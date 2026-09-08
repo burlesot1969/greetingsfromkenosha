@@ -23,13 +23,16 @@ class KenoshaMap {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // Leaflet map initialization
+    // Leaflet map initialization with smooth half-step zoom controls
     this.map = L.map(containerId, {
       center: KENOSHA_BOUNDS.center,
       zoom: 14,
       minZoom: 12,
       maxZoom: 18,
-      zoomControl: false, // We'll add custom WPA styled zoom controls
+      zoomSnap: 0.5,
+      zoomDelta: 0.5,
+      wheelPxPerZoomLevel: 90,
+      zoomControl: false,
       attributionControl: false
     });
 

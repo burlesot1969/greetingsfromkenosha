@@ -23,13 +23,16 @@ class KenoshaMap {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // Leaflet map initialization
+    // Leaflet map initialization with smooth half-step zoom controls
     this.map = L.map(containerId, {
       center: KENOSHA_BOUNDS.center,
       zoom: 14,
       minZoom: 12,
       maxZoom: 18,
-      zoomControl: false, // We'll add custom WPA styled zoom controls
+      zoomSnap: 0.5,
+      zoomDelta: 0.5,
+      wheelPxPerZoomLevel: 90,
+      zoomControl: false,
       attributionControl: false
     });
 
@@ -118,9 +121,10 @@ class KenoshaMap {
       const popupContent = this.createPostcardPopupHTML(markerData);
       marker.bindPopup(popupContent, {
         className: 'wpa-postcard-popup',
-        maxWidth: 380,
-        minWidth: 320,
-        autoPanPadding: [30, 30],
+        maxWidth: 295,
+        minWidth: 240,
+        autoPanPaddingTopLeft: [25, 95],
+        autoPanPaddingBottomRight: [25, 30],
         closeButton: true
       });
 
@@ -208,7 +212,7 @@ class KenoshaMap {
         <div class="wpa-postcard-content">
           ${data.imageUrl ? `
             <div class="wpa-postcard-photo-frame">
-              <img src="${data.imageUrl}" alt="${title}" class="wpa-postcard-img" loading="lazy" />
+              <img src="${data.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" />
               <div class="wpa-postcard-photo-caption">Historic Kenosha Edition</div>
             </div>
           ` : ''}
@@ -243,18 +247,20 @@ class KenoshaMap {
     `;
   }
 
-  focusMarker(id, zoomLevel = 16) {
+  focusMarker(id, zoomLevel = 15) {
     const marker = this.markerMap.get(id);
     if (marker) {
       const latlng = marker.getLatLng();
-      this.map.flyTo(latlng, zoomLevel, {
-        duration: 1.2,
+      // Offset target center north so the upward-opening popup is comfortably centered below the header
+      const targetLat = latlng.lat + 0.0045;
+      this.map.flyTo([targetLat, latlng.lng], zoomLevel, {
+        duration: 0.9,
         easeLinearity: 0.25
       });
       setTimeout(() => {
         marker.openPopup();
         this.highlightMarkerPin(id);
-      }, 500);
+      }, 450);
       this.activeMarkerId = id;
     }
   }

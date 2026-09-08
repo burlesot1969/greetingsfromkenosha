@@ -74,7 +74,7 @@
         <!-- Animated Project Hero Banner in Sidebar -->
         <div class="wpa-toc-banner">
           <div class="wpa-toc-banner-inner">
-            <img src="./assets/logo-banner.gif" onerror="this.onerror=null;this.src='./logo-banner.gif';" alt="Greetings from Kenosha Animated Banner" class="wpa-toc-banner-gif" />
+            <img src="./logo-banner.gif" onerror="this.onerror=null;this.src='./assets/logo-banner.gif';" alt="Greetings from Kenosha Animated Banner" class="wpa-toc-banner-gif" />
             <div class="wpa-toc-banner-footer">
               <span class="wpa-toc-author">By Todd Burleson</span>
               <a href="https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha" target="_blank" rel="noopener noreferrer" class="wpa-toc-substack-link">
@@ -191,29 +191,41 @@
           <span>Click anywhere on the map to set marker coordinates!</span>
         </div>
 
-        <!-- WPA Map Legend -->
-        <div class="wpa-map-legend" role="complementary" aria-label="Map Legend">
-          <div class="wpa-legend-title">WPA ATLAS LEGEND</div>
-          <div class="wpa-legend-items">
-            <div class="wpa-legend-row">
-              <span class="wpa-legend-swatch swatch-land"></span>
-              <span>Land (Cream / Sandstone)</span>
+        <!-- WPA Collapsible Map Legend (Hidden by default) -->
+        <div class="wpa-legend-container" id="wpa-legend-container">
+          <button id="btn-toggle-legend" class="wpa-legend-toggle-btn" aria-expanded="false" aria-controls="wpa-map-legend" title="Toggle Map Legend">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>Map Legend</span>
+            <span class="wpa-legend-caret" aria-hidden="true">▲</span>
+          </button>
+          <div class="wpa-map-legend" id="wpa-map-legend" role="complementary" aria-label="Map Legend" style="display: none;">
+            <div class="wpa-legend-header">
+              <div class="wpa-legend-title">WPA ATLAS LEGEND</div>
+              <button id="btn-close-legend" class="wpa-legend-close-btn" aria-label="Close legend">&times;</button>
             </div>
-            <div class="wpa-legend-row">
-              <span class="wpa-legend-swatch swatch-water"></span>
-              <span>Lake Michigan (Muted Teal)</span>
-            </div>
-            <div class="wpa-legend-row">
-              <span class="wpa-legend-swatch swatch-park"></span>
-              <span>City Parks (Sage Green)</span>
-            </div>
-            <div class="wpa-legend-row">
-              <span class="wpa-legend-swatch swatch-road"></span>
-              <span>Major Arterials (Charcoal)</span>
-            </div>
-            <div class="wpa-legend-row">
-              <span class="wpa-legend-swatch swatch-transit"></span>
-              <span>Historic PCC Streetcar Loop</span>
+            <div class="wpa-legend-items">
+              <div class="wpa-legend-row">
+                <span class="wpa-legend-swatch swatch-land"></span>
+                <span>Land (Sandstone Cream)</span>
+              </div>
+              <div class="wpa-legend-row">
+                <span class="wpa-legend-swatch swatch-water"></span>
+                <span>Lake Michigan (Muted Teal)</span>
+              </div>
+              <div class="wpa-legend-row">
+                <span class="wpa-legend-swatch swatch-park"></span>
+                <span>City Parks (Sage Green)</span>
+              </div>
+              <div class="wpa-legend-row">
+                <span class="wpa-legend-swatch swatch-road"></span>
+                <span>Major Arterials (Charcoal)</span>
+              </div>
+              <div class="wpa-legend-row">
+                <span class="wpa-legend-swatch swatch-transit"></span>
+                <span>Historic PCC Streetcar Loop</span>
+              </div>
             </div>
           </div>
         </div>
@@ -341,8 +353,7 @@
   <!-- Leaflet JS Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <!-- Application Entry Point (Supports both root & js/ folder) -->
+  <!-- Application Entry Point -->
   <script type="module" src="app.js"></script>
-  <script type="module" src="js/app.js"></script>
 </body>
 </html>

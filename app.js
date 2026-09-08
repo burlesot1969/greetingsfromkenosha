@@ -104,7 +104,6 @@ class GreetingsApp {
           <div class="wpa-toc-card-info">
             <div class="wpa-toc-card-meta">
               <span class="wpa-toc-edition">${item.edition}</span>
-              ${item.artist ? `<span class="wpa-toc-tag">${item.artist}</span>` : ''}
             </div>
             <h4 class="wpa-toc-card-title">${item.title}</h4>
             <p class="wpa-toc-card-addr">${item.address}</p>
@@ -220,6 +219,33 @@ class GreetingsApp {
       themeSelect.addEventListener('change', (e) => {
         kenoshaMap.setBaseTheme(e.target.value);
         this.showToast(`Applied ${themeSelect.options[themeSelect.selectedIndex].text} style`);
+      });
+    }
+
+    // Map Legend Collapsible Toggle
+    const toggleLegendBtn = document.getElementById('btn-toggle-legend');
+    const closeLegendBtn = document.getElementById('btn-close-legend');
+    const legendContainer = document.getElementById('wpa-legend-container');
+    const mapLegend = document.getElementById('wpa-map-legend');
+
+    if (toggleLegendBtn && mapLegend) {
+      toggleLegendBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = mapLegend.style.display === 'none' || mapLegend.style.display === '';
+        mapLegend.style.display = isHidden ? 'block' : 'none';
+        toggleLegendBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        if (legendContainer) {
+          legendContainer.classList.toggle('open', isHidden);
+        }
+      });
+    }
+
+    if (closeLegendBtn && mapLegend) {
+      closeLegendBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mapLegend.style.display = 'none';
+        if (toggleLegendBtn) toggleLegendBtn.setAttribute('aria-expanded', 'false');
+        if (legendContainer) legendContainer.classList.remove('open');
       });
     }
 

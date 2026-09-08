@@ -33,18 +33,14 @@ class GreetingsApp {
       this.refreshMarkers();
     });
 
-    // Automatically highlight and open the first marker's popup after initial load
+    // Automatically highlight the first marker after initial load without obstructing the map
     setTimeout(() => {
       const markers = markerStore.getAll();
       if (markers.length > 0) {
         this.selectedMarkerId = markers[0].id;
         kenoshaMap.highlightMarkerPin(markers[0].id);
-        const marker = kenoshaMap.markerMap.get(markers[0].id);
-        if (marker) {
-          marker.openPopup();
-        }
       }
-    }, 700);
+    }, 400);
   }
 
   refreshMarkers() {
@@ -96,7 +92,7 @@ class GreetingsApp {
           <div class="wpa-toc-card-visual">
             ${item.imageUrl ? `
               <div class="wpa-toc-thumb-wrap">
-                <img src="${item.imageUrl}" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
+                <img src="${item.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
                 <span class="wpa-toc-badge-overlay">#${numOnly}</span>
               </div>
             ` : `
@@ -108,7 +104,6 @@ class GreetingsApp {
           <div class="wpa-toc-card-info">
             <div class="wpa-toc-card-meta">
               <span class="wpa-toc-edition">${item.edition}</span>
-              ${item.artist ? `<span class="wpa-toc-tag">${item.artist}</span>` : ''}
             </div>
             <h4 class="wpa-toc-card-title">${item.title}</h4>
             <p class="wpa-toc-card-addr">${item.address}</p>
@@ -227,6 +222,33 @@ class GreetingsApp {
       });
     }
 
+    // Map Legend Collapsible Toggle
+    const toggleLegendBtn = document.getElementById('btn-toggle-legend');
+    const closeLegendBtn = document.getElementById('btn-close-legend');
+    const legendContainer = document.getElementById('wpa-legend-container');
+    const mapLegend = document.getElementById('wpa-map-legend');
+
+    if (toggleLegendBtn && mapLegend) {
+      toggleLegendBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = mapLegend.style.display === 'none' || mapLegend.style.display === '';
+        mapLegend.style.display = isHidden ? 'block' : 'none';
+        toggleLegendBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        if (legendContainer) {
+          legendContainer.classList.toggle('open', isHidden);
+        }
+      });
+    }
+
+    if (closeLegendBtn && mapLegend) {
+      closeLegendBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mapLegend.style.display = 'none';
+        if (toggleLegendBtn) toggleLegendBtn.setAttribute('aria-expanded', 'false');
+        if (legendContainer) legendContainer.classList.remove('open');
+      });
+    }
+
     // Modal Add Marker
     const openAddModalBtn = document.getElementById('btn-open-add-modal');
     const addModal = document.getElementById('modal-add-marker');
@@ -337,6 +359,22 @@ class GreetingsApp {
         closeModal();
         this.showToast(`Added ${newMarker.edition}: ${newMarker.title}!`);
         this.selectMarker(newMarker.id, true);
+      });
+    }
+
+    // Download updated data.js to commit to GitHub
+    const btnDownloadDataJS = document.getElementById('btn-download-datajs');
+    if (btnDownloadDataJS) {
+      btnDownloadDataJS.addEventListener('click', () => {
+        const code = markerStore.exportDataJS();
+        const blob = new Blob([code], { type: 'application/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data.js';
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast('Downloaded updated data.js for GitHub!', 4000);
       });
     }
 
@@ -540,9 +578,16 @@ class GreetingsApp {
   }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize safely when DOM is ready
+const startApp = () => {
+  if (window.__greetingsApp) return;
   const app = new GreetingsApp();
-  app.init();
   window.__greetingsApp = app;
-});
+  app.init();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
