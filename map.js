@@ -209,7 +209,7 @@ class KenoshaMap {
         <div class="wpa-postcard-content">
           ${data.imageUrl ? `
             <div class="wpa-postcard-photo-frame">
-              <img src="${data.imageUrl}" alt="${title}" class="wpa-postcard-img" loading="lazy" />
+              <img src="${data.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" />
               <div class="wpa-postcard-photo-caption">Historic Kenosha Edition</div>
             </div>
           ` : ''}

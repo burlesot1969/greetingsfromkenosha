@@ -92,7 +92,7 @@ class GreetingsApp {
           <div class="wpa-toc-card-visual">
             ${item.imageUrl ? `
               <div class="wpa-toc-thumb-wrap">
-                <img src="${item.imageUrl}" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
+                <img src="${item.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
                 <span class="wpa-toc-badge-overlay">#${numOnly}</span>
               </div>
             ` : `
@@ -552,9 +552,16 @@ class GreetingsApp {
   }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize safely when DOM is ready
+const startApp = () => {
+  if (window.__greetingsApp) return;
   const app = new GreetingsApp();
-  app.init();
   window.__greetingsApp = app;
-});
+  app.init();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
