@@ -1,0 +1,1395 @@
+/**
+ * Greetings From Kenosha - 1930s WPA Poster Design System
+ * Aesthetic: Cream Land, Muted Teal Water, Sage Green Parks, Deep Charcoal Roads, Terracotta & Ochre Accents
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+:root {
+  /* 1930s WPA Color Tokens */
+  --wpa-cream-bg: #F5EFEB;
+  --wpa-cream-paper: #FBF8F1;
+  --wpa-cream-darker: #EBE1D0;
+  --wpa-teal-water: #2B6870;
+  --wpa-teal-dark: #1E4E54;
+  --wpa-teal-light: #41828B;
+  --wpa-sage-park: #6D8F72;
+  --wpa-sage-dark: #4F6F53;
+  --wpa-charcoal-road: #24272C;
+  --wpa-charcoal-light: #3E434B;
+  --wpa-terracotta: #C45934;
+  --wpa-terracotta-dark: #A54422;
+  --wpa-ochre-gold: #DCA134;
+  --wpa-ink-navy: #1D2D44;
+  --wpa-text-dark: #1E2328;
+  --wpa-text-muted: #575D65;
+  --wpa-border-color: #D3C5B4;
+  
+  /* Typography */
+  --font-display: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 2px 4px rgba(36, 39, 44, 0.08);
+  --shadow-md: 0 4px 14px rgba(36, 39, 44, 0.14);
+  --shadow-lg: 0 10px 25px rgba(36, 39, 44, 0.22);
+  --shadow-wpa-card: 3px 4px 0px rgba(36, 39, 44, 0.85);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+/* Reset & Base Setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background-color: var(--wpa-cream-bg);
+  color: var(--wpa-text-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain Overlay for authentic 1930s printed paper texture */
+.paper-grain-texture {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* App Wrapper Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* 1930s WPA Header Banner */
+.wpa-header {
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-cream-paper);
+  border-bottom: 3px solid var(--wpa-terracotta);
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.wpa-header::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--wpa-ochre-gold);
+}
+
+.wpa-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.wpa-logo-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.wpa-logo-emblem {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background: var(--wpa-charcoal-road);
+  border: 2px solid var(--wpa-ochre-gold);
+  overflow: hidden;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpa-logo-link:hover .wpa-logo-emblem {
+  transform: scale(1.06);
+  border-color: #FFF;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.8);
+}
+
+.wpa-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wpa-seal-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--wpa-terracotta);
+  border: 2px solid var(--wpa-ochre-gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+}
+
+.wpa-seal-text {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--wpa-cream-paper);
+  letter-spacing: 1px;
+}
+
+.wpa-seal-year {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  color: var(--wpa-ochre-gold);
+}
+
+.wpa-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.wpa-main-title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: var(--wpa-cream-paper);
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.6);
+  margin: 0;
+}
+
+.wpa-main-title span {
+  color: var(--wpa-ochre-gold);
+}
+
+.wpa-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--wpa-cream-darker);
+  opacity: 0.9;
+}
+
+.wpa-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* WPA Retro Styled Buttons */
+.wpa-btn {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--wpa-charcoal-road);
+  background: var(--wpa-cream-paper);
+  color: var(--wpa-charcoal-road);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 2px 2px 0px var(--wpa-charcoal-road);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+  text-decoration: none;
+}
+
+.wpa-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
+  background: #FFFDF9;
+}
+
+.wpa-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--wpa-charcoal-road);
+}
+
+.wpa-btn-primary {
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  border-color: var(--wpa-text-dark);
+}
+
+.wpa-btn-primary:hover {
+  background: var(--wpa-terracotta-dark);
+}
+
+.wpa-btn-secondary {
+  background: var(--wpa-teal-water);
+  color: #FFF;
+  border-color: var(--wpa-ink-navy);
+}
+
+.wpa-btn-secondary:hover {
+  background: var(--wpa-teal-dark);
+}
+
+.wpa-select {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--wpa-charcoal-road);
+  background: var(--wpa-cream-paper);
+  color: var(--wpa-text-dark);
+  box-shadow: 2px 2px 0px var(--wpa-charcoal-road);
+  cursor: pointer;
+}
+
+/* Main Workspace: Sidebar & Map */
+.main-workspace {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 65px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Table of Contents (TOC) Sidebar */
+.wpa-sidebar {
+  width: 380px;
+  min-width: 380px;
+  height: 100%;
+  background: var(--wpa-cream-paper);
+  border-right: 3px solid var(--wpa-border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 500;
+  box-shadow: 4px 0 16px rgba(0,0,0,0.06);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), margin-left 0.3s ease;
+}
+
+.wpa-sidebar.collapsed {
+  margin-left: -380px;
+}
+
+/* Animated Project Hero Banner in Sidebar */
+.wpa-toc-banner {
+  background: var(--wpa-ink-navy);
+  border-bottom: 2px solid var(--wpa-terracotta);
+  padding: 0.75rem 1rem 0.6rem;
+  position: relative;
+}
+
+.wpa-toc-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wpa-toc-banner-gif {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1.5px solid var(--wpa-ochre-gold);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  display: block;
+}
+
+.wpa-toc-banner-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.2rem;
+}
+
+.wpa-toc-author {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  color: var(--wpa-ochre-gold);
+}
+
+.wpa-toc-substack-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--wpa-cream-paper);
+  text-decoration: none;
+  background: rgba(196, 89, 52, 0.85);
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+}
+
+.wpa-toc-substack-link:hover {
+  background: var(--wpa-terracotta);
+  color: #FFF;
+}
+
+.wpa-toc-header {
+  padding: 1.1rem 1.25rem 0.85rem;
+  background: var(--wpa-cream-bg);
+  border-bottom: 2px solid var(--wpa-border-color);
+  position: relative;
+}
+
+.wpa-toc-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.wpa-toc-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: 1.2px;
+  color: var(--wpa-text-dark);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wpa-toc-badge {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+}
+
+.wpa-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.wpa-search-input {
+  width: 100%;
+  padding: 0.55rem 2.2rem 0.55rem 2.2rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  border: 2px solid var(--wpa-border-color);
+  border-radius: var(--radius-sm);
+  background: #FFF;
+  color: var(--wpa-text-dark);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpa-search-input:focus {
+  border-color: var(--wpa-teal-water);
+  box-shadow: 0 0 0 3px rgba(43, 104, 112, 0.15);
+}
+
+.wpa-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--wpa-text-muted);
+  pointer-events: none;
+}
+
+.wpa-search-clear {
+  position: absolute;
+  right: 0.65rem;
+  background: none;
+  border: none;
+  color: var(--wpa-text-muted);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Postcard Items List */
+.wpa-toc-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Postcard TOC Card */
+.wpa-toc-card {
+  background: #FFF;
+  border: 2px solid var(--wpa-border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+}
+
+.wpa-toc-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--wpa-teal-water);
+  box-shadow: 3px 4px 0px rgba(43, 104, 112, 0.3);
+}
+
+.wpa-toc-card.active {
+  border-color: var(--wpa-terracotta);
+  background: #FFFDF9;
+  box-shadow: var(--shadow-wpa-card);
+}
+
+.wpa-toc-card.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--wpa-terracotta);
+  border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.wpa-toc-card-visual {
+  flex-shrink: 0;
+}
+
+.wpa-toc-thumb-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid var(--wpa-charcoal-road);
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.18);
+  background: var(--wpa-cream-bg);
+}
+
+.wpa-toc-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.wpa-toc-card:hover .wpa-toc-thumb {
+  transform: scale(1.08);
+}
+
+.wpa-toc-badge-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  padding: 1px 4px;
+  border-top-left-radius: 4px;
+  border-top: 1px solid var(--wpa-charcoal-road);
+  border-left: 1px solid var(--wpa-charcoal-road);
+}
+
+.wpa-toc-card-badge {
+  background: var(--wpa-cream-bg);
+  border: 1.5px solid var(--wpa-charcoal-road);
+  border-radius: 4px;
+  padding: 0.25rem 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.wpa-toc-badge-num {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--wpa-charcoal-road);
+  line-height: 1;
+}
+
+.wpa-toc-card.active .wpa-toc-card-badge {
+  background: var(--wpa-terracotta);
+  border-color: var(--wpa-terracotta-dark);
+}
+
+.wpa-toc-card.active .wpa-toc-badge-num {
+  color: #FFF;
+}
+
+.wpa-toc-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.wpa-toc-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.wpa-toc-edition {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  color: var(--wpa-terracotta);
+}
+
+.wpa-toc-tag {
+  font-size: 0.72rem;
+  background: var(--wpa-cream-darker);
+  color: var(--wpa-text-dark);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.wpa-toc-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--wpa-text-dark);
+  line-height: 1.25;
+  margin-bottom: 0.25rem;
+}
+
+.wpa-toc-card-addr {
+  font-size: 0.8rem;
+  color: var(--wpa-text-muted);
+  margin-bottom: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.wpa-toc-card-snippet {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--wpa-text-dark);
+  opacity: 0.85;
+}
+
+.wpa-btn-icon {
+  background: var(--wpa-cream-bg);
+  border: 1.5px solid var(--wpa-border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem;
+  color: var(--wpa-text-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-icon:hover {
+  background: var(--wpa-teal-water);
+  color: #FFF;
+  border-color: var(--wpa-teal-dark);
+}
+
+.wpa-toc-footer {
+  padding: 0.75rem 1rem;
+  background: var(--wpa-cream-bg);
+  border-top: 2px solid var(--wpa-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.wpa-public-footer-note {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--wpa-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.wpa-author-lock-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--wpa-border-color);
+  padding: 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.5;
+}
+
+.wpa-author-lock-btn:hover {
+  color: var(--wpa-text-dark);
+  background: rgba(0,0,0,0.05);
+  border-color: var(--wpa-border-color);
+  opacity: 1;
+}
+
+.wpa-author-lock-btn.author-unlocked {
+  color: var(--wpa-terracotta);
+  border-color: var(--wpa-terracotta);
+  background: rgba(196, 89, 52, 0.1);
+  opacity: 1;
+}
+
+/* Map Container & Overlays */
+.map-viewport {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  background: var(--wpa-cream-bg);
+}
+
+#kenosha-map {
+  width: 100%;
+  height: 100%;
+  background: var(--wpa-cream-bg);
+}
+
+/* Crosshair cursor when picking coordinates */
+#kenosha-map.crosshair-mode {
+  cursor: crosshair !important;
+}
+
+/* WPA Basemap Filter Themes */
+/* 1. 1930s WPA Poster Style (Default) */
+.theme-wpa-poster .wpa-basemap-tiles {
+  filter: sepia(35%) hue-rotate(-12deg) saturate(130%) contrast(108%) brightness(98%);
+}
+
+/* 2. Warm Lithograph */
+.theme-wpa-litho .wpa-basemap-tiles {
+  filter: sepia(60%) saturate(140%) contrast(115%) brightness(95%);
+}
+
+/* 3. Vintage Postcard Sepia */
+.theme-wpa-sepia .wpa-basemap-tiles {
+  filter: sepia(85%) contrast(120%) brightness(92%);
+}
+
+/* 4. Midnight Deco */
+.theme-wpa-night .wpa-basemap-tiles {
+  filter: invert(90%) hue-rotate(180deg) saturate(120%) contrast(125%);
+}
+
+/* Floating Controls & Overlays on Map */
+.map-floating-bar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 800;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.map-sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 800;
+}
+
+/* WPA Legend & Bounding Box Guide on Map */
+.wpa-map-legend {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  background: rgba(251, 248, 241, 0.95);
+  backdrop-filter: blur(4px);
+  border: 2px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  z-index: 800;
+  box-shadow: var(--shadow-wpa-card);
+  max-width: 250px;
+}
+
+.wpa-legend-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--wpa-text-dark);
+  margin-bottom: 0.4rem;
+  border-bottom: 1.5px solid var(--wpa-border-color);
+  padding-bottom: 0.2rem;
+}
+
+.wpa-legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.wpa-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wpa-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+
+.swatch-land { background: var(--wpa-cream-bg); border-color: #BDB09E; }
+.swatch-water { background: var(--wpa-teal-water); }
+.swatch-park { background: var(--wpa-sage-park); }
+.swatch-road { background: var(--wpa-charcoal-road); }
+.swatch-transit { background: var(--wpa-terracotta); border-style: dashed; }
+
+/* Vintage Compass Rose */
+.wpa-compass-rose {
+  position: absolute;
+  top: 4.8rem;
+  left: 1rem;
+  z-index: 800;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.wpa-compass-svg {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.3));
+}
+
+/* Pick Location Banner */
+.pick-location-banner {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  padding: 0.6rem 1.25rem;
+  border-radius: 30px;
+  border: 2px solid var(--wpa-charcoal-road);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: bounceBanner 0.4s ease;
+}
+
+@keyframes bounceBanner {
+  0% { transform: translate(-50%, -20px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Custom WPA Marker Pin */
+.wpa-custom-pin-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+.wpa-pin-wrapper {
+  position: relative;
+  width: 40px;
+  height: 48px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wpa-pin-wrapper:hover {
+  transform: scale(1.15) translateY(-4px);
+  z-index: 999;
+}
+
+.wpa-pin-wrapper.active-pin {
+  transform: scale(1.22) translateY(-6px);
+  z-index: 1000;
+}
+
+.wpa-pin-head {
+  width: 38px;
+  height: 38px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--wpa-terracotta);
+  border: 2.5px solid var(--wpa-charcoal-road);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 1px;
+}
+
+.wpa-pin-wrapper.active-pin .wpa-pin-head {
+  background: var(--wpa-ochre-gold);
+  border-color: var(--wpa-ink-navy);
+  animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 161, 52, 0.7); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 161, 52, 0); }
+}
+
+.wpa-pin-inner {
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.wpa-pin-no {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--wpa-cream-paper);
+  opacity: 0.9;
+}
+
+.wpa-pin-edition {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--wpa-cream-paper);
+  line-height: 1;
+}
+
+.wpa-pin-wrapper.active-pin .wpa-pin-edition,
+.wpa-pin-wrapper.active-pin .wpa-pin-no {
+  color: var(--wpa-ink-navy);
+  font-weight: bold;
+}
+
+.wpa-pin-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 11px;
+  width: 18px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* Postcard Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: normal !important;
+}
+
+.leaflet-popup-tip-container {
+  display: none !important; /* Clean flush card look */
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  top: 10px !important;
+  right: 12px !important;
+  color: var(--wpa-charcoal-road) !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.35rem !important;
+  z-index: 10;
+  background: rgba(251, 248, 241, 0.85);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The Postcard Itself */
+.wpa-postcard {
+  background: var(--wpa-cream-paper);
+  border: 3px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.25rem 1.1rem;
+  box-shadow: var(--shadow-wpa-card);
+  position: relative;
+  overflow: hidden;
+  max-width: 370px;
+}
+
+/* Vintage Airmail Border */
+.wpa-postcard-airmail-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--wpa-terracotta),
+    var(--wpa-terracotta) 10px,
+    var(--wpa-cream-paper) 10px,
+    var(--wpa-cream-paper) 20px,
+    var(--wpa-teal-water) 20px,
+    var(--wpa-teal-water) 30px,
+    var(--wpa-cream-paper) 30px,
+    var(--wpa-cream-paper) 40px
+  );
+}
+
+.wpa-postcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 2px dashed var(--wpa-border-color);
+}
+
+.wpa-postcard-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wpa-postmark-kicker {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  color: var(--wpa-text-muted);
+}
+
+.wpa-edition-badge {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  color: var(--wpa-terracotta);
+  line-height: 1;
+}
+
+/* Stamp & Postmark */
+.wpa-stamp-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 1.75rem;
+}
+
+.wpa-stamp-inner {
+  width: 44px;
+  height: 52px;
+  border: 2px dashed var(--wpa-charcoal-road);
+  background: #F4E8D0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+}
+
+.wpa-stamp-text {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.5px;
+  color: var(--wpa-ink-navy);
+}
+
+.wpa-stamp-price {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--wpa-terracotta);
+  line-height: 1;
+}
+
+.wpa-stamp-state {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--wpa-text-muted);
+}
+
+.wpa-postmark-stamp {
+  position: absolute;
+  top: -6px;
+  left: -22px;
+  width: 58px;
+  height: 58px;
+  color: var(--wpa-charcoal-road);
+  opacity: 0.8;
+  pointer-events: none;
+  transform: rotate(-15deg);
+}
+
+.wpa-postmark-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Postcard Body & Photo */
+.wpa-postcard-photo-frame {
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid var(--wpa-charcoal-road);
+  background: var(--wpa-cream-bg);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.wpa-postcard-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.wpa-postcard-photo-caption {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--wpa-text-muted);
+  text-align: right;
+  padding: 2px 6px;
+  background: var(--wpa-cream-darker);
+  border-top: 1px solid var(--wpa-border-color);
+}
+
+.wpa-postcard-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--wpa-text-dark);
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+.wpa-postcard-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--wpa-teal-dark);
+  margin-bottom: 0.6rem;
+}
+
+.wpa-postcard-meta {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.wpa-meta-pill {
+  font-size: 0.72rem;
+  background: var(--wpa-cream-darker);
+  color: var(--wpa-text-dark);
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.wpa-postcard-summary {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--wpa-text-dark);
+  margin-bottom: 0.95rem;
+}
+
+/* Postcard Action Footer */
+.wpa-postcard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.65rem;
+  border-top: 1.5px solid var(--wpa-border-color);
+}
+
+.wpa-btn-readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--wpa-terracotta);
+  color: #FFF !important;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--wpa-charcoal-road);
+  box-shadow: 2px 2px 0px var(--wpa-charcoal-road);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-readmore:hover {
+  background: var(--wpa-terracotta-dark);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
+}
+
+.wpa-postcard-coords {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--wpa-text-muted);
+}
+
+/* Modal Dialog for Adding Custom Markers */
+.wpa-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(29, 45, 68, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.wpa-modal-overlay.open {
+  display: flex;
+}
+
+.wpa-modal-card {
+  background: var(--wpa-cream-paper);
+  border: 3px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg), 6px 8px 0px rgba(36, 39, 44, 0.9);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.wpa-modal-header {
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-cream-paper);
+  padding: 1rem 1.25rem;
+  border-bottom: 3px solid var(--wpa-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wpa-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  margin: 0;
+  color: var(--wpa-cream-paper);
+}
+
+.wpa-modal-close {
+  background: none;
+  border: none;
+  color: var(--wpa-cream-paper);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.wpa-modal-body {
+  padding: 1.25rem;
+}
+
+.wpa-form-group {
+  margin-bottom: 0.95rem;
+}
+
+.wpa-form-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--wpa-text-dark);
+  margin-bottom: 0.35rem;
+}
+
+.wpa-form-input,
+.wpa-form-textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  border: 2px solid var(--wpa-border-color);
+  border-radius: var(--radius-sm);
+  background: #FFF;
+  color: var(--wpa-text-dark);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.wpa-form-input:focus,
+.wpa-form-textarea:focus {
+  border-color: var(--wpa-teal-water);
+  box-shadow: 0 0 0 3px rgba(43, 104, 112, 0.15);
+}
+
+.wpa-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.wpa-coord-pick-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.wpa-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--wpa-border-color);
+}
+
+/* Toast Notifications */
+.wpa-toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.wpa-toast {
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-cream-paper);
+  border: 2px solid var(--wpa-ochre-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.1rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  font-size: 0.88rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+.wpa-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wpa-toast-stamp {
+  font-family: var(--font-display);
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+}
+
+/* WPA Tooltips */
+.wpa-tooltip {
+  background: var(--wpa-ink-navy) !important;
+  color: var(--wpa-cream-paper) !important;
+  border: 1.5px solid var(--wpa-ochre-gold) !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.82rem !important;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.5) !important;
+  padding: 4px 8px !important;
+}
+
+.wpa-tooltip::before {
+  border-top-color: var(--wpa-ink-navy) !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .wpa-sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1500;
+  }
+  .wpa-header-controls .theme-selector-group {
+    display: none;
+  }
+  .wpa-main-title {
+    font-size: 1.4rem;
+  }
+  .wpa-subtitle {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .wpa-sidebar {
+    width: 100vw;
+    min-width: 100vw;
+  }
+  .wpa-sidebar.collapsed {
+    margin-left: -100vw;
+  }
+  .wpa-header {
+    padding: 0.5rem 0.85rem;
+  }
+  .wpa-main-title {
+    font-size: 1.25rem;
+  }
+  .wpa-seal-emblem {
+    display: none;
+  }
+  .wpa-map-legend {
+    display: none;
+  }
+}
