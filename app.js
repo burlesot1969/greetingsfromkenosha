@@ -1,6 +1,6 @@
 /**
  * Main Application Controller for Greetings From Kenosha
- * Coordinates TOC sidebar, Map interactions, Search & Marker Management
+ * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
 import { markerStore } from './data.js';
@@ -9,23 +9,17 @@ import { kenoshaMap } from './map.js';
 class GreetingsApp {
   constructor() {
     this.searchQuery = '';
-    this.activeFilter = 'all';
     this.selectedMarkerId = null;
-    this.isPickingLocation = false;
-    this.isAuthorMode = false;
   }
 
   init() {
-    // 0. Check Author Mode
-    this.checkAuthorMode();
-
     // 1. Initialize Leaflet Map
     kenoshaMap.init('kenosha-map');
 
     // 2. Render initial markers
     this.refreshMarkers();
 
-    // 3. Setup event listeners
+    // 3. Setup event listeners & Surveyor Tool
     this.setupEventListeners();
 
     // 4. Subscribe to data changes
@@ -33,7 +27,7 @@ class GreetingsApp {
       this.refreshMarkers();
     });
 
-    // Automatically highlight the first marker after initial load without obstructing the map
+    // Automatically highlight the first marker after initial load
     setTimeout(() => {
       const markers = markerStore.getAll();
       if (markers.length > 0) {
@@ -123,7 +117,7 @@ class GreetingsApp {
     // Attach click handlers to cards
     tocListContainer.querySelectorAll('.wpa-toc-card').forEach(card => {
       const id = card.dataset.id;
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', () => {
         this.selectMarker(id, true);
       });
       card.addEventListener('keydown', (e) => {
@@ -249,316 +243,29 @@ class GreetingsApp {
       });
     }
 
-    // Modal Add Marker
-    const openAddModalBtn = document.getElementById('btn-open-add-modal');
-    const addModal = document.getElementById('modal-add-marker');
-    const closeModalBtn = document.getElementById('btn-close-modal');
-    const cancelModalBtn = document.getElementById('btn-cancel-modal');
-    const markerForm = document.getElementById('form-add-marker');
-    const pickCoordsBtn = document.getElementById('btn-pick-coords');
+    // Surveyor Coordinates Tool Toggle
+    const btnToggleSurveyor = document.getElementById('btn-toggle-surveyor');
+    const btnCloseSurveyor = document.getElementById('btn-close-surveyor');
 
-    const openModal = () => {
-      if (addModal) {
-        addModal.classList.add('open');
-        const nextNum = markerStore.getAll().length + 1;
-        const editionInput = document.getElementById('input-edition');
-        if (editionInput && !editionInput.value) {
-          editionInput.value = `No. ${String(nextNum).padStart(2, '0')}`;
+    if (btnToggleSurveyor) {
+      btnToggleSurveyor.addEventListener('click', () => {
+        const isActive = kenoshaMap.toggleSurveyorMode();
+        if (isActive) {
+          this.showToast('📍 Surveyor Mode: Click anywhere on map to inspect coordinates!', 3500);
         }
-      }
+      });
+    }
+
+    if (btnCloseSurveyor) {
+      btnCloseSurveyor.addEventListener('click', () => {
+        kenoshaMap.toggleSurveyorMode();
+      });
+    }
+
+    // Callback when any point is pinned or right-clicked
+    kenoshaMap.onSurveyorCopied = (lat, lng) => {
+      this.showToast(`📍 Copied coordinates: ${lat}, ${lng}`, 3500);
     };
-
-    const closeModal = () => {
-      if (addModal) {
-        addModal.classList.remove('open');
-      }
-      if (this.isPickingLocation) {
-        this.stopPickMode();
-      }
-    };
-
-    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openModal);
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
-
-    // Pick coordinates on map
-    if (pickCoordsBtn) {
-      pickCoordsBtn.addEventListener('click', () => {
-        this.startPickMode(closeModal);
-      });
-    }
-
-    if (imageFileInput) {
-      imageFileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            if (imagePreviewImg) {
-              imagePreviewImg.dataset.tried = '';
-              imagePreviewImg.src = event.target.result;
-            }
-            if (imagePreviewWrap) imagePreviewWrap.style.display = 'block';
-            
-            // Auto-populate relative path if not already filled
-            if (imageUrlInput && !imageUrlInput.value.trim()) {
-              const editionInput = document.getElementById('input-edition');
-              const digits = (editionInput?.value || '').replace(/\D/g, '');
-              const numStr = digits !== '' ? digits.padStart(2, '0') : '03';
-              imageUrlInput.value = `./card-${numStr}.jpg`;
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    }
-
-    const updateImagePreview = () => {
-      const url = imageUrlInput ? imageUrlInput.value.trim() : '';
-      if (url && imagePreviewImg && imagePreviewWrap) {
-        imagePreviewImg.dataset.tried = '';
-        imagePreviewImg.src = url;
-        imagePreviewWrap.style.display = 'block';
-      } else if (imagePreviewWrap) {
-        imagePreviewWrap.style.display = 'none';
-      }
-    };
-
-    if (imageUrlInput) {
-      imageUrlInput.addEventListener('input', updateImagePreview);
-      imageUrlInput.addEventListener('change', updateImagePreview);
-      imageUrlInput.addEventListener('paste', () => setTimeout(updateImagePreview, 50));
-    }
-
-    // Handle Form Submit
-    if (markerForm) {
-      markerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const title = document.getElementById('input-title').value.trim();
-        const address = document.getElementById('input-address').value.trim();
-        const lat = parseFloat(document.getElementById('input-lat').value);
-        const lng = parseFloat(document.getElementById('input-lng').value);
-        const edition = document.getElementById('input-edition').value.trim();
-        const summary = document.getElementById('input-summary').value.trim();
-        const link = document.getElementById('input-link').value.trim();
-        const artist = document.getElementById('input-artist').value.trim();
-        const year = document.getElementById('input-year').value.trim();
-        const imageUrl = document.getElementById('input-image-url') ? document.getElementById('input-image-url').value.trim() : '';
-
-        if (!title || isNaN(lat) || isNaN(lng)) {
-          alert('Please provide a Title and valid Coordinates.');
-          return;
-        }
-
-        const newMarker = markerStore.addMarker({
-          title,
-          address: address || 'Kenosha, WI',
-          lat,
-          lng,
-          edition: edition || `No. ${String(markerStore.getAll().length + 1).padStart(2, '0')}`,
-          summary: summary || 'A notable historic location in downtown Kenosha.',
-          link: link || '#',
-          imageUrl: imageUrl || '',
-          artist: artist || '',
-          year: year || ''
-        });
-
-        markerForm.reset();
-        if (imagePreviewWrap) imagePreviewWrap.style.display = 'none';
-        closeModal();
-        this.showToast(`Added ${newMarker.edition}: ${newMarker.title}!`);
-        this.selectMarker(newMarker.id, true);
-      });
-    }
-
-    // Download updated data.js to commit to GitHub
-    const btnDownloadDataJS = document.getElementById('btn-download-datajs');
-    if (btnDownloadDataJS) {
-      btnDownloadDataJS.addEventListener('click', () => {
-        const code = markerStore.exportDataJS();
-        const blob = new Blob([code], { type: 'application/javascript' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'data.js';
-        a.click();
-        URL.revokeObjectURL(url);
-        this.showToast('Downloaded updated data.js for GitHub!', 4000);
-      });
-    }
-
-    // Export / Import JSON & Reset features
-    const btnExport = document.getElementById('btn-export-data');
-    if (btnExport) {
-      btnExport.addEventListener('click', () => {
-        const json = markerStore.exportJSON();
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'greetings-from-kenosha-markers.json';
-        a.click();
-        URL.revokeObjectURL(url);
-        this.showToast('Exported Kenosha Postcard Markers JSON');
-      });
-    }
-
-    const btnResetDefaults = document.getElementById('btn-reset-defaults');
-    if (btnResetDefaults) {
-      btnResetDefaults.addEventListener('click', () => {
-        if (confirm('Reset to original default Greetings from Kenosha Mural marker?')) {
-          markerStore.resetToDefaults();
-          this.showToast('Reset to original collection.');
-        }
-      });
-    }
-
-    // Discreet Author Mode Lock Toggle
-    const btnToggleAuthor = document.getElementById('btn-toggle-author-mode');
-    if (btnToggleAuthor) {
-      btnToggleAuthor.addEventListener('click', () => {
-        if (this.isAuthorMode) {
-          this.lockAuthorMode();
-        } else {
-          this.openPasscodeModal();
-        }
-      });
-    }
-
-    // Passcode Form & Modal Controls
-    const passcodeModal = document.getElementById('modal-passcode');
-    const passcodeForm = document.getElementById('form-passcode');
-    const closePasscodeBtn = document.getElementById('btn-close-passcode-modal');
-    const cancelPasscodeBtn = document.getElementById('btn-cancel-passcode');
-    const passcodeInput = document.getElementById('input-passcode');
-    const passcodeError = document.getElementById('passcode-error-msg');
-
-    const closePasscode = () => {
-      if (passcodeModal) passcodeModal.classList.remove('open');
-      if (passcodeForm) passcodeForm.reset();
-      if (passcodeError) passcodeError.style.display = 'none';
-    };
-
-    if (closePasscodeBtn) closePasscodeBtn.addEventListener('click', closePasscode);
-    if (cancelPasscodeBtn) cancelPasscodeBtn.addEventListener('click', closePasscode);
-
-    if (passcodeForm) {
-      passcodeForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const entered = (passcodeInput ? passcodeInput.value : '').trim();
-        // Default passcode is 'kenosha1930'
-        if (entered.toLowerCase() === 'kenosha1930' || entered === 'admin' || entered === 'kenosha') {
-          closePasscode();
-          this.unlockAuthorMode();
-        } else {
-          if (passcodeError) passcodeError.style.display = 'block';
-          if (passcodeInput) passcodeInput.focus();
-        }
-      });
-    }
-
-    // Keyboard shortcut for Author Mode: Cmd+Shift+A or Ctrl+Shift+A
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        if (this.isAuthorMode) {
-          this.lockAuthorMode();
-        } else {
-          this.openPasscodeModal();
-        }
-      }
-    });
-  }
-
-  openPasscodeModal() {
-    const modal = document.getElementById('modal-passcode');
-    const input = document.getElementById('input-passcode');
-    const error = document.getElementById('passcode-error-msg');
-    if (error) error.style.display = 'none';
-    if (modal) {
-      modal.classList.add('open');
-      setTimeout(() => { if (input) input.focus(); }, 150);
-    }
-  }
-
-  checkAuthorMode() {
-    const params = new URLSearchParams(window.location.search);
-    const authorParam = params.get('author') || params.get('passcode') || params.get('key');
-    const isParamValid = authorParam && (authorParam.toLowerCase() === 'kenosha1930' || authorParam === 'true' || authorParam === '1');
-    const stored = sessionStorage.getItem('wpa_author_mode');
-
-    this.isAuthorMode = isParamValid || stored === 'true';
-    this.updateAuthorModeUI();
-  }
-
-  unlockAuthorMode() {
-    this.isAuthorMode = true;
-    sessionStorage.setItem('wpa_author_mode', 'true');
-    this.updateAuthorModeUI();
-    this.showToast('Author Passcode Verified! Editing Tools Unlocked.', 3800);
-  }
-
-  lockAuthorMode() {
-    this.isAuthorMode = false;
-    sessionStorage.removeItem('wpa_author_mode');
-    this.updateAuthorModeUI();
-    this.showToast('Author Tools Locked (Public Reader Mode)', 3000);
-  }
-
-  updateAuthorModeUI() {
-    const headerControls = document.getElementById('author-header-controls');
-    const footerTools = document.getElementById('author-footer-tools');
-    const lockBtn = document.getElementById('btn-toggle-author-mode');
-    const lockIcon = document.getElementById('icon-author-lock');
-
-    const displayVal = this.isAuthorMode ? 'flex' : 'none';
-
-    if (headerControls) headerControls.style.display = displayVal;
-    if (footerTools) footerTools.style.display = displayVal;
-
-    if (lockBtn) {
-      lockBtn.classList.toggle('author-unlocked', this.isAuthorMode);
-      lockBtn.title = this.isAuthorMode 
-        ? 'Author Mode ACTIVE (Click to Lock)' 
-        : 'Author Mode Locked (Click to enter passcode)';
-    }
-
-    if (lockIcon) {
-      if (this.isAuthorMode) {
-        // Unlocked icon SVG path
-        lockIcon.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>';
-      } else {
-        // Locked icon SVG path
-        lockIcon.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>';
-      }
-    }
-  }
-
-  startPickMode(closeModalFn) {
-    this.isPickingLocation = true;
-    closeModalFn();
-    const banner = document.getElementById('pick-location-banner');
-    if (banner) banner.style.display = 'flex';
-
-    kenoshaMap.enablePickMode((lat, lng) => {
-      this.stopPickMode();
-      const addModal = document.getElementById('modal-add-marker');
-      if (addModal) addModal.classList.add('open');
-
-      const latInput = document.getElementById('input-lat');
-      const lngInput = document.getElementById('input-lng');
-      if (latInput) latInput.value = lat.toFixed(7);
-      if (lngInput) lngInput.value = lng.toFixed(7);
-
-      this.showToast(`Selected point: ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
-    });
-  }
-
-  stopPickMode() {
-    this.isPickingLocation = false;
-    kenoshaMap.disablePickMode();
-    const banner = document.getElementById('pick-location-banner');
-    if (banner) banner.style.display = 'none';
   }
 
   truncate(str, maxLen = 100) {

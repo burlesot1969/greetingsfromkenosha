@@ -1306,125 +1306,128 @@ html, body {
   color: var(--wpa-text-muted);
 }
 
-/* Modal Dialog for Adding Custom Markers */
-.wpa-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(29, 45, 68, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 2000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+/* WPA Surveyor / Coordinate Tool */
+.crosshair-mode {
+  cursor: crosshair !important;
 }
 
-.wpa-modal-overlay.open {
-  display: flex;
-}
-
-.wpa-modal-card {
-  background: var(--wpa-cream-paper);
-  border: 3px solid var(--wpa-charcoal-road);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg), 6px 8px 0px rgba(36, 39, 44, 0.9);
-  width: 100%;
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  animation: modalFadeIn 0.25s ease-out;
-}
-
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.wpa-modal-header {
+.surveyor-banner {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
   background: var(--wpa-ink-navy);
   color: var(--wpa-cream-paper);
-  padding: 1rem 1.25rem;
-  border-bottom: 3px solid var(--wpa-terracotta);
+  border: 2px solid var(--wpa-ochre-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.1rem;
+  box-shadow: var(--shadow-lg), 3px 3px 0px rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  animation: bannerSlideDown 0.25s ease-out;
 }
 
-.wpa-modal-title {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  letter-spacing: 1.5px;
-  margin: 0;
-  color: var(--wpa-cream-paper);
+@keyframes bannerSlideDown {
+  from { opacity: 0; transform: translate(-50%, -15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-.wpa-modal-close {
+.wpa-btn-close-banner {
   background: none;
   border: none;
-  color: var(--wpa-cream-paper);
-  font-size: 1.5rem;
+  color: var(--wpa-ochre-gold);
+  font-size: 1.3rem;
+  line-height: 1;
   cursor: pointer;
+  padding: 0 0.2rem;
 }
 
-.wpa-modal-body {
-  padding: 1.25rem;
+.wpa-btn-close-banner:hover {
+  color: #FFF;
 }
 
-.wpa-form-group {
-  margin-bottom: 0.95rem;
+.wpa-surveyor-icon-container {
+  background: none;
+  border: none;
 }
 
-.wpa-form-label {
-  display: block;
-  font-family: var(--font-sans);
+.wpa-surveyor-pin {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(196, 89, 52, 0.25);
+  border: 2px solid var(--wpa-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(196, 89, 52, 0.6);
+  animation: surveyorPulse 1.8s infinite;
+}
+
+@keyframes surveyorPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(196, 89, 52, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 12px rgba(196, 89, 52, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(196, 89, 52, 0); }
+}
+
+.wpa-surveyor-crosshair {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wpa-terracotta-dark);
+  border: 1.5px solid #FFF;
+}
+
+.wpa-surveyor-popup .leaflet-popup-content-wrapper {
+  background: var(--wpa-cream-paper);
+  border: 2px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  box-shadow: 3px 3px 0px rgba(36, 39, 44, 0.85);
+  padding: 0;
+}
+
+.wpa-surveyor-popup .leaflet-popup-content {
+  margin: 0.6rem 0.85rem;
+}
+
+.wpa-surveyor-card {
+  text-align: center;
+}
+
+.wpa-surveyor-badge {
+  font-family: var(--font-display);
   font-size: 0.85rem;
-  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--wpa-terracotta);
+  margin-bottom: 0.2rem;
+}
+
+.wpa-surveyor-coords {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--wpa-text-dark);
+  background: var(--wpa-cream-bg);
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed var(--wpa-border-color);
+  border-radius: 3px;
+  user-select: all;
   margin-bottom: 0.35rem;
 }
 
-.wpa-form-input,
-.wpa-form-textarea {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  border: 2px solid var(--wpa-border-color);
-  border-radius: var(--radius-sm);
-  background: #FFF;
-  color: var(--wpa-text-dark);
-  outline: none;
-  transition: border-color 0.2s ease;
+.wpa-surveyor-status {
+  font-size: 0.78rem;
+  color: var(--wpa-sage-dark);
+  font-weight: 600;
 }
 
-.wpa-form-input:focus,
-.wpa-form-textarea:focus {
-  border-color: var(--wpa-teal-water);
-  box-shadow: 0 0 0 3px rgba(43, 104, 112, 0.15);
-}
-
-.wpa-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
-}
-
-.wpa-coord-pick-group {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.wpa-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 2px solid var(--wpa-border-color);
+.wpa-btn.active {
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  border-color: var(--wpa-terracotta-dark);
 }
 
 /* Toast Notifications */

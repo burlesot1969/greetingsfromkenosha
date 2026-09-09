@@ -14,8 +14,9 @@ class KenoshaMap {
     this.baseTileLayer = null;
     this.markerMap = new Map(); // id -> L.Marker
     this.activeMarkerId = null;
-    this.isPickMode = false;
-    this.onCoordinatePicked = null;
+    this.isSurveyorMode = false;
+    this.surveyorMarker = null;
+    this.onSurveyorCopied = null;
     this.currentTheme = 'wpa-poster';
   }
 
@@ -63,11 +64,15 @@ class KenoshaMap {
     // Marker Layer Group
     this.markersLayer = L.layerGroup().addTo(this.map);
 
-    // Map Click Listener for "Pick Location" feature
+    // Right-Click (or Long-Press) anywhere on map to drop surveyor pin & copy coordinates
+    this.map.on('contextmenu', (e) => {
+      this.dropSurveyorPin(e.latlng.lat, e.latlng.lng, true);
+    });
+
+    // Left-Click when in Surveyor Mode to drop surveyor pin & copy coordinates
     this.map.on('click', (e) => {
-      if (this.isPickMode && typeof this.onCoordinatePicked === 'function') {
-        this.onCoordinatePicked(e.latlng.lat, e.latlng.lng);
-        this.disablePickMode();
+      if (this.isSurveyorMode) {
+        this.dropSurveyorPin(e.latlng.lat, e.latlng.lng, true);
       }
     });
 
@@ -274,22 +279,74 @@ class KenoshaMap {
     });
   }
 
-  enablePickMode(callback) {
-    this.isPickMode = true;
-    this.onCoordinatePicked = callback;
-    const mapEl = document.getElementById('kenosha-map');
-    if (mapEl) {
-      mapEl.classList.add('crosshair-mode');
+  dropSurveyorPin(lat, lng, autoCopy = true) {
+    if (this.surveyorMarker) {
+      this.map.removeLayer(this.surveyorMarker);
+      this.surveyorMarker = null;
+    }
+
+    const latStr = lat.toFixed(7);
+    const lngStr = lng.toFixed(7);
+    const coordText = `${latStr}, ${lngStr}`;
+
+    if (autoCopy && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(coordText).catch(() => {});
+    }
+
+    const iconHtml = `
+      <div class="wpa-surveyor-pin">
+        <div class="wpa-surveyor-crosshair"></div>
+      </div>
+    `;
+
+    const customIcon = L.divIcon({
+      html: iconHtml,
+      className: 'wpa-surveyor-icon-container',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -16]
+    });
+
+    this.surveyorMarker = L.marker([lat, lng], {
+      icon: customIcon,
+      zIndexOffset: 1000
+    }).addTo(this.map);
+
+    const popupHtml = `
+      <div class="wpa-surveyor-card">
+        <div class="wpa-surveyor-badge">SURVEYOR PIN</div>
+        <div class="wpa-surveyor-coords">${latStr}, ${lngStr}</div>
+        <div class="wpa-surveyor-status">✓ Copied to clipboard!</div>
+      </div>
+    `;
+
+    this.surveyorMarker.bindPopup(popupHtml, {
+      className: 'wpa-surveyor-popup',
+      closeButton: true,
+      autoPan: false
+    }).openPopup();
+
+    if (typeof this.onSurveyorCopied === 'function') {
+      this.onSurveyorCopied(latStr, lngStr);
     }
   }
 
-  disablePickMode() {
-    this.isPickMode = false;
-    this.onCoordinatePicked = null;
+  toggleSurveyorMode() {
+    this.isSurveyorMode = !this.isSurveyorMode;
     const mapEl = document.getElementById('kenosha-map');
-    if (mapEl) {
-      mapEl.classList.remove('crosshair-mode');
+    const btn = document.getElementById('btn-toggle-surveyor');
+    const banner = document.getElementById('surveyor-banner');
+
+    if (this.isSurveyorMode) {
+      if (mapEl) mapEl.classList.add('crosshair-mode');
+      if (btn) btn.classList.add('active');
+      if (banner) banner.style.display = 'flex';
+    } else {
+      if (mapEl) mapEl.classList.remove('crosshair-mode');
+      if (btn) btn.classList.remove('active');
+      if (banner) banner.style.display = 'none';
     }
+    return this.isSurveyorMode;
   }
 }
 
