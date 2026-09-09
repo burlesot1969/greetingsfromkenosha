@@ -294,10 +294,10 @@
             <label class="wpa-form-label" for="input-image-file">Postcard Image (Optional)</label>
             <div style="display:flex; flex-direction:column; gap:0.5rem;">
               <input type="file" id="input-image-file" class="wpa-form-input" accept="image/*" style="padding:0.4rem;">
-              <input type="url" id="input-image-url" class="wpa-form-input" placeholder="Or paste image URL (https://...)">
+              <input type="text" id="input-image-url" class="wpa-form-input" placeholder="e.g. ./card-03.jpg or https://...">
               <div id="modal-image-preview-wrap" style="display:none; text-align:center; padding:0.5rem; background:var(--wpa-cream-bg); border:1.5px dashed var(--wpa-border-color); border-radius:4px;">
-                <img id="modal-image-preview" src="" alt="Preview" style="max-height:120px; max-width:100%; border-radius:4px; border:2px solid var(--wpa-charcoal-road);">
-                <div style="font-size:0.75rem; color:var(--wpa-text-muted); margin-top:0.25rem;">Postcard Photo Preview</div>
+                <img id="modal-image-preview" src="" alt="Preview" style="max-height:120px; max-width:100%; border-radius:4px; border:2px solid var(--wpa-charcoal-road);" onerror="if(!this.dataset.tried){this.dataset.tried='1';if(this.src.includes('assets/')){this.src=this.src.replace('assets/','');}else{this.src='./assets/'+this.src.split('/').pop();}}">
+                <div id="modal-image-preview-label" style="font-size:0.75rem; color:var(--wpa-text-muted); margin-top:0.25rem;">Postcard Photo Preview</div>
               </div>
             </div>
           </div>

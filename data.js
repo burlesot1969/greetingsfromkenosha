@@ -1,9 +1,9 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03
  */
 
-const STORAGE_KEY = 'greetings_from_kenosha_markers_v5';
+const STORAGE_KEY = 'greetings_from_kenosha_markers_v6';
 
 // Pre-populated default collection of Postcards
 export const DEFAULT_MARKERS = [
@@ -57,6 +57,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Harbor', 'Coffee Shop', 'Historic Building', 'Cream City Brick'],
     isDefault: true,
     dateAdded: '2026-09-08T01:00:00Z'
+  },
+  {
+    id: 'kenosha-03',
+    title: 'Weiskopf-Mica Block (Olafson & Porter Vintage Goods)',
+    address: '5000 7th Ave Kenosha WI 53140',
+    lat: 42.5906507,
+    lng: -87.8206569,
+    edition: 'No. 03',
+    editionNum: 3,
+    imageUrl: './card-03.jpg',
+    summary: 'In the 1890s, the Weiskopf block was a disjointed row of three separate wood-frame storefronts. They housed a barbershop, Charles Skidd’s hardware store, and a plumbing shop. The local editors of the Kenosha News publicly shamed the corner as an architectural eyesore. It sure has changed today!',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-3?r=4abqy&utm_campaign=post-expanded-share&utm_medium=web',
+    year: "1890s",
+    artist: 'Todd Burleson',
+    tags: ['Historic Building', 'Downtown', 'Weiskopf Block', 'Vintage Goods'],
+    isDefault: true,
+    dateAdded: '2026-09-09T16:40:06.768Z'
   }
 ];
 

@@ -288,37 +288,46 @@ class GreetingsApp {
       });
     }
 
-    // Image File Upload Preview & Handling
-    const imageFileInput = document.getElementById('input-image-file');
-    const imageUrlInput = document.getElementById('input-image-url');
-    const imagePreviewWrap = document.getElementById('modal-image-preview-wrap');
-    const imagePreviewImg = document.getElementById('modal-image-preview');
-
     if (imageFileInput) {
       imageFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = (event) => {
-            if (imageUrlInput) imageUrlInput.value = event.target.result;
-            if (imagePreviewImg) imagePreviewImg.src = event.target.result;
+            if (imagePreviewImg) {
+              imagePreviewImg.dataset.tried = '';
+              imagePreviewImg.src = event.target.result;
+            }
             if (imagePreviewWrap) imagePreviewWrap.style.display = 'block';
+            
+            // Auto-populate relative path if not already filled
+            if (imageUrlInput && !imageUrlInput.value.trim()) {
+              const editionInput = document.getElementById('input-edition');
+              const digits = (editionInput?.value || '').replace(/\D/g, '');
+              const numStr = digits !== '' ? digits.padStart(2, '0') : '03';
+              imageUrlInput.value = `./card-${numStr}.jpg`;
+            }
           };
           reader.readAsDataURL(file);
         }
       });
     }
 
+    const updateImagePreview = () => {
+      const url = imageUrlInput ? imageUrlInput.value.trim() : '';
+      if (url && imagePreviewImg && imagePreviewWrap) {
+        imagePreviewImg.dataset.tried = '';
+        imagePreviewImg.src = url;
+        imagePreviewWrap.style.display = 'block';
+      } else if (imagePreviewWrap) {
+        imagePreviewWrap.style.display = 'none';
+      }
+    };
+
     if (imageUrlInput) {
-      imageUrlInput.addEventListener('input', (e) => {
-        const url = e.target.value.trim();
-        if (url && imagePreviewImg && imagePreviewWrap) {
-          imagePreviewImg.src = url;
-          imagePreviewWrap.style.display = 'block';
-        } else if (imagePreviewWrap) {
-          imagePreviewWrap.style.display = 'none';
-        }
-      });
+      imageUrlInput.addEventListener('input', updateImagePreview);
+      imageUrlInput.addEventListener('change', updateImagePreview);
+      imageUrlInput.addEventListener('paste', () => setTimeout(updateImagePreview, 50));
     }
 
     // Handle Form Submit
