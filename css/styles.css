@@ -1605,10 +1605,151 @@ html, body {
   font-weight: 600;
 }
 
+.wpa-btn-surveyor-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: #24415C;
+  color: var(--wpa-ochre-gold);
+  border: 1.5px solid var(--wpa-ochre-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  margin-top: 0.45rem;
+  width: 100%;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-surveyor-add:hover {
+  background: #1C3349;
+  color: #FFF;
+  transform: translateY(-1px);
+}
+
 .wpa-btn.active {
   background: var(--wpa-terracotta);
   color: #FFF;
   border-color: var(--wpa-terracotta-dark);
+}
+
+/* Modal Dialog for Planned Markers */
+.wpa-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(29, 45, 68, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.wpa-modal-overlay.open {
+  display: flex !important;
+}
+
+.wpa-modal-card {
+  background: var(--wpa-cream-paper);
+  border: 3px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg), 6px 8px 0px rgba(36, 39, 44, 0.9);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.wpa-modal-header {
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-cream-paper);
+  padding: 1rem 1.25rem;
+  border-bottom: 3px solid var(--wpa-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wpa-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: 1.5px;
+  margin: 0;
+  color: var(--wpa-cream-paper);
+}
+
+.wpa-modal-close {
+  background: none;
+  border: none;
+  color: var(--wpa-cream-paper);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.wpa-modal-body {
+  padding: 1.25rem;
+}
+
+.wpa-form-group {
+  margin-bottom: 0.95rem;
+}
+
+.wpa-form-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--wpa-text-dark);
+  margin-bottom: 0.35rem;
+}
+
+.wpa-form-input,
+.wpa-form-textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  border: 2px solid var(--wpa-border-color);
+  border-radius: var(--radius-sm);
+  background: #FFF;
+  color: var(--wpa-text-dark);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.wpa-form-input:focus,
+.wpa-form-textarea:focus {
+  border-color: var(--wpa-teal-water);
+  box-shadow: 0 0 0 3px rgba(43, 104, 112, 0.15);
+}
+
+.wpa-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.wpa-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--wpa-border-color);
 }
 
 /* Toast Notifications */

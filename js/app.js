@@ -297,10 +297,95 @@ class GreetingsApp {
       }
     });
 
+    // Modal Planned Pin Controls
+    const closePlannedBtn = document.getElementById('btn-close-planned-modal');
+    const cancelPlannedBtn = document.getElementById('btn-cancel-planned');
+    const formPlanned = document.getElementById('form-planned-pin');
+
+    if (closePlannedBtn) {
+      closePlannedBtn.addEventListener('click', () => this.closePlannedModal());
+    }
+    if (cancelPlannedBtn) {
+      cancelPlannedBtn.addEventListener('click', () => this.closePlannedModal());
+    }
+
+    if (formPlanned) {
+      formPlanned.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const edition = document.getElementById('planned-input-edition')?.value.trim() || 'No. 06';
+        const title = document.getElementById('planned-input-title')?.value.trim();
+        const address = document.getElementById('planned-input-address')?.value.trim() || 'Kenosha, WI';
+        const lat = parseFloat(document.getElementById('planned-input-lat')?.value);
+        const lng = parseFloat(document.getElementById('planned-input-lng')?.value);
+        const status = document.getElementById('planned-input-status')?.value || 'Researching';
+        const notes = document.getElementById('planned-input-notes')?.value.trim() || '';
+
+        if (!title || isNaN(lat) || isNaN(lng)) {
+          alert('Please provide a landmark title and valid coordinates.');
+          return;
+        }
+
+        const newPlanned = markerStore.addPlannedMarker({
+          title,
+          address,
+          lat,
+          lng,
+          plannedEdition: edition,
+          status,
+          notes
+        });
+
+        this.closePlannedModal();
+
+        // Ensure curator mode is active so pin displays immediately
+        if (!this.isCuratorMode) {
+          this.isCuratorMode = true;
+          sessionStorage.setItem('wpa_curator_mode', 'true');
+        }
+
+        this.updateCuratorModeState();
+        this.showToast(`📝 Placed Planned Pin: ${newPlanned.plannedEdition} — ${newPlanned.title}!`, 4000);
+      });
+    }
+
     // Callback when any point is pinned or right-clicked
     kenoshaMap.onSurveyorCopied = (lat, lng) => {
       this.showToast(`📍 Copied coordinates: ${lat}, ${lng}`, 3500);
     };
+  }
+
+  openPlannedModal(lat, lng) {
+    const modal = document.getElementById('modal-planned-pin');
+    const latInput = document.getElementById('planned-input-lat');
+    const lngInput = document.getElementById('planned-input-lng');
+    const editionInput = document.getElementById('planned-input-edition');
+    const titleInput = document.getElementById('planned-input-title');
+
+    if (!modal) return;
+
+    if (latInput) latInput.value = parseFloat(lat).toFixed(7);
+    if (lngInput) lngInput.value = parseFloat(lng).toFixed(7);
+
+    const totalCount = markerStore.getAll(true).length;
+    if (editionInput && !editionInput.value) {
+      editionInput.value = `No. ${String(totalCount).padStart(2, '0')}`;
+    }
+
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      if (titleInput) titleInput.focus();
+    }, 150);
+  }
+
+  closePlannedModal() {
+    const modal = document.getElementById('modal-planned-pin');
+    const form = document.getElementById('form-planned-pin');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.style.display = 'none';
+    }
+    if (form) form.reset();
   }
 
   async checkCuratorMode() {

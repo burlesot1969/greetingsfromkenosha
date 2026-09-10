@@ -431,11 +431,18 @@ class KenoshaMap {
       zIndexOffset: 1000
     }).addTo(this.map);
 
+    const isCurator = this.isSurveyorMode || window.__greetingsApp?.isCuratorMode || Boolean(sessionStorage.getItem('wpa_curator_mode') === 'true');
+
     const popupHtml = `
       <div class="wpa-surveyor-card">
         <div class="wpa-surveyor-badge">SURVEYOR PIN</div>
         <div class="wpa-surveyor-coords">${latStr}, ${lngStr}</div>
         <div class="wpa-surveyor-status">✓ Copied to clipboard!</div>
+        ${isCurator ? `
+          <button type="button" id="btn-surveyor-create-pin" class="wpa-btn-surveyor-add">
+            <span>📝 Create Planned Pin Here</span>
+          </button>
+        ` : ''}
       </div>
     `;
 
@@ -444,6 +451,18 @@ class KenoshaMap {
       closeButton: true,
       autoPan: false
     }).openPopup();
+
+    this.surveyorMarker.on('popupopen', () => {
+      const addBtn = document.getElementById('btn-surveyor-create-pin');
+      if (addBtn) {
+        addBtn.addEventListener('click', () => {
+          this.surveyorMarker?.closePopup();
+          if (window.__greetingsApp && typeof window.__greetingsApp.openPlannedModal === 'function') {
+            window.__greetingsApp.openPlannedModal(lat, lng);
+          }
+        });
+      }
+    });
 
     if (typeof this.onSurveyorCopied === 'function') {
       this.onSurveyorCopied(latStr, lngStr);

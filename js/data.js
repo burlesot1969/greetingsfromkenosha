@@ -85,8 +85,61 @@ class MarkerStore {
   }
 
   setPlannedMarkers(list) {
-    this.plannedMarkers = Array.isArray(list) ? [...list] : [];
+    const localStored = this.loadLocalPlanned();
+    const combined = Array.isArray(list) ? [...list] : [];
+    
+    // Merge any locally added planned pins that aren't yet in the file
+    const existingIds = new Set(combined.map(m => m.id));
+    for (const item of localStored) {
+      if (!existingIds.has(item.id)) {
+        combined.push(item);
+        existingIds.add(item.id);
+      }
+    }
+
+    this.plannedMarkers = combined;
     this.notify();
+  }
+
+  addPlannedMarker(plannedData) {
+    const id = plannedData.id || `plan-${Date.now()}`;
+    const newPlanned = {
+      ...plannedData,
+      id,
+      plannedEdition: plannedData.plannedEdition || 'Draft',
+      status: plannedData.status || 'Researching',
+      lat: parseFloat(plannedData.lat),
+      lng: parseFloat(plannedData.lng),
+      dateAdded: new Date().toISOString()
+    };
+
+    this.plannedMarkers.push(newPlanned);
+    this.saveLocalPlanned();
+    this.notify();
+    return newPlanned;
+  }
+
+  saveLocalPlanned() {
+    try {
+      localStorage.setItem('wpa_local_planned_markers', JSON.stringify(this.plannedMarkers));
+    } catch (e) {
+      console.warn('Could not save planned markers to localStorage', e);
+    }
+  }
+
+  loadLocalPlanned() {
+    try {
+      const stored = localStorage.getItem('wpa_local_planned_markers');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load planned markers from localStorage', e);
+    }
+    return [];
   }
 
   getAll(includePlanned = false) {
