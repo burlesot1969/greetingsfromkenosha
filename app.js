@@ -11,11 +11,12 @@ class GreetingsApp {
     this.searchQuery = '';
     this.selectedMarkerId = null;
     this.isCuratorMode = false;
+    this.hasLocalPlannedData = false;
   }
 
-  init() {
-    // 1. Check Curator Planning Mode
-    this.checkCuratorMode();
+  async init() {
+    // 1. Check Curator Planning Mode & load local-only draft file if present
+    await this.checkCuratorMode();
 
     // 2. Initialize Leaflet Map
     kenoshaMap.init('kenosha-map');
@@ -302,16 +303,36 @@ class GreetingsApp {
     };
   }
 
-  checkCuratorMode() {
+  async checkCuratorMode() {
+    this.hasLocalPlannedData = false;
+
+    // Check if the local git-ignored planned-markers.js file exists on this local computer
+    try {
+      const module = await import('./planned-markers.js');
+      if (module && Array.isArray(module.PLANNED_MARKERS) && module.PLANNED_MARKERS.length > 0) {
+        markerStore.setPlannedMarkers(module.PLANNED_MARKERS);
+        this.hasLocalPlannedData = true;
+      }
+    } catch (e) {
+      // File does not exist on public GitHub Pages (100% inaccessible to public)
+      this.hasLocalPlannedData = false;
+    }
+
     const params = new URLSearchParams(window.location.search);
-    const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts') || params.get('key');
-    const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1' || curatorParam.toLowerCase() === 'kenosha1930');
+    const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts');
+    const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1');
     const storedSession = sessionStorage.getItem('wpa_curator_mode');
 
-    this.isCuratorMode = isParamActive || storedSession === 'true';
+    // On local machine where planned-markers.js exists, enable curator mode by default or per toggle
+    this.isCuratorMode = this.hasLocalPlannedData && (isParamActive || storedSession === 'true' || storedSession === null);
   }
 
   toggleCuratorMode() {
+    if (!this.hasLocalPlannedData) {
+      this.showToast('Public Mode: No local planning file found.', 3000);
+      return;
+    }
+
     this.isCuratorMode = !this.isCuratorMode;
     sessionStorage.setItem('wpa_curator_mode', this.isCuratorMode ? 'true' : 'false');
     this.updateCuratorModeState();
@@ -319,7 +340,7 @@ class GreetingsApp {
     if (this.isCuratorMode) {
       this.showToast('🧭 Curator Mode ON: Private Planning Layer visible', 3500);
     } else {
-      this.showToast('Public Mode: Planning Layer hidden', 3000);
+      this.showToast('Curator Planning Layer Hidden', 3000);
     }
   }
 

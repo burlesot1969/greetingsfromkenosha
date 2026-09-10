@@ -77,37 +77,16 @@ export const DEFAULT_MARKERS = [
   }
 ];
 
-// Curatorial & Planning Layer - Future editions in progress (Visible only in Curator Mode)
-export const PLANNED_MARKERS = [
-  {
-    id: 'plan-04',
-    title: 'Simmons Island Light Station',
-    address: '5155 4th Ave, Kenosha, WI',
-    lat: 42.5898,
-    lng: -87.8105,
-    plannedEdition: 'No. 04',
-    status: 'Researching',
-    notes: 'Built in 1906 on Simmons Island. Historic cream city brick keeper tower marking the harbor entrance.',
-    tags: ['Lighthouse', 'Harbor', 'Simmons Island', 'Maritime']
-  },
-  {
-    id: 'plan-05',
-    title: 'Historic Kenosha Streetcar Loop',
-    address: '54th St & 8th Ave, Kenosha, WI',
-    lat: 42.5832,
-    lng: -87.8228,
-    plannedEdition: 'No. 05',
-    status: 'Drafting Story',
-    notes: 'Preserved authentic electric PCC streetcar fleet operating through downtown and harbor park districts.',
-    tags: ['Streetcar', 'Transit', 'Civic Center', 'Downtown']
-  }
-];
-
 class MarkerStore {
   constructor() {
     this.markers = [...DEFAULT_MARKERS];
-    this.plannedMarkers = [...PLANNED_MARKERS];
+    this.plannedMarkers = [];
     this.listeners = [];
+  }
+
+  setPlannedMarkers(list) {
+    this.plannedMarkers = Array.isArray(list) ? [...list] : [];
+    this.notify();
   }
 
   getAll(includePlanned = false) {
