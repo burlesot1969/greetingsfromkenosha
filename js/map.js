@@ -17,6 +17,8 @@ class KenoshaMap {
     this.plannedMap = new Map(); // id -> L.Marker
     this.activeMarkerId = null;
     this.isSurveyorMode = false;
+    this.isRepicking = false;
+    this.onRepickCoordinate = null;
     this.surveyorMarker = null;
     this.onSurveyorCopied = null;
     this.currentTheme = 'wpa-poster';
@@ -74,8 +76,12 @@ class KenoshaMap {
       this.dropSurveyorPin(e.latlng.lat, e.latlng.lng, true);
     });
 
-    // Left-Click when in Surveyor Mode to drop surveyor pin & copy coordinates
+    // Left-Click when in Repick Mode or Surveyor Mode
     this.map.on('click', (e) => {
+      if (this.isRepicking && typeof this.onRepickCoordinate === 'function') {
+        this.onRepickCoordinate(e.latlng.lat, e.latlng.lng);
+        return;
+      }
       if (this.isSurveyorMode) {
         this.dropSurveyorPin(e.latlng.lat, e.latlng.lng, true);
       }
@@ -236,7 +242,7 @@ class KenoshaMap {
             <span>${address}</span>
           </div>
 
-          ${(year || artist) ? `<div class="wpa-postcard-meta">${year}${artist}</div>` : ''}
+          ${(year || artist) ? `<div class="wpa-meta-pill">${year}${artist}</div>` : ''}
 
           <p class="wpa-postcard-summary">${summary}</p>
         </div>
@@ -276,11 +282,38 @@ class KenoshaMap {
       const popupContent = this.createFieldNotePopupHTML(item);
       marker.bindPopup(popupContent, {
         className: 'wpa-field-note-popup',
-        maxWidth: 300,
-        minWidth: 250,
+        maxWidth: 320,
+        minWidth: 260,
         autoPanPaddingTopLeft: [25, 95],
         autoPanPaddingBottomRight: [25, 30],
         closeButton: true
+      });
+
+      marker.on('popupopen', () => {
+        const popupNode = marker.getPopup().getElement();
+        if (!popupNode) return;
+
+        const editBtn = popupNode.querySelector('.wpa-btn-field-edit');
+        const deleteBtn = popupNode.querySelector('.wpa-btn-field-delete');
+
+        if (editBtn) {
+          editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            marker.closePopup();
+            if (window.__greetingsApp && typeof window.__greetingsApp.openEditPlannedModal === 'function') {
+              window.__greetingsApp.openEditPlannedModal(item.id);
+            }
+          });
+        }
+
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (window.__greetingsApp && typeof window.__greetingsApp.deletePlannedPin === 'function') {
+              window.__greetingsApp.deletePlannedPin(item.id);
+            }
+          });
+        }
       });
 
       marker.addTo(this.plannedPinsLayer);
@@ -352,6 +385,17 @@ class KenoshaMap {
         <div class="wpa-field-note-footer">
           <span>Target: ${edition}</span>
           <span>${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}</span>
+        </div>
+
+        <div class="wpa-field-note-actions">
+          <button type="button" class="wpa-btn-field-edit" data-id="${item.id}" title="Edit Pin Details & Coordinates">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            <span>Edit Pin</span>
+          </button>
+          <button type="button" class="wpa-btn-field-delete" data-id="${item.id}" title="Delete this Draft Pin">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            <span>Delete Pin</span>
+          </button>
         </div>
       </div>
     `;

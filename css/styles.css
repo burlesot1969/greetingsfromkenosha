@@ -1487,6 +1487,73 @@ html, body {
   color: var(--wpa-text-muted);
 }
 
+/* Field Note Action Buttons (Edit / Delete) */
+.wpa-field-note-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1.5px dashed var(--wpa-border-color);
+}
+
+.wpa-btn-field-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: #24415C;
+  color: var(--wpa-ochre-gold);
+  border: 1.5px solid var(--wpa-ochre-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  flex: 1;
+  box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.25);
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-field-edit:hover {
+  background: #1C3349;
+  color: #FFF;
+  transform: translateY(-1px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.35);
+}
+
+.wpa-btn-field-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: #FDF2F2;
+  color: #C5221F;
+  border: 1.5px solid #F28B82;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  flex: 1;
+  box-shadow: 1.5px 1.5px 0px rgba(197, 34, 31, 0.15);
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-field-delete:hover {
+  background: #C5221F;
+  color: #FFF;
+  border-color: #A51D1A;
+  transform: translateY(-1px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+}
+
+.wpa-modal-overlay.picking-mode {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* WPA Surveyor / Coordinate Tool */
 .crosshair-mode {
   cursor: crosshair !important;

@@ -85,15 +85,27 @@ class MarkerStore {
   }
 
   setPlannedMarkers(list) {
+    const deletedIds = this.loadDeletedPlannedIds();
     const localStored = this.loadLocalPlanned();
-    const combined = Array.isArray(list) ? [...list] : [];
+    const localMap = new Map(localStored.map(item => [item.id, item]));
     
-    // Merge any locally added planned pins that aren't yet in the file
-    const existingIds = new Set(combined.map(m => m.id));
+    const combined = [];
+    const seenIds = new Set();
+
+    if (Array.isArray(list)) {
+      for (const item of list) {
+        if (!deletedIds.has(item.id)) {
+          const toUse = localMap.has(item.id) ? localMap.get(item.id) : item;
+          combined.push(toUse);
+          seenIds.add(item.id);
+        }
+      }
+    }
+
     for (const item of localStored) {
-      if (!existingIds.has(item.id)) {
+      if (!seenIds.has(item.id) && !deletedIds.has(item.id)) {
         combined.push(item);
-        existingIds.add(item.id);
+        seenIds.add(item.id);
       }
     }
 
@@ -119,6 +131,33 @@ class MarkerStore {
     return newPlanned;
   }
 
+  updatePlannedMarker(id, updatedData) {
+    const idx = this.plannedMarkers.findIndex(m => m.id === id);
+    if (idx !== -1) {
+      this.plannedMarkers[idx] = {
+        ...this.plannedMarkers[idx],
+        ...updatedData,
+        lat: parseFloat(updatedData.lat ?? this.plannedMarkers[idx].lat),
+        lng: parseFloat(updatedData.lng ?? this.plannedMarkers[idx].lng)
+      };
+      this.saveLocalPlanned();
+      this.notify();
+      return this.plannedMarkers[idx];
+    }
+    return null;
+  }
+
+  deletePlannedMarker(id) {
+    const deletedIds = this.loadDeletedPlannedIds();
+    deletedIds.add(id);
+    this.saveDeletedPlannedIds(deletedIds);
+
+    this.plannedMarkers = this.plannedMarkers.filter(m => m.id !== id);
+    this.saveLocalPlanned();
+    this.notify();
+    return true;
+  }
+
   saveLocalPlanned() {
     try {
       localStorage.setItem('wpa_local_planned_markers', JSON.stringify(this.plannedMarkers));
@@ -140,6 +179,25 @@ class MarkerStore {
       console.warn('Could not load planned markers from localStorage', e);
     }
     return [];
+  }
+
+  loadDeletedPlannedIds() {
+    try {
+      const stored = localStorage.getItem('wpa_deleted_planned_ids');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          return new Set(parsed);
+        }
+      }
+    } catch (e) {}
+    return new Set();
+  }
+
+  saveDeletedPlannedIds(setObj) {
+    try {
+      localStorage.setItem('wpa_deleted_planned_ids', JSON.stringify([...setObj]));
+    } catch (e) {}
   }
 
   getAll(includePlanned = false) {

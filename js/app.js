@@ -312,7 +312,8 @@ class GreetingsApp {
     if (formPlanned) {
       formPlanned.addEventListener('submit', (e) => {
         e.preventDefault();
-        const edition = document.getElementById('planned-input-edition')?.value.trim() || 'No. 06';
+        const id = document.getElementById('planned-input-id')?.value.trim();
+        const edition = document.getElementById('planned-input-edition')?.value.trim() || 'No. 04';
         const title = document.getElementById('planned-input-title')?.value.trim();
         const address = document.getElementById('planned-input-address')?.value.trim() || 'Kenosha, WI';
         const lat = parseFloat(document.getElementById('planned-input-lat')?.value);
@@ -325,15 +326,28 @@ class GreetingsApp {
           return;
         }
 
-        const newPlanned = markerStore.addPlannedMarker({
-          title,
-          address,
-          lat,
-          lng,
-          plannedEdition: edition,
-          status,
-          notes
-        });
+        let savedItem = null;
+        if (id) {
+          savedItem = markerStore.updatePlannedMarker(id, {
+            title,
+            address,
+            lat,
+            lng,
+            plannedEdition: edition,
+            status,
+            notes
+          });
+        } else {
+          savedItem = markerStore.addPlannedMarker({
+            title,
+            address,
+            lat,
+            lng,
+            plannedEdition: edition,
+            status,
+            notes
+          });
+        }
 
         this.closePlannedModal();
 
@@ -344,7 +358,69 @@ class GreetingsApp {
         }
 
         this.updateCuratorModeState();
-        this.showToast(`📝 Placed Planned Pin: ${newPlanned.plannedEdition} — ${newPlanned.title}!`, 4000);
+        
+        if (id) {
+          this.showToast(`✏️ Updated Planned Pin: ${savedItem ? savedItem.plannedEdition : edition} — ${title}!`, 4000);
+        } else {
+          this.showToast(`📝 Placed Planned Pin: ${savedItem ? savedItem.plannedEdition : edition} — ${title}!`, 4000);
+        }
+      });
+    }
+
+    // Repick Planned Coordinates from map
+    const repickBtn = document.getElementById('btn-repick-planned-coords');
+    const repickBanner = document.getElementById('repick-banner');
+    const closeRepickBtn = document.getElementById('btn-close-repick');
+
+    if (repickBtn) {
+      repickBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-planned-pin');
+        if (modal) {
+          modal.classList.add('picking-mode');
+        }
+
+        if (repickBanner) {
+          repickBanner.style.display = 'flex';
+        }
+
+        kenoshaMap.isRepicking = true;
+        const mapEl = document.getElementById('kenosha-map');
+        if (mapEl) mapEl.classList.add('crosshair-mode');
+
+        kenoshaMap.onRepickCoordinate = (lat, lng) => {
+          kenoshaMap.isRepicking = false;
+          if (mapEl) mapEl.classList.remove('crosshair-mode');
+          if (repickBanner) repickBanner.style.display = 'none';
+
+          const latInput = document.getElementById('planned-input-lat');
+          const lngInput = document.getElementById('planned-input-lng');
+          if (latInput) latInput.value = parseFloat(lat).toFixed(7);
+          if (lngInput) lngInput.value = parseFloat(lng).toFixed(7);
+
+          // Drop surveyor pin to visually mark new spot
+          kenoshaMap.dropSurveyorPin(lat, lng, false);
+
+          if (modal) {
+            modal.classList.remove('picking-mode');
+          }
+
+          this.showToast(`📍 Set coordinates to: ${lat.toFixed(5)}, ${lng.toFixed(5)}`, 3000);
+        };
+      });
+    }
+
+    if (closeRepickBtn) {
+      closeRepickBtn.addEventListener('click', () => {
+        kenoshaMap.isRepicking = false;
+        kenoshaMap.onRepickCoordinate = null;
+        const mapEl = document.getElementById('kenosha-map');
+        if (mapEl) mapEl.classList.remove('crosshair-mode');
+        if (repickBanner) repickBanner.style.display = 'none';
+
+        const modal = document.getElementById('modal-planned-pin');
+        if (modal) {
+          modal.classList.remove('picking-mode');
+        }
       });
     }
 
@@ -356,21 +432,45 @@ class GreetingsApp {
 
   openPlannedModal(lat, lng) {
     const modal = document.getElementById('modal-planned-pin');
+    const modalTitle = document.getElementById('modal-planned-title');
+    const saveBtn = document.getElementById('btn-save-planned');
+    const idInput = document.getElementById('planned-input-id');
     const latInput = document.getElementById('planned-input-lat');
     const lngInput = document.getElementById('planned-input-lng');
     const editionInput = document.getElementById('planned-input-edition');
     const titleInput = document.getElementById('planned-input-title');
+    const addressInput = document.getElementById('planned-input-address');
+    const statusSelect = document.getElementById('planned-input-status');
+    const notesInput = document.getElementById('planned-input-notes');
 
     if (!modal) return;
+
+    if (idInput) idInput.value = '';
+    if (modalTitle) modalTitle.textContent = '📝 CREATE PLANNED PIN';
+    if (saveBtn) saveBtn.textContent = 'Save Planned Pin';
 
     if (latInput) latInput.value = parseFloat(lat).toFixed(7);
     if (lngInput) lngInput.value = parseFloat(lng).toFixed(7);
 
-    const totalCount = markerStore.getAll(true).length;
-    if (editionInput && !editionInput.value) {
-      editionInput.value = `No. ${String(totalCount).padStart(2, '0')}`;
+    // Calculate next suggested edition number (highest edition + 1)
+    const all = markerStore.getAll(true);
+    let maxEditionNum = 0;
+    all.forEach(m => {
+      const num = typeof m.editionNum === 'number' ? m.editionNum : parseInt((m.edition || m.plannedEdition || '').replace(/\D/g, ''), 10);
+      if (!isNaN(num) && num > maxEditionNum) {
+        maxEditionNum = num;
+      }
+    });
+    const nextNum = maxEditionNum + 1;
+    if (editionInput) {
+      editionInput.value = `No. ${String(nextNum).padStart(2, '0')}`;
     }
+    if (titleInput) titleInput.value = '';
+    if (addressInput) addressInput.value = '';
+    if (statusSelect) statusSelect.value = 'Researching';
+    if (notesInput) notesInput.value = '';
 
+    modal.classList.remove('picking-mode');
     modal.classList.add('open');
     modal.style.display = 'flex';
     setTimeout(() => {
@@ -378,11 +478,73 @@ class GreetingsApp {
     }, 150);
   }
 
+  openEditPlannedModal(id) {
+    const item = markerStore.getById(id);
+    if (!item) {
+      this.showToast('Could not find planned pin to edit');
+      return;
+    }
+
+    const modal = document.getElementById('modal-planned-pin');
+    const modalTitle = document.getElementById('modal-planned-title');
+    const saveBtn = document.getElementById('btn-save-planned');
+    const idInput = document.getElementById('planned-input-id');
+    const latInput = document.getElementById('planned-input-lat');
+    const lngInput = document.getElementById('planned-input-lng');
+    const editionInput = document.getElementById('planned-input-edition');
+    const titleInput = document.getElementById('planned-input-title');
+    const addressInput = document.getElementById('planned-input-address');
+    const statusSelect = document.getElementById('planned-input-status');
+    const notesInput = document.getElementById('planned-input-notes');
+
+    if (!modal) return;
+
+    if (idInput) idInput.value = item.id;
+    if (modalTitle) modalTitle.textContent = `✏️ EDIT PLANNED PIN • ${item.plannedEdition || item.edition || ''}`;
+    if (saveBtn) saveBtn.textContent = 'Update Planned Pin';
+
+    if (editionInput) editionInput.value = item.plannedEdition || item.edition || '';
+    if (statusSelect) statusSelect.value = item.status || 'Researching';
+    if (titleInput) titleInput.value = item.title || '';
+    if (addressInput) addressInput.value = item.address || '';
+    if (latInput) latInput.value = parseFloat(item.lat).toFixed(7);
+    if (lngInput) lngInput.value = parseFloat(item.lng).toFixed(7);
+    if (notesInput) notesInput.value = item.notes || '';
+
+    modal.classList.remove('picking-mode');
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      if (titleInput) titleInput.focus();
+    }, 150);
+  }
+
+  deletePlannedPin(id) {
+    const item = markerStore.getById(id);
+    const pinName = item ? `${item.plannedEdition || item.edition || 'Pin'}: ${item.title}` : 'this pin';
+    
+    const confirmed = window.confirm(`Are you sure you want to delete planned pin "${pinName}"?\n\nThis will remove it from your curator map layer.`);
+    if (!confirmed) return;
+
+    markerStore.deletePlannedMarker(id);
+    this.updateCuratorModeState();
+    this.showToast(`🗑️ Deleted Planned Pin: ${pinName}`, 3500);
+  }
+
   closePlannedModal() {
     const modal = document.getElementById('modal-planned-pin');
     const form = document.getElementById('form-planned-pin');
+    const repickBanner = document.getElementById('repick-banner');
+    const mapEl = document.getElementById('kenosha-map');
+
+    kenoshaMap.isRepicking = false;
+    kenoshaMap.onRepickCoordinate = null;
+    if (mapEl) mapEl.classList.remove('crosshair-mode');
+    if (repickBanner) repickBanner.style.display = 'none';
+
     if (modal) {
       modal.classList.remove('open');
+      modal.classList.remove('picking-mode');
       modal.style.display = 'none';
     }
     if (form) form.reset();
@@ -394,7 +556,7 @@ class GreetingsApp {
     // Check if the local git-ignored planned-markers.js file exists on this local computer
     try {
       const module = await import('./planned-markers.js');
-      if (module && Array.isArray(module.PLANNED_MARKERS) && module.PLANNED_MARKERS.length > 0) {
+      if (module && Array.isArray(module.PLANNED_MARKERS)) {
         markerStore.setPlannedMarkers(module.PLANNED_MARKERS);
         this.hasLocalPlannedData = true;
       }
@@ -403,12 +565,19 @@ class GreetingsApp {
       this.hasLocalPlannedData = false;
     }
 
+    // Also check if user has local draft markers stored in localStorage
+    const localStored = markerStore.loadLocalPlanned();
+    if (localStored.length > 0) {
+      this.hasLocalPlannedData = true;
+      markerStore.setPlannedMarkers([]); // will merge localStored
+    }
+
     const params = new URLSearchParams(window.location.search);
     const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts');
     const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1');
     const storedSession = sessionStorage.getItem('wpa_curator_mode');
 
-    // On local machine where planned-markers.js exists, enable curator mode by default or per toggle
+    // On local machine where planned-markers.js exists or local draft markers exist, enable curator mode by default or per toggle
     this.isCuratorMode = this.hasLocalPlannedData && (isParamActive || storedSession === 'true' || storedSession === null);
   }
 
