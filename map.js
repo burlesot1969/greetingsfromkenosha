@@ -191,6 +191,7 @@ class KenoshaMap {
     const link = data.link || '#';
     const year = data.year ? `<span class="wpa-meta-pill">Est. ${data.year}</span>` : '';
     const artist = data.artist ? `<span class="wpa-meta-pill">Artist: ${data.artist}</span>` : '';
+    const isCurator = window.__greetingsApp?.isCuratorMode || Boolean(sessionStorage.getItem('wpa_curator_mode') === 'true') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     return `
       <article class="wpa-postcard" role="region" aria-label="Postcard: ${title}">
@@ -242,7 +243,7 @@ class KenoshaMap {
             <span>${address}</span>
           </div>
 
-          ${(year || artist) ? `<div class="wpa-postcard-meta">${year}${artist}</div>` : ''}
+          ${(year || artist) ? `<div class="wpa-meta-pill">${year}${artist}</div>` : ''}
 
           <p class="wpa-postcard-summary">${summary}</p>
         </div>
@@ -259,6 +260,15 @@ class KenoshaMap {
             <span>${data.lat.toFixed(5)}° N, ${Math.abs(data.lng).toFixed(5)}° W</span>
           </div>
         </div>
+
+        ${isCurator ? `
+          <div class="wpa-postcard-curator-actions">
+            <button type="button" class="wpa-btn-repick-live-marker" data-id="${data.id}" data-edition="${edition}" data-title="${title}" title="Repick pin location on the map">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>📍 Correct Pin Location</span>
+            </button>
+          </div>
+        ` : ''}
       </article>
     `;
   }

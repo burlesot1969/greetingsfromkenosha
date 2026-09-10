@@ -1306,6 +1306,37 @@ html, body {
   color: var(--wpa-text-muted);
 }
 
+.wpa-postcard-curator-actions {
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1.5px dashed var(--wpa-border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wpa-btn-repick-live-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #24415C;
+  color: var(--wpa-ochre-gold);
+  border: 1.5px solid var(--wpa-ochre-gold);
+  border-radius: 3px;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.2);
+}
+
+.wpa-btn-repick-live-marker:hover {
+  background: #1C3349;
+  color: #FFF;
+  transform: translateY(-1px);
+}
+
 /* ==========================================================================
    Curator Mode & Planned Pins Layer (1930s Blueprint / Field Notes Aesthetic)
    ========================================================================== */

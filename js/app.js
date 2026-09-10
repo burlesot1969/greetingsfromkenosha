@@ -460,6 +460,55 @@ class GreetingsApp {
           this.deletePlannedPin(id);
         }
       }
+
+      // Live Postcard Repositioning Button
+      const repickLiveBtn = e.target.closest('.wpa-btn-repick-live-marker');
+      if (repickLiveBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = repickLiveBtn.dataset.id;
+        const title = repickLiveBtn.dataset.title || 'Postcard';
+        const edition = repickLiveBtn.dataset.edition || 'Pin';
+
+        kenoshaMap.map.closePopup();
+
+        const repickBanner = document.getElementById('repick-banner');
+        if (repickBanner) {
+          const span = repickBanner.querySelector('span');
+          if (span) {
+            span.innerHTML = `<strong>Repositioning ${edition}:</strong> Click anywhere on the map to place this pin at the exact spot.`;
+          }
+          repickBanner.style.display = 'flex';
+        }
+
+        kenoshaMap.isRepicking = true;
+        const mapEl = document.getElementById('kenosha-map');
+        if (mapEl) mapEl.classList.add('crosshair-mode');
+
+        kenoshaMap.onRepickCoordinate = (lat, lng) => {
+          kenoshaMap.isRepicking = false;
+          if (mapEl) mapEl.classList.remove('crosshair-mode');
+          if (repickBanner) repickBanner.style.display = 'none';
+
+          // Update marker in data store & localStorage
+          markerStore.updateMarkerCoordinates(id, lat, lng);
+
+          // Re-render and re-focus
+          this.refreshMarkers();
+          setTimeout(() => {
+            kenoshaMap.focusMarker(id);
+          }, 350);
+
+          const latFormatted = lat.toFixed(7);
+          const lngFormatted = lng.toFixed(7);
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(`${latFormatted}, ${lngFormatted}`).catch(() => {});
+          }
+
+          this.showToast(`✓ Repositioned ${edition} to ${latFormatted}, ${lngFormatted}! (Coordinates copied to clipboard)`, 5000);
+        };
+      }
     });
 
     // Callback when any point is pinned or right-clicked
