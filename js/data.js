@@ -77,22 +77,58 @@ export const DEFAULT_MARKERS = [
   }
 ];
 
+// Curatorial & Planning Layer - Future editions in progress (Visible only in Curator Mode)
+export const PLANNED_MARKERS = [
+  {
+    id: 'plan-04',
+    title: 'Simmons Island Light Station',
+    address: '5155 4th Ave, Kenosha, WI',
+    lat: 42.5898,
+    lng: -87.8105,
+    plannedEdition: 'No. 04',
+    status: 'Researching',
+    notes: 'Built in 1906 on Simmons Island. Historic cream city brick keeper tower marking the harbor entrance.',
+    tags: ['Lighthouse', 'Harbor', 'Simmons Island', 'Maritime']
+  },
+  {
+    id: 'plan-05',
+    title: 'Historic Kenosha Streetcar Loop',
+    address: '54th St & 8th Ave, Kenosha, WI',
+    lat: 42.5832,
+    lng: -87.8228,
+    plannedEdition: 'No. 05',
+    status: 'Drafting Story',
+    notes: 'Preserved authentic electric PCC streetcar fleet operating through downtown and harbor park districts.',
+    tags: ['Streetcar', 'Transit', 'Civic Center', 'Downtown']
+  }
+];
+
 class MarkerStore {
   constructor() {
     this.markers = [...DEFAULT_MARKERS];
+    this.plannedMarkers = [...PLANNED_MARKERS];
     this.listeners = [];
   }
 
-  getAll() {
-    return [...this.markers].sort((a, b) => {
+  getAll(includePlanned = false) {
+    const list = includePlanned ? [...this.markers, ...this.plannedMarkers] : [...this.markers];
+    return list.sort((a, b) => {
       const numA = typeof a.editionNum === 'number' ? a.editionNum : 999;
       const numB = typeof b.editionNum === 'number' ? b.editionNum : 999;
       return numA - numB;
     });
   }
 
+  getPublished() {
+    return [...this.markers].sort((a, b) => (a.editionNum ?? 999) - (b.editionNum ?? 999));
+  }
+
+  getPlanned() {
+    return [...this.plannedMarkers];
+  }
+
   getById(id) {
-    return this.markers.find(m => m.id === id) || null;
+    return this.markers.find(m => m.id === id) || this.plannedMarkers.find(m => m.id === id) || null;
   }
 
   subscribe(listener) {
@@ -109,3 +145,4 @@ class MarkerStore {
 }
 
 export const markerStore = new MarkerStore();
+

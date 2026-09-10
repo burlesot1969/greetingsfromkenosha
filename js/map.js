@@ -9,10 +9,12 @@ class KenoshaMap {
   constructor() {
     this.map = null;
     this.markersLayer = null;
+    this.plannedPinsLayer = null;
     this.parksLayer = null;
     this.boundariesLayer = null;
     this.baseTileLayer = null;
     this.markerMap = new Map(); // id -> L.Marker
+    this.plannedMap = new Map(); // id -> L.Marker
     this.activeMarkerId = null;
     this.isSurveyorMode = false;
     this.surveyorMarker = null;
@@ -61,8 +63,11 @@ class KenoshaMap {
     // Add Tile Layers (OSM natural vector rendering with WPA color styling)
     this.setBaseTheme(this.currentTheme);
 
-    // Marker Layer Group
+    // Marker Layer Group (Public Live Postcards)
     this.markersLayer = L.layerGroup().addTo(this.map);
+
+    // Planned Pins Layer Group (Private Curator Layer)
+    this.plannedPinsLayer = L.layerGroup();
 
     // Right-Click (or Long-Press) anywhere on map to drop surveyor pin & copy coordinates
     this.map.on('contextmenu', (e) => {
@@ -250,6 +255,120 @@ class KenoshaMap {
         </div>
       </article>
     `;
+  }
+
+  renderPlannedMarkers(plannedList) {
+    this.plannedPinsLayer.clearLayers();
+    this.plannedMap.clear();
+
+    if (!Array.isArray(plannedList) || plannedList.length === 0) return;
+
+    plannedList.forEach((item) => {
+      const customIcon = this.createPlannedMarkerIcon(item);
+
+      const marker = L.marker([item.lat, item.lng], {
+        icon: customIcon,
+        title: `Curator Draft: ${item.title}`,
+        riseOnHover: true,
+        alt: `${item.plannedEdition || 'Draft'}: ${item.title}`
+      });
+
+      const popupContent = this.createFieldNotePopupHTML(item);
+      marker.bindPopup(popupContent, {
+        className: 'wpa-field-note-popup',
+        maxWidth: 300,
+        minWidth: 250,
+        autoPanPaddingTopLeft: [25, 95],
+        autoPanPaddingBottomRight: [25, 30],
+        closeButton: true
+      });
+
+      marker.addTo(this.plannedPinsLayer);
+      this.plannedMap.set(item.id, marker);
+    });
+  }
+
+  createPlannedMarkerIcon(item) {
+    const edition = item.plannedEdition || 'Draft';
+    const digits = edition.replace(/\D/g, '');
+    const numOnly = digits !== '' ? digits : '??';
+
+    const iconHtml = `
+      <div class="wpa-pin-planned" data-id="${item.id}" title="Curator Planned Pin: ${item.title}">
+        <div class="wpa-pin-head">
+          <div class="wpa-pin-inner">
+            <span class="wpa-pin-no">#</span>
+            <span class="wpa-pin-edition">${numOnly}</span>
+          </div>
+        </div>
+        <div class="wpa-pin-stem"></div>
+        <div class="wpa-pin-shadow"></div>
+      </div>
+    `;
+
+    return L.divIcon({
+      html: iconHtml,
+      className: 'wpa-planned-pin-container',
+      iconSize: [40, 48],
+      iconAnchor: [20, 48],
+      popupAnchor: [0, -44]
+    });
+  }
+
+  createFieldNotePopupHTML(item) {
+    const title = item.title || 'Upcoming Postcard Landmark';
+    const address = item.address || 'Kenosha, WI';
+    const edition = item.plannedEdition || 'Planned';
+    const status = item.status || 'In Research';
+    const notes = item.notes || 'No curatorial field notes recorded yet.';
+    const statusLower = status.toLowerCase();
+    const statusClass = statusLower.includes('art')
+      ? 'status-art'
+      : statusLower.includes('writ')
+        ? 'status-writing'
+        : 'status-researching';
+
+    return `
+      <div class="wpa-field-note-card" role="region" aria-label="Curator Note: ${title}">
+        <div class="wpa-field-note-header">
+          <span class="wpa-field-note-badge">📝 CURATOR NOTE • ${edition}</span>
+          <span class="wpa-status-pill ${statusClass}">${status}</span>
+        </div>
+
+        <h3 class="wpa-field-note-title">${title}</h3>
+
+        <div class="wpa-field-note-addr">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          <span>${address}</span>
+        </div>
+
+        <div class="wpa-field-note-box">
+          <div class="wpa-field-note-label">Curatorial &amp; Field Notes</div>
+          <p class="wpa-field-note-text">${notes}</p>
+        </div>
+
+        <div class="wpa-field-note-footer">
+          <span>Target: ${edition}</span>
+          <span>${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  setPlannedLayerVisibility(visible = true) {
+    if (!this.map || !this.plannedPinsLayer) return;
+
+    if (visible) {
+      if (!this.map.hasLayer(this.plannedPinsLayer)) {
+        this.plannedPinsLayer.addTo(this.map);
+      }
+    } else {
+      if (this.map.hasLayer(this.plannedPinsLayer)) {
+        this.map.removeLayer(this.plannedPinsLayer);
+      }
+    }
   }
 
   focusMarker(id, zoomLevel = 15) {

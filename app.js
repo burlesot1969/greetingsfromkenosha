@@ -10,21 +10,33 @@ class GreetingsApp {
   constructor() {
     this.searchQuery = '';
     this.selectedMarkerId = null;
+    this.isCuratorMode = false;
   }
 
   init() {
-    // 1. Initialize Leaflet Map
+    // 1. Check Curator Planning Mode
+    this.checkCuratorMode();
+
+    // 2. Initialize Leaflet Map
     kenoshaMap.init('kenosha-map');
 
-    // 2. Render initial markers
+    // 3. Render initial markers
     this.refreshMarkers();
 
-    // 3. Setup event listeners & Surveyor Tool
+    // 4. If in Curator Mode, render planned draft pins
+    if (this.isCuratorMode) {
+      this.updateCuratorModeState();
+    }
+
+    // 5. Setup event listeners & Surveyor Tool
     this.setupEventListeners();
 
-    // 4. Subscribe to data changes
+    // 6. Subscribe to data changes
     markerStore.subscribe(() => {
       this.refreshMarkers();
+      if (this.isCuratorMode) {
+        this.updateCuratorModeState();
+      }
     });
 
     // Automatically highlight the first marker after initial load
@@ -262,10 +274,68 @@ class GreetingsApp {
       });
     }
 
+    // Curator Mode Badge Click / Keyboard Toggle
+    const curatorBadge = document.getElementById('curator-mode-badge');
+    if (curatorBadge) {
+      curatorBadge.addEventListener('click', () => {
+        this.toggleCuratorMode();
+      });
+      curatorBadge.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.toggleCuratorMode();
+        }
+      });
+    }
+
+    // Keyboard shortcut to toggle Curator Mode: Shift + P (Planner)
+    document.addEventListener('keydown', (e) => {
+      if (e.shiftKey && (e.key === 'P' || e.key === 'p') && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        this.toggleCuratorMode();
+      }
+    });
+
     // Callback when any point is pinned or right-clicked
     kenoshaMap.onSurveyorCopied = (lat, lng) => {
       this.showToast(`📍 Copied coordinates: ${lat}, ${lng}`, 3500);
     };
+  }
+
+  checkCuratorMode() {
+    const params = new URLSearchParams(window.location.search);
+    const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts') || params.get('key');
+    const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1' || curatorParam.toLowerCase() === 'kenosha1930');
+    const storedSession = sessionStorage.getItem('wpa_curator_mode');
+
+    this.isCuratorMode = isParamActive || storedSession === 'true';
+  }
+
+  toggleCuratorMode() {
+    this.isCuratorMode = !this.isCuratorMode;
+    sessionStorage.setItem('wpa_curator_mode', this.isCuratorMode ? 'true' : 'false');
+    this.updateCuratorModeState();
+
+    if (this.isCuratorMode) {
+      this.showToast('🧭 Curator Mode ON: Private Planning Layer visible', 3500);
+    } else {
+      this.showToast('Public Mode: Planning Layer hidden', 3000);
+    }
+  }
+
+  updateCuratorModeState() {
+    const badge = document.getElementById('curator-mode-badge');
+    if (badge) {
+      badge.style.display = this.isCuratorMode ? 'inline-flex' : 'none';
+    }
+
+    if (this.isCuratorMode) {
+      const plannedList = markerStore.getPlanned();
+      kenoshaMap.renderPlannedMarkers(plannedList);
+      kenoshaMap.setPlannedLayerVisibility(true);
+    } else {
+      kenoshaMap.setPlannedLayerVisibility(false);
+    }
   }
 
   truncate(str, maxLen = 100) {
