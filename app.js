@@ -424,6 +424,44 @@ class GreetingsApp {
       });
     }
 
+    // Global delegated click listener for on-map popup buttons
+    document.addEventListener('click', (e) => {
+      const createBtn = e.target.closest('#btn-surveyor-create-pin') || e.target.closest('.wpa-btn-surveyor-add');
+      if (createBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        kenoshaMap.surveyorMarker?.closePopup();
+        const lat = parseFloat(createBtn.dataset.lat);
+        const lng = parseFloat(createBtn.dataset.lng);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          this.openPlannedModal(lat, lng);
+        } else if (kenoshaMap.surveyorMarker) {
+          const pos = kenoshaMap.surveyorMarker.getLatLng();
+          this.openPlannedModal(pos.lat, pos.lng);
+        }
+      }
+
+      const editBtn = e.target.closest('.wpa-btn-field-edit');
+      if (editBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = editBtn.dataset.id;
+        if (id) {
+          this.openEditPlannedModal(id);
+        }
+      }
+
+      const deleteBtn = e.target.closest('.wpa-btn-field-delete');
+      if (deleteBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = deleteBtn.dataset.id;
+        if (id) {
+          this.deletePlannedPin(id);
+        }
+      }
+    });
+
     // Callback when any point is pinned or right-clicked
     kenoshaMap.onSurveyorCopied = (lat, lng) => {
       this.showToast(`📍 Copied coordinates: ${lat}, ${lng}`, 3500);
@@ -553,6 +591,11 @@ class GreetingsApp {
   async checkCuratorMode() {
     this.hasLocalPlannedData = false;
 
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+    if (isLocalHost) {
+      this.hasLocalPlannedData = true;
+    }
+
     // Check if the local git-ignored planned-markers.js file exists on this local computer
     try {
       const module = await import('./planned-markers.js');
@@ -562,7 +605,9 @@ class GreetingsApp {
       }
     } catch (e) {
       // File does not exist on public GitHub Pages (100% inaccessible to public)
-      this.hasLocalPlannedData = false;
+      if (!isLocalHost) {
+        this.hasLocalPlannedData = false;
+      }
     }
 
     // Also check if user has local draft markers stored in localStorage
@@ -578,7 +623,7 @@ class GreetingsApp {
     const storedSession = sessionStorage.getItem('wpa_curator_mode');
 
     // On local machine where planned-markers.js exists or local draft markers exist, enable curator mode by default or per toggle
-    this.isCuratorMode = this.hasLocalPlannedData && (isParamActive || storedSession === 'true' || storedSession === null);
+    this.isCuratorMode = this.hasLocalPlannedData && (isLocalHost || isParamActive || storedSession === 'true' || storedSession === null);
   }
 
   toggleCuratorMode() {
