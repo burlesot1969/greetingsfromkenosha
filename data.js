@@ -79,28 +79,12 @@ export const DEFAULT_MARKERS = [
 
 class MarkerStore {
   constructor() {
-    this.markers = this.loadLiveMarkersWithOverrides();
+    this.markers = [...DEFAULT_MARKERS];
     this.plannedMarkers = [];
     this.listeners = [];
-  }
-
-  loadLiveMarkersWithOverrides() {
-    const base = [...DEFAULT_MARKERS];
     try {
-      const overrides = JSON.parse(localStorage.getItem('wpa_custom_live_coordinates') || '{}');
-      return base.map(m => {
-        if (overrides[m.id]) {
-          return {
-            ...m,
-            lat: parseFloat(overrides[m.id].lat),
-            lng: parseFloat(overrides[m.id].lng)
-          };
-        }
-        return m;
-      });
-    } catch (e) {
-      return base;
-    }
+      localStorage.removeItem('wpa_custom_live_coordinates');
+    } catch (e) {}
   }
 
   updateMarkerCoordinates(id, lat, lng) {
@@ -111,11 +95,6 @@ class MarkerStore {
         lat: parseFloat(lat),
         lng: parseFloat(lng)
       };
-      try {
-        const overrides = JSON.parse(localStorage.getItem('wpa_custom_live_coordinates') || '{}');
-        overrides[id] = { lat: parseFloat(lat), lng: parseFloat(lng) };
-        localStorage.setItem('wpa_custom_live_coordinates', JSON.stringify(overrides));
-      } catch (e) {}
       this.notify();
       return this.markers[idx];
     }
