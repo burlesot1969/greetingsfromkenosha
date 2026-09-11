@@ -725,9 +725,9 @@ class GreetingsApp {
         this.updateCuratorModeState();
         
         if (id) {
-          this.showToast(`✏️ Updated Planned Pin: ${savedItem ? savedItem.plannedEdition : edition} — ${title}!`, 4000);
+          this.showToast(`✏️ Updated Planned Pin: ${savedItem ? savedItem.plannedEdition : edition}: ${title}!`, 4000);
         } else {
-          this.showToast(`📝 Placed Planned Pin: ${savedItem ? savedItem.plannedEdition : edition} — ${title}!`, 4000);
+          this.showToast(`📝 Placed Planned Pin: ${savedItem ? savedItem.plannedEdition : edition}: ${title}!`, 4000);
         }
       });
     }
