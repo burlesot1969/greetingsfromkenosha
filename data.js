@@ -113,7 +113,14 @@ class MarkerStore {
     if (Array.isArray(list)) {
       for (const item of list) {
         if (!deletedIds.has(item.id)) {
-          const toUse = localMap.has(item.id) ? localMap.get(item.id) : item;
+          const localItem = localMap.get(item.id) || {};
+          const toUse = {
+            ...localItem,
+            ...item,
+            imageUrl: item.imageUrl || localItem.imageUrl || '',
+            lat: parseFloat(localItem.lat ?? item.lat),
+            lng: parseFloat(localItem.lng ?? item.lng)
+          };
           combined.push(toUse);
           seenIds.add(item.id);
         }
