@@ -369,6 +369,15 @@ class GreetingsApp {
       if (window.innerWidth > 900) {
         if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
         if (sidebar) sidebar.classList.remove('mobile-open');
+      } else {
+        // Synchronize mobile switcher buttons
+        if (this.currentMobileView === 'index') {
+          if (sidebar) sidebar.classList.add('mobile-open');
+          if (sidebarBackdrop) sidebarBackdrop.classList.add('active');
+        } else {
+          if (sidebar) sidebar.classList.remove('mobile-open');
+          if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+        }
       }
       setTimeout(() => {
         if (kenoshaMap && kenoshaMap.map) {

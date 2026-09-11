@@ -2172,19 +2172,6 @@ html, body {
 
 /* Full-Screen Postcard Artwork & Design Lightbox */
 .wpa-lightbox-overlay {
-  background: rgba(18, 25, 33, 0.92) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 4000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-
-.wpa-lightbox-container {
-  position: relative;
-.wpa-lightbox-overlay {
   background: rgba(15, 23, 36, 0.93) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
