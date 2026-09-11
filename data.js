@@ -80,7 +80,8 @@ export const DEFAULT_MARKERS = [
 class MarkerStore {
   constructor() {
     this.markers = [...DEFAULT_MARKERS];
-    this.plannedMarkers = [];
+    // Immediately load locally saved planned pins from localStorage
+    this.plannedMarkers = this.loadLocalPlanned();
     this.listeners = [];
     try {
       localStorage.removeItem('wpa_custom_live_coordinates');
@@ -127,7 +128,58 @@ class MarkerStore {
     }
 
     this.plannedMarkers = combined;
+    this.saveLocalPlanned();
     this.notify();
+  }
+
+  exportPlannedMarkersJSON() {
+    return JSON.stringify(this.plannedMarkers, null, 2);
+  }
+
+  exportPlannedMarkersFileContent() {
+    return `/**\n * PRIVATE LOCAL-ONLY CURATOR PLANNING LAYER\n * This file is git-ignored and NEVER pushed to GitHub.\n * Total Draft Pins: ${this.plannedMarkers.length}\n * Generated: ${new Date().toLocaleString()}\n */\n\nexport const PLANNED_MARKERS = ${JSON.stringify(this.plannedMarkers, null, 2)};\n`;
+  }
+
+  importPlannedMarkers(data) {
+    let list = data;
+    if (typeof data === 'string') {
+      try {
+        // Handle JS export syntax if pasted with 'export const PLANNED_MARKERS = ...'
+        let clean = data.trim();
+        if (clean.includes('=')) {
+          clean = clean.split('=').slice(1).join('=').trim().replace(/;$/, '');
+        }
+        list = JSON.parse(clean);
+      } catch (e) {
+        return { success: false, error: 'Invalid JSON/Code format.' };
+      }
+    }
+
+    if (!Array.isArray(list)) {
+      return { success: false, error: 'Data must be an array of markers.' };
+    }
+
+    const current = this.loadLocalPlanned();
+    const map = new Map(current.map(m => [m.id, m]));
+    let importedCount = 0;
+
+    list.forEach(m => {
+      if (m && (m.id || m.title)) {
+        const id = m.id || `plan-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
+        map.set(id, {
+          ...m,
+          id,
+          lat: parseFloat(m.lat),
+          lng: parseFloat(m.lng)
+        });
+        importedCount++;
+      }
+    });
+
+    this.plannedMarkers = Array.from(map.values());
+    this.saveLocalPlanned();
+    this.notify();
+    return { success: true, count: importedCount, total: this.plannedMarkers.length };
   }
 
   addPlannedMarker(plannedData) {

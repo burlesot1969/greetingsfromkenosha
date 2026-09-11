@@ -289,6 +289,33 @@ class GreetingsApp {
       });
     }
 
+    // Curator Drafts Backup & Export Modal Controls
+    const openDraftsBtn = document.getElementById('btn-open-drafts-modal');
+    const closeDraftsBtn = document.getElementById('btn-close-export-modal');
+    const closeDraftsDoneBtn = document.getElementById('btn-close-export-done');
+    const downloadPlannedBtn = document.getElementById('btn-download-planned-js');
+    const copyDraftsBtn = document.getElementById('btn-copy-drafts-json');
+    const importDraftsBtn = document.getElementById('btn-import-drafts');
+
+    if (openDraftsBtn) {
+      openDraftsBtn.addEventListener('click', () => this.openDraftsExportModal());
+    }
+    if (closeDraftsBtn) {
+      closeDraftsBtn.addEventListener('click', () => this.closeDraftsExportModal());
+    }
+    if (closeDraftsDoneBtn) {
+      closeDraftsDoneBtn.addEventListener('click', () => this.closeDraftsExportModal());
+    }
+    if (downloadPlannedBtn) {
+      downloadPlannedBtn.addEventListener('click', () => this.downloadPlannedMarkersFile());
+    }
+    if (copyDraftsBtn) {
+      copyDraftsBtn.addEventListener('click', () => this.copyDraftsToClipboard());
+    }
+    if (importDraftsBtn) {
+      importDraftsBtn.addEventListener('click', () => this.importDraftsFromTextarea());
+    }
+
     // Keyboard shortcut to toggle Curator Mode: Shift + P (Planner)
     document.addEventListener('keydown', (e) => {
       if (e.shiftKey && (e.key === 'P' || e.key === 'p') && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
@@ -467,53 +494,56 @@ class GreetingsApp {
         e.preventDefault();
         e.stopPropagation();
         const id = repickLiveBtn.dataset.id;
-        const title = repickLiveBtn.dataset.title || 'Postcard';
-        const edition = repickLiveBtn.dataset.edition || 'Pin';
-
-        kenoshaMap.map.closePopup();
-
-        const repickBanner = document.getElementById('repick-banner');
-        if (repickBanner) {
-          const span = repickBanner.querySelector('span');
-          if (span) {
-            span.innerHTML = `<strong>Repositioning ${edition}:</strong> Click anywhere on the map to place this pin at the exact spot.`;
-          }
-          repickBanner.style.display = 'flex';
+        const edition = repickLiveBtn.dataset.edition || 'Marker';
+        if (id) {
+          this.startRepickingLiveMarker(id, edition);
         }
-
-        kenoshaMap.isRepicking = true;
-        const mapEl = document.getElementById('kenosha-map');
-        if (mapEl) mapEl.classList.add('crosshair-mode');
-
-        kenoshaMap.onRepickCoordinate = (lat, lng) => {
-          kenoshaMap.isRepicking = false;
-          if (mapEl) mapEl.classList.remove('crosshair-mode');
-          if (repickBanner) repickBanner.style.display = 'none';
-
-          // Update marker in data store & localStorage
-          markerStore.updateMarkerCoordinates(id, lat, lng);
-
-          // Re-render and re-focus
-          this.refreshMarkers();
-          setTimeout(() => {
-            kenoshaMap.focusMarker(id);
-          }, 350);
-
-          const latFormatted = lat.toFixed(7);
-          const lngFormatted = lng.toFixed(7);
-
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(`${latFormatted}, ${lngFormatted}`).catch(() => {});
-          }
-
-          this.showToast(`✓ Repositioned ${edition} to ${latFormatted}, ${lngFormatted}! (Coordinates copied to clipboard)`, 5000);
-        };
       }
     });
 
     // Callback when any point is pinned or right-clicked
     kenoshaMap.onSurveyorCopied = (lat, lng) => {
       this.showToast(`📍 Copied coordinates: ${lat}, ${lng}`, 3500);
+    };
+  }
+
+  startRepickingLiveMarker(id, edition) {
+    const item = markerStore.getById(id);
+    if (!item) return;
+
+    kenoshaMap.markerMap.get(id)?.closePopup();
+
+    const repickBanner = document.getElementById('repick-banner');
+    const bannerText = repickBanner?.querySelector('span');
+    if (bannerText) {
+      bannerText.innerHTML = `<strong>Repositioning ${edition}:</strong> Click on map to place ${item.title} at new spot.`;
+    }
+    if (repickBanner) repickBanner.style.display = 'flex';
+
+    kenoshaMap.isRepicking = true;
+    const mapEl = document.getElementById('kenosha-map');
+    if (mapEl) mapEl.classList.add('crosshair-mode');
+
+    kenoshaMap.onRepickCoordinate = (lat, lng) => {
+      kenoshaMap.isRepicking = false;
+      if (mapEl) mapEl.classList.remove('crosshair-mode');
+      if (repickBanner) repickBanner.style.display = 'none';
+
+      markerStore.updateMarkerCoordinates(id, lat, lng);
+      kenoshaMap.renderMarkers(markerStore.getAll(), (mid) => this.selectMarker(mid, true));
+
+      setTimeout(() => {
+        kenoshaMap.focusMarker(id, 16);
+      }, 350);
+
+      const latFormatted = lat.toFixed(7);
+      const lngFormatted = lng.toFixed(7);
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(`${latFormatted}, ${lngFormatted}`).catch(() => {});
+      }
+
+      this.showToast(`✓ Repositioned ${edition} to ${latFormatted}, ${lngFormatted}! (Coordinates copied to clipboard)`, 5000);
     };
   }
 
@@ -637,56 +667,122 @@ class GreetingsApp {
     if (form) form.reset();
   }
 
+  openDraftsExportModal() {
+    const modal = document.getElementById('modal-curator-export');
+    const countEl = document.getElementById('curator-export-count');
+    const textarea = document.getElementById('curator-drafts-textarea');
+    if (!modal) return;
+
+    const planned = markerStore.getPlanned();
+    if (countEl) {
+      countEl.textContent = `${planned.length} draft planned pin${planned.length === 1 ? '' : 's'}`;
+    }
+    if (textarea) {
+      textarea.value = markerStore.exportPlannedMarkersFileContent();
+    }
+
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
+
+  closeDraftsExportModal() {
+    const modal = document.getElementById('modal-curator-export');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.style.display = 'none';
+    }
+  }
+
+  downloadPlannedMarkersFile() {
+    const fileContent = markerStore.exportPlannedMarkersFileContent();
+    const blob = new Blob([fileContent], { type: 'application/javascript;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'planned-markers.js';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    this.showToast('📥 Downloaded planned-markers.js! Replace your project file with this.', 4500);
+  }
+
+  copyDraftsToClipboard() {
+    const fileContent = markerStore.exportPlannedMarkersFileContent();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fileContent)
+        .then(() => {
+          this.showToast('📋 Copied planned-markers.js code to clipboard!', 3500);
+        })
+        .catch(() => {
+          this.showToast('Could not copy automatically. Select and copy from the text box.', 3500);
+        });
+    }
+  }
+
+  importDraftsFromTextarea() {
+    const textarea = document.getElementById('curator-drafts-textarea');
+    if (!textarea || !textarea.value.trim()) {
+      alert('Please paste draft JSON or JS code into the text area.');
+      return;
+    }
+
+    const res = markerStore.importPlannedMarkers(textarea.value.trim());
+    if (res.success) {
+      this.isCuratorMode = true;
+      sessionStorage.setItem('wpa_curator_mode', 'true');
+      this.updateCuratorModeState();
+      this.closeDraftsExportModal();
+      this.showToast(`✓ Successfully imported ${res.count} draft pins! Total now: ${res.total}`, 4500);
+    } else {
+      alert(`Import Failed: ${res.error || 'Please check data format.'}`);
+    }
+  }
+
   async checkCuratorMode() {
     this.hasLocalPlannedData = false;
 
-    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-    if (isLocalHost) {
+    // 1. Load directly from browser localStorage
+    const localStored = markerStore.loadLocalPlanned();
+    if (localStored && localStored.length > 0) {
       this.hasLocalPlannedData = true;
+      markerStore.setPlannedMarkers(localStored);
     }
 
-    // Check if the local git-ignored planned-markers.js file exists on this local computer
+    // 2. Try loading from planned-markers.js if present
     try {
-      const module = await import('./planned-markers.js');
-      if (module && Array.isArray(module.PLANNED_MARKERS)) {
+      const module = await import('./planned-markers.js?t=' + Date.now());
+      if (module && Array.isArray(module.PLANNED_MARKERS) && module.PLANNED_MARKERS.length > 0) {
         markerStore.setPlannedMarkers(module.PLANNED_MARKERS);
         this.hasLocalPlannedData = true;
       }
     } catch (e) {
-      // File does not exist on public GitHub Pages (100% inaccessible to public)
-      if (!isLocalHost) {
-        this.hasLocalPlannedData = false;
-      }
+      // Ignored if file not present or empty
     }
 
-    // Also check if user has local draft markers stored in localStorage
-    const localStored = markerStore.loadLocalPlanned();
-    if (localStored.length > 0) {
-      this.hasLocalPlannedData = true;
-      markerStore.setPlannedMarkers([]); // will merge localStored
-    }
-
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
     const params = new URLSearchParams(window.location.search);
     const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts');
     const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1');
     const storedSession = sessionStorage.getItem('wpa_curator_mode');
 
-    // On local machine where planned-markers.js exists or local draft markers exist, enable curator mode by default or per toggle
-    this.isCuratorMode = this.hasLocalPlannedData && (isLocalHost || isParamActive || storedSession === 'true' || storedSession === null);
+    // If local draft pins exist, or on localhost, or parameter active:
+    if (this.hasLocalPlannedData || isLocalHost || isParamActive) {
+      // Default to ON unless explicitly toggled off in this session
+      this.isCuratorMode = (storedSession !== 'false');
+    } else {
+      this.isCuratorMode = (storedSession === 'true');
+    }
   }
 
   toggleCuratorMode() {
-    if (!this.hasLocalPlannedData) {
-      this.showToast('Public Mode: No local planning file found.', 3000);
-      return;
-    }
-
     this.isCuratorMode = !this.isCuratorMode;
     sessionStorage.setItem('wpa_curator_mode', this.isCuratorMode ? 'true' : 'false');
     this.updateCuratorModeState();
 
     if (this.isCuratorMode) {
-      this.showToast('🧭 Curator Mode ON: Private Planning Layer visible', 3500);
+      const count = markerStore.getPlanned().length;
+      this.showToast(`🧭 Curator Layer Visible (${count} draft pins)`, 3500);
     } else {
       this.showToast('Curator Planning Layer Hidden', 3000);
     }
@@ -694,12 +790,27 @@ class GreetingsApp {
 
   updateCuratorModeState() {
     const badge = document.getElementById('curator-mode-badge');
+    const countEl = document.getElementById('curator-drafts-count');
+    const backupBtn = document.getElementById('btn-open-drafts-modal');
+    const plannedList = markerStore.getPlanned();
+
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+    const shouldShowCuratorControls = this.isCuratorMode || this.hasLocalPlannedData || isLocalHost || (sessionStorage.getItem('wpa_curator_mode') !== null);
+
     if (badge) {
-      badge.style.display = this.isCuratorMode ? 'inline-flex' : 'none';
+      badge.style.display = shouldShowCuratorControls ? 'inline-flex' : 'none';
+      badge.classList.toggle('active', this.isCuratorMode);
+      badge.classList.toggle('inactive', !this.isCuratorMode);
+      if (countEl) {
+        countEl.textContent = plannedList.length > 0 ? `(${plannedList.length})` : '';
+      }
+    }
+
+    if (backupBtn) {
+      backupBtn.style.display = (shouldShowCuratorControls && plannedList.length > 0) ? 'inline-flex' : 'none';
     }
 
     if (this.isCuratorMode) {
-      const plannedList = markerStore.getPlanned();
       kenoshaMap.renderPlannedMarkers(plannedList);
       kenoshaMap.setPlannedLayerVisibility(true);
     } else {

@@ -1910,6 +1910,59 @@ html, body {
   border-top-color: var(--wpa-ink-navy) !important;
 }
 
+/* Curator Mode Badge & Header Action */
+.wpa-curator-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #24415C;
+  color: var(--wpa-ochre-gold);
+  border: 1.5px solid var(--wpa-ochre-gold);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.wpa-curator-badge:hover {
+  background: #1B3147;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.wpa-curator-badge.inactive {
+  background: rgba(36, 65, 92, 0.4);
+  color: #CBD5E0;
+  border-color: #718096;
+}
+
+.wpa-curator-badge .curator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wpa-ochre-gold);
+  box-shadow: 0 0 6px var(--wpa-ochre-gold);
+}
+
+.wpa-curator-badge.inactive .curator-dot {
+  background: #A0AEC0;
+  box-shadow: none;
+}
+
+.wpa-drafts-count-badge {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  padding: 0.08rem 0.4rem;
+  border-radius: 10px;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 900px) {
   .wpa-sidebar {

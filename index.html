@@ -60,13 +60,19 @@
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
           </svg>
           <span>Coordinates</span>
+        </button>        <!-- Private Curator Indicator Badge & Drafts Tools -->
+        <button id="curator-mode-badge" class="wpa-curator-badge" style="display: none;" title="Curator Planning Layer (Click to toggle on/off)" type="button">
+          <span class="curator-dot"></span>
+          <span>Curator Layer</span>
+          <span id="curator-drafts-count" class="wpa-drafts-count-badge"></span>
         </button>
 
-        <!-- Private Curator Indicator Badge (Visible only in Curator Mode) -->
-        <div id="curator-mode-badge" class="wpa-curator-badge" style="display: none;" title="Curator Planning Layer Active (Click to toggle)" role="button" tabindex="0">
-          <span class="curator-dot"></span>
-          <span>Curator Mode</span>
-        </div>
+        <button id="btn-open-drafts-modal" class="wpa-btn" style="display: none;" title="Backup, Export or Restore Draft Planned Pins" type="button">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+          <span>Backup Drafts</span>
+        </button>
       </div>
     </header>
 
@@ -286,6 +292,42 @@
       </div>
     </div>
 
+    <!-- Modal: Curator Drafts Manager & Export/Import -->
+    <div id="modal-curator-export" class="wpa-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-export-title" style="display: none;">
+      <div class="wpa-modal-card" style="max-width: 520px; border: 3px solid #24415C;">
+        <div class="wpa-modal-header" style="background: #24415C; border-bottom: 3px solid var(--wpa-ochre-gold);">
+          <h3 id="modal-export-title" class="wpa-modal-title" style="color: var(--wpa-ochre-gold);">💾 CURATOR DRAFTS BACKUP &amp; EXPORT</h3>
+          <button id="btn-close-export-modal" class="wpa-modal-close" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="wpa-modal-body" style="padding: 1.25rem;">
+          <p style="margin-bottom: 1rem; font-size: 0.88rem; line-height: 1.45; color: #2D3748;">
+            You currently have <strong id="curator-export-count" style="color: #24415C; font-size: 1rem;">0 draft planned pins</strong> in this browser. You can export them to your local project file or transfer them across browsers.
+          </p>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <button type="button" id="btn-download-planned-js" class="wpa-btn wpa-btn-primary" style="background: #24415C; border-color: var(--wpa-ochre-gold); color: #FFF; flex: 1; min-width: 170px;">
+              📥 Download planned-markers.js
+            </button>
+            <button type="button" id="btn-copy-drafts-json" class="wpa-btn" style="flex: 1; min-width: 130px;">
+              📋 Copy Draft Code
+            </button>
+          </div>
+
+          <div class="wpa-form-group" style="margin-bottom: 0.75rem;">
+            <label class="wpa-form-label" for="curator-drafts-textarea">Draft Data Code (Paste here to restore or import):</label>
+            <textarea id="curator-drafts-textarea" class="wpa-form-textarea" rows="7" style="font-family: monospace; font-size: 0.78rem; white-space: pre; tab-size: 2;" placeholder="Draft markers code..."></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem;">
+            <button type="button" id="btn-import-drafts" class="wpa-btn" style="background: var(--wpa-terracotta); color: #FFF; border-color: var(--wpa-charcoal-road); font-weight: 600;">
+              📥 Restore / Import Drafts
+            </button>
+            <button type="button" id="btn-close-export-done" class="wpa-btn">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast Notifications -->
     <div id="wpa-toast-container" class="wpa-toast-container" aria-live="polite"></div>
   </div>
@@ -294,6 +336,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20260910c"></script>
+  <script type="module" src="app.js?v=20260910d"></script>
 </body>
 </html>
