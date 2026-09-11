@@ -437,16 +437,20 @@ class KenoshaMap {
     const marker = this.markerMap.get(id);
     if (marker) {
       const latlng = marker.getLatLng();
-      // Offset target center north so the upward-opening popup is comfortably centered below the header
-      const targetLat = latlng.lat + 0.0045;
-      this.map.flyTo([targetLat, latlng.lng], zoomLevel, {
-        duration: 0.9,
+      const isMobile = window.innerWidth <= 900;
+      // Offset target center north so popup is comfortably positioned below mobile nav/header
+      const offsetLat = isMobile ? 0.0038 : 0.0045;
+      const targetLat = latlng.lat + offsetLat;
+      const targetZoom = isMobile ? Math.min(zoomLevel, 15) : zoomLevel;
+
+      this.map.flyTo([targetLat, latlng.lng], targetZoom, {
+        duration: 0.8,
         easeLinearity: 0.25
       });
       setTimeout(() => {
         marker.openPopup();
         this.highlightMarkerPin(id);
-      }, 450);
+      }, 400);
       this.activeMarkerId = id;
     }
   }

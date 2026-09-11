@@ -76,8 +76,28 @@
       </div>
     </header>
 
+    <!-- Mobile View Switcher (Visible on small screens for 1-tap thumb navigation) -->
+    <nav class="wpa-mobile-nav-bar" aria-label="Mobile View Switcher">
+      <button id="btn-mobile-view-map" class="wpa-mobile-nav-btn active" type="button" aria-pressed="true">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+        </svg>
+        <span>Interactive Map</span>
+      </button>
+      <button id="btn-mobile-view-index" class="wpa-mobile-nav-btn" type="button" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
+        </svg>
+        <span>Postcard Index</span>
+        <span id="mobile-stat-total-cards" class="wpa-toc-badge">4</span>
+      </button>
+    </nav>
+
     <!-- Main Workspace -->
     <main class="main-workspace" role="main">
+      <!-- Mobile Drawer Backdrop Overlay -->
+      <div id="wpa-sidebar-backdrop" class="wpa-sidebar-backdrop" aria-hidden="true"></div>
+
       <!-- Table of Contents (TOC) Sidebar -->
       <aside id="wpa-sidebar" class="wpa-sidebar" aria-label="Table of Contents">
         <!-- Animated Project Hero Banner in Sidebar -->
@@ -100,6 +120,12 @@
               POSTCARD INDEX
               <span id="stat-total-cards" class="wpa-toc-badge">1</span>
             </h2>
+            <button id="btn-close-sidebar-mobile" class="wpa-btn-close-sidebar-mobile" type="button" aria-label="Close Postcard Index and return to Map" title="Back to Map">
+              <span>Map View</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
           </div>
 
           <div class="wpa-search-wrapper">
@@ -387,6 +413,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20260910f"></script>
+  <script type="module" src="app.js?v=20260911m"></script>
 </body>
 </html>

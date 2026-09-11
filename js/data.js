@@ -236,7 +236,9 @@ class MarkerStore {
 
   saveLocalPlanned() {
     try {
-      localStorage.setItem('wpa_local_planned_markers', JSON.stringify(this.plannedMarkers));
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('wpa_local_planned_markers', JSON.stringify(this.plannedMarkers));
+      }
     } catch (e) {
       console.warn('Could not save planned markers to localStorage', e);
     }
@@ -244,11 +246,13 @@ class MarkerStore {
 
   loadLocalPlanned() {
     try {
-      const stored = localStorage.getItem('wpa_local_planned_markers');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          return parsed;
+      if (typeof localStorage !== 'undefined') {
+        const stored = localStorage.getItem('wpa_local_planned_markers');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            return parsed;
+          }
         }
       }
     } catch (e) {
@@ -259,11 +263,13 @@ class MarkerStore {
 
   loadDeletedPlannedIds() {
     try {
-      const stored = localStorage.getItem('wpa_deleted_planned_ids');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          return new Set(parsed);
+      if (typeof localStorage !== 'undefined') {
+        const stored = localStorage.getItem('wpa_deleted_planned_ids');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            return new Set(parsed);
+          }
         }
       }
     } catch (e) {}

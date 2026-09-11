@@ -13,6 +13,7 @@ class GreetingsApp {
     this.currentLightboxId = null;
     this.isCuratorMode = false;
     this.hasLocalPlannedData = false;
+    this.currentMobileView = 'map';
   }
 
   async init() {
@@ -33,7 +34,12 @@ class GreetingsApp {
     // 5. Setup event listeners & Surveyor Tool
     this.setupEventListeners();
 
-    // 6. Subscribe to data changes
+    // 6. Set initial mobile view (default to map view on small screens so map is immediately visible)
+    if (window.innerWidth <= 900) {
+      this.setMobileView('map');
+    }
+
+    // 7. Subscribe to data changes
     markerStore.subscribe(() => {
       this.refreshMarkers();
       if (this.isCuratorMode) {
@@ -49,6 +55,62 @@ class GreetingsApp {
         kenoshaMap.highlightMarkerPin(markers[0].id);
       }
     }, 400);
+  }
+
+  setMobileView(view) {
+    this.currentMobileView = view;
+    const navMapBtn = document.getElementById('btn-mobile-view-map');
+    const navIndexBtn = document.getElementById('btn-mobile-view-index');
+    const sidebar = document.getElementById('wpa-sidebar');
+    const backdrop = document.getElementById('wpa-sidebar-backdrop');
+    const sidebarToggleBtn = document.getElementById('btn-toggle-sidebar');
+
+    if (view === 'index') {
+      if (navMapBtn) {
+        navMapBtn.classList.remove('active');
+        navMapBtn.setAttribute('aria-pressed', 'false');
+      }
+      if (navIndexBtn) {
+        navIndexBtn.classList.add('active');
+        navIndexBtn.setAttribute('aria-pressed', 'true');
+      }
+      if (sidebar) {
+        sidebar.classList.add('mobile-open');
+        sidebar.classList.remove('collapsed');
+      }
+      if (backdrop) {
+        backdrop.classList.add('active');
+      }
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.setAttribute('aria-expanded', 'true');
+      }
+    } else {
+      // Map view
+      if (navMapBtn) {
+        navMapBtn.classList.add('active');
+        navMapBtn.setAttribute('aria-pressed', 'true');
+      }
+      if (navIndexBtn) {
+        navIndexBtn.classList.remove('active');
+        navIndexBtn.setAttribute('aria-pressed', 'false');
+      }
+      if (sidebar) {
+        sidebar.classList.remove('mobile-open');
+      }
+      if (backdrop) {
+        backdrop.classList.remove('active');
+      }
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // Trigger Leaflet viewport recalculation
+    setTimeout(() => {
+      if (kenoshaMap && kenoshaMap.map) {
+        kenoshaMap.map.invalidateSize();
+      }
+    }, 280);
   }
 
   refreshMarkers() {
@@ -88,49 +150,99 @@ class GreetingsApp {
       const isSelected = item.id === this.selectedMarkerId;
       const digits = (item.edition || '').replace(/\D/g, '');
       const numOnly = digits !== '' ? digits : '00';
+      const substackUrl = item.link || 'https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha';
 
       return `
         <article 
           class="wpa-toc-card ${isSelected ? 'active' : ''}" 
           data-id="${item.id}"
-          role="button" 
           tabindex="0"
           aria-label="Postcard ${item.edition}: ${item.title}"
         >
-          <div class="wpa-toc-card-visual">
-            ${item.imageUrl ? `
-              <div class="wpa-toc-thumb-wrap">
-                <img src="${item.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
-                <span class="wpa-toc-badge-overlay">#${numOnly}</span>
-              </div>
-            ` : `
-              <div class="wpa-toc-card-badge">
-                <span class="wpa-toc-badge-num">#${numOnly}</span>
-              </div>
-            `}
-          </div>
-          <div class="wpa-toc-card-info">
-            <div class="wpa-toc-card-meta">
-              <span class="wpa-toc-edition">${item.edition}</span>
+          <div class="wpa-toc-card-main">
+            <div class="wpa-toc-card-visual">
+              ${item.imageUrl ? `
+                <div class="wpa-toc-thumb-wrap wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full postcard artwork" role="button" tabindex="0">
+                  <img src="${item.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
+                  <span class="wpa-toc-badge-overlay">#${numOnly}</span>
+                  <div class="wpa-toc-thumb-zoom-badge" aria-hidden="true">🔍 Zoom</div>
+                </div>
+              ` : `
+                <div class="wpa-toc-card-badge">
+                  <span class="wpa-toc-badge-num">#${numOnly}</span>
+                </div>
+              `}
             </div>
-            <h4 class="wpa-toc-card-title">${item.title}</h4>
-            <p class="wpa-toc-card-addr">${item.address}</p>
-            <p class="wpa-toc-card-snippet">${this.truncate(item.summary, 85)}</p>
+            <div class="wpa-toc-card-info">
+              <div class="wpa-toc-card-meta">
+                <span class="wpa-toc-edition">${item.edition}</span>
+                ${item.year ? `<span class="wpa-toc-tag">Est. ${item.year}</span>` : ''}
+              </div>
+              <h4 class="wpa-toc-card-title">${item.title}</h4>
+              <p class="wpa-toc-card-addr">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>${item.address}</span>
+              </p>
+              <p class="wpa-toc-card-snippet">${this.truncate(item.summary, 90)}</p>
+            </div>
           </div>
+
           <div class="wpa-toc-card-actions">
-            <button class="wpa-btn-icon btn-toc-fly" title="Fly to location on map" aria-label="Fly to ${item.title}">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <button type="button" class="wpa-btn-card-map btn-card-fly" data-id="${item.id}" title="View ${item.title} on interactive map">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                 <polygon points="12 2 19 21 12 17 5 21 12 2"/>
               </svg>
+              <span>View on Map</span>
             </button>
+            <a class="wpa-btn-card-story" href="${substackUrl}" target="_blank" rel="noopener noreferrer" title="Read story on Substack (Opens in new tab)">
+              <span>Read Story</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </a>
           </div>
         </article>
       `;
     }).join('');
 
-    // Attach click handlers to cards
+    // Attach click and touch handlers to cards
     tocListContainer.querySelectorAll('.wpa-toc-card').forEach(card => {
       const id = card.dataset.id;
+      
+      // Stop propagation on the Substack link so clicking it doesn't trigger card selection
+      const storyLink = card.querySelector('.wpa-btn-card-story');
+      if (storyLink) {
+        storyLink.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // Thumbnail click opens lightbox
+      const thumb = card.querySelector('.wpa-toc-thumb-wrap');
+      if (thumb) {
+        thumb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.openPostcardLightbox(id);
+        });
+        thumb.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            this.openPostcardLightbox(id);
+          }
+        });
+      }
+
+      // Fly to map button
+      const mapBtn = card.querySelector('.wpa-btn-card-map');
+      if (mapBtn) {
+        mapBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.selectMarker(id, true);
+        });
+      }
+
+      // Card body click
       card.addEventListener('click', () => {
         this.selectMarker(id, true);
       });
@@ -156,6 +268,11 @@ class GreetingsApp {
       }
     });
 
+    // If on mobile/tablet and focusing on map, close drawer and switch view to map
+    if (window.innerWidth <= 900 && zoomOnMap) {
+      this.setMobileView('map');
+    }
+
     // Trigger map focus
     if (zoomOnMap) {
       kenoshaMap.focusMarker(id);
@@ -165,11 +282,11 @@ class GreetingsApp {
   }
 
   updateStats() {
+    const all = markerStore.getAll();
     const countEl = document.getElementById('stat-total-cards');
-    if (countEl) {
-      const all = markerStore.getAll();
-      countEl.textContent = all.length;
-    }
+    const mobileCountEl = document.getElementById('mobile-stat-total-cards');
+    if (countEl) countEl.textContent = all.length;
+    if (mobileCountEl) mobileCountEl.textContent = all.length;
   }
 
   setupEventListeners() {
@@ -198,19 +315,67 @@ class GreetingsApp {
       });
     }
 
+    // Mobile View Switcher Buttons
+    const btnMobileMap = document.getElementById('btn-mobile-view-map');
+    const btnMobileIndex = document.getElementById('btn-mobile-view-index');
+    const btnCloseMobileSidebar = document.getElementById('btn-close-sidebar-mobile');
+    const sidebarBackdrop = document.getElementById('wpa-sidebar-backdrop');
+
+    if (btnMobileMap) {
+      btnMobileMap.addEventListener('click', () => {
+        this.setMobileView('map');
+      });
+    }
+
+    if (btnMobileIndex) {
+      btnMobileIndex.addEventListener('click', () => {
+        this.setMobileView('index');
+      });
+    }
+
+    if (btnCloseMobileSidebar) {
+      btnCloseMobileSidebar.addEventListener('click', () => {
+        this.setMobileView('map');
+      });
+    }
+
+    if (sidebarBackdrop) {
+      sidebarBackdrop.addEventListener('click', () => {
+        this.setMobileView('map');
+      });
+    }
+
     // Sidebar Toggle
     const sidebarToggleBtn = document.getElementById('btn-toggle-sidebar');
     const sidebar = document.getElementById('wpa-sidebar');
     if (sidebarToggleBtn && sidebar) {
       sidebarToggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        const isCollapsed = sidebar.classList.contains('collapsed');
-        sidebarToggleBtn.setAttribute('aria-expanded', !isCollapsed);
-        setTimeout(() => {
-          kenoshaMap.map.invalidateSize();
-        }, 300);
+        if (window.innerWidth <= 900) {
+          const isOpen = sidebar.classList.contains('mobile-open');
+          this.setMobileView(isOpen ? 'map' : 'index');
+        } else {
+          sidebar.classList.toggle('collapsed');
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          sidebarToggleBtn.setAttribute('aria-expanded', !isCollapsed);
+          setTimeout(() => {
+            kenoshaMap.map.invalidateSize();
+          }, 300);
+        }
       });
     }
+
+    // Window Resize Handler to handle mobile/desktop layout transitions
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 900) {
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+        if (sidebar) sidebar.classList.remove('mobile-open');
+      }
+      setTimeout(() => {
+        if (kenoshaMap && kenoshaMap.map) {
+          kenoshaMap.map.invalidateSize();
+        }
+      }, 250);
+    });
 
     // Reset Map View Button
     const resetViewBtn = document.getElementById('btn-reset-view');

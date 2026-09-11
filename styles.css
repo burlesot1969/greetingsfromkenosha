@@ -432,6 +432,102 @@ html, body {
   justify-content: center;
 }
 
+/* Mobile View Switcher Bar (Segmented WPA Tab Bar for Phones/Tablets) */
+.wpa-mobile-nav-bar {
+  display: none;
+  background: var(--wpa-ink-navy);
+  border-bottom: 2px solid var(--wpa-terracotta);
+  padding: 0.4rem 0.6rem;
+  gap: 0.5rem;
+  z-index: 950;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.wpa-mobile-nav-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(251, 248, 241, 0.12);
+  color: var(--wpa-cream-paper);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 42px; /* Touch target */
+  text-decoration: none;
+}
+
+.wpa-mobile-nav-btn:hover {
+  background: rgba(251, 248, 241, 0.2);
+}
+
+.wpa-mobile-nav-btn.active {
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  border-color: var(--wpa-ochre-gold);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+
+.wpa-mobile-nav-btn .wpa-toc-badge {
+  font-size: 0.72rem;
+  padding: 0.08rem 0.4rem;
+  background: var(--wpa-ochre-gold);
+  color: var(--wpa-ink-navy);
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.wpa-btn-close-sidebar-mobile {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-ochre-gold);
+  border: 1.5px solid var(--wpa-ochre-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  min-height: 36px;
+  transition: all 0.15s ease;
+}
+
+.wpa-btn-close-sidebar-mobile:hover {
+  background: #1C3349;
+  color: #FFF;
+}
+
+/* Sidebar Backdrop for Mobile Off-Canvas Drawer */
+.wpa-sidebar-backdrop {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 25, 33, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 1400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.wpa-sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* Postcard Items List */
 .wpa-toc-list {
   flex: 1;
@@ -440,6 +536,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Postcard TOC Card */
@@ -447,20 +544,26 @@ html, body {
   background: #FFF;
   border: 2px solid var(--wpa-border-color);
   border-radius: var(--radius-md);
-  padding: 0.75rem 0.85rem;
+  padding: 0.85rem;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.06);
+}
+
+.wpa-toc-card-main {
   display: flex;
   gap: 0.85rem;
   align-items: flex-start;
-  transition: all 0.2s ease;
-  position: relative;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
 
 .wpa-toc-card:hover {
   transform: translateY(-2px);
   border-color: var(--wpa-teal-water);
-  box-shadow: 3px 4px 0px rgba(43, 104, 112, 0.3);
+  box-shadow: 3px 4px 0px rgba(43, 104, 112, 0.25);
 }
 
 .wpa-toc-card.active {
@@ -487,13 +590,15 @@ html, body {
 
 .wpa-toc-thumb-wrap {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 6px;
   overflow: hidden;
   border: 2px solid var(--wpa-charcoal-road);
   box-shadow: 1px 2px 4px rgba(0,0,0,0.18);
   background: var(--wpa-cream-bg);
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .wpa-toc-thumb {
@@ -508,6 +613,29 @@ html, body {
   transform: scale(1.08);
 }
 
+.wpa-toc-thumb-zoom-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(29, 45, 68, 0.65);
+  color: #FFF;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.wpa-toc-thumb-wrap:hover .wpa-toc-thumb-zoom-badge {
+  opacity: 1;
+}
+
 .wpa-toc-badge-overlay {
   position: absolute;
   bottom: 0;
@@ -520,6 +648,7 @@ html, body {
   border-top-left-radius: 4px;
   border-top: 1px solid var(--wpa-charcoal-road);
   border-left: 1px solid var(--wpa-charcoal-road);
+  z-index: 2;
 }
 
 .wpa-toc-card-badge {
@@ -600,6 +729,67 @@ html, body {
   line-height: 1.4;
   color: var(--wpa-text-dark);
   opacity: 0.85;
+}
+
+/* Postcard Card Direct Interactive Action Buttons */
+.wpa-toc-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  border-top: 1.5px dashed var(--wpa-border-color);
+  padding-top: 0.6rem;
+}
+
+.wpa-btn-card-map {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.65rem;
+  background: var(--wpa-cream-paper);
+  color: var(--wpa-charcoal-road);
+  border: 1.5px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px var(--wpa-charcoal-road);
+  transition: all 0.15s ease;
+  min-height: 38px;
+}
+
+.wpa-btn-card-map:hover {
+  background: var(--wpa-ochre-gold);
+  color: var(--wpa-ink-navy);
+  transform: translateY(-1px);
+}
+
+.wpa-btn-card-story {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  background: var(--wpa-terracotta);
+  color: #FFF !important;
+  border: 1.5px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  box-shadow: 1.5px 1.5px 0px var(--wpa-charcoal-road);
+  transition: all 0.15s ease;
+  min-height: 38px;
+}
+
+.wpa-btn-card-story:hover {
+  background: var(--wpa-terracotta-dark);
+  color: #FFF !important;
+  transform: translateY(-1px);
 }
 
 .wpa-btn-icon {
@@ -2180,72 +2370,215 @@ html, body {
   cursor: pointer;
 }
 
-@media (max-width: 860px) {
-  .wpa-lightbox-card {
-    flex-direction: column;
-    max-height: 90vh;
-  }
-  .wpa-lightbox-image-wrapper {
-    flex: none;
-    max-height: 45vh;
-  }
-  .wpa-lightbox-details {
-    flex: 1;
-    padding: 1.25rem;
-    border-left: none;
-    border-top: 2.5px solid var(--wpa-charcoal-road);
-  }
-  .wpa-lightbox-nav.prev {
-    left: 0.5rem;
-  }
-  .wpa-lightbox-nav.next {
-    right: 0.5rem;
-  }
-}
-
-/* Responsive Breakpoints */
 @media (max-width: 900px) {
+  .wpa-mobile-nav-bar {
+    display: flex;
+  }
+
+  .main-workspace {
+    height: calc(100vh - 118px);
+  }
+
   .wpa-sidebar {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
+    width: min(440px, 92vw);
+    min-width: 0;
     z-index: 1500;
+    transform: translateX(-105%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    box-shadow: none;
   }
+
+  .wpa-sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 8px 0 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .wpa-sidebar.collapsed {
+    transform: translateX(-105%);
+    margin-left: 0;
+  }
+
+  .wpa-btn-close-sidebar-mobile {
+    display: inline-flex;
+  }
+
   .wpa-header-controls .theme-selector-group {
     display: none;
   }
+
   .wpa-main-title {
     font-size: 1.35rem;
   }
+
   .wpa-subtitle {
     font-size: 0.68rem;
+  }
+
+  /* Responsive Leaflet Popup on Mobile & Tablets */
+  .leaflet-popup-content-wrapper {
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .wpa-postcard {
+    max-width: calc(100vw - 48px) !important;
+    min-width: 260px;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .wpa-field-note-card {
+    max-width: calc(100vw - 48px) !important;
+    min-width: 260px;
+  }
+
+  .wpa-postcard-img {
+    height: 135px;
   }
 }
 
 @media (max-width: 600px) {
   .wpa-sidebar {
     width: 100vw;
-    min-width: 100vw;
+    max-width: 100vw;
   }
-  .wpa-sidebar.collapsed {
-    margin-left: -100vw;
-  }
+
   .wpa-header {
-    padding: 0.45rem 0.75rem;
+    padding: 0.45rem 0.65rem;
   }
+
+  .wpa-header-controls {
+    gap: 0.4rem;
+  }
+
   .wpa-main-title {
     font-size: 1.15rem;
+    letter-spacing: 1px;
   }
+
+  .wpa-subtitle {
+    display: none;
+  }
+
   .wpa-seal-emblem {
     display: none;
   }
+
+  .wpa-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.88rem;
+  }
+
+  .wpa-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .wpa-header-controls .wpa-btn span {
+    display: none;
+  }
+
+  .wpa-header-controls .wpa-btn {
+    padding: 0.4rem 0.55rem;
+    min-height: 38px;
+    min-width: 38px;
+    justify-content: center;
+  }
+
+  .wpa-curator-badge {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.82rem;
+    min-height: 38px;
+  }
+
+  .wpa-curator-badge span:nth-child(2) {
+    display: none;
+  }
+
   .wpa-legend-container {
-    bottom: 2.5rem;
+    bottom: 1.75rem;
     left: 0.75rem;
   }
+
   .leaflet-control-zoom {
-    margin-bottom: 2.5rem !important;
+    margin-bottom: 1.75rem !important;
     margin-right: 0.75rem !important;
+  }
+
+  .wpa-compass-rose {
+    top: 4.2rem;
+    left: 0.75rem;
+  }
+
+  .wpa-compass-svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .map-sidebar-toggle {
+    top: 0.75rem;
+    left: 0.75rem;
+    min-height: 40px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .wpa-lightbox-overlay {
+    padding: 0.75rem;
+  }
+
+  .wpa-lightbox-container {
+    width: 100vw;
+    max-height: 95vh;
+  }
+
+  .wpa-lightbox-close {
+    top: -2.25rem;
+    right: 0.25rem;
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+  }
+
+  .wpa-lightbox-card {
+    max-height: 85vh;
+  }
+
+  .wpa-lightbox-details {
+    padding: 1rem;
+  }
+
+  .wpa-lightbox-title {
+    font-size: 1.3rem;
+  }
+
+  .wpa-lightbox-nav {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 380px) {
+  .wpa-mobile-nav-btn {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.4rem;
+    letter-spacing: 0.3px;
+  }
+
+  .wpa-mobile-nav-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .wpa-toc-card-actions {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .wpa-btn-card-map,
+  .wpa-btn-card-story {
+    width: 100%;
   }
 }
