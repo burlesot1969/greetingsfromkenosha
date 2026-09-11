@@ -2465,70 +2465,116 @@ html, body {
 
 @media (max-width: 900px) {
   .wpa-mobile-nav-bar {
-    display: flex;
+    display: flex !important;
   }
 
   .main-workspace {
-    height: calc(100vh - 118px);
+    position: relative !important;
+    display: block !important;
+    width: 100vw !important;
+    height: calc(100vh - 105px) !important;
+    overflow: hidden !important;
+  }
+
+  .map-viewport {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10 !important;
+  }
+
+  #kenosha-map {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .wpa-sidebar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: min(440px, 92vw);
-    min-width: 0;
-    z-index: 1500;
-    transform: translateX(-105%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: min(440px, 100vw) !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    z-index: 1500 !important;
+    transform: translateX(-105%) !important;
+    margin-left: 0 !important;
     box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
   }
 
   .wpa-sidebar.mobile-open {
-    transform: translateX(0);
-    box-shadow: 8px 0 28px rgba(0, 0, 0, 0.45);
+    transform: translateX(0) !important;
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.55) !important;
   }
 
   .wpa-sidebar.collapsed {
-    transform: translateX(-105%);
-    margin-left: 0;
+    transform: translateX(-105%) !important;
+    margin-left: 0 !important;
   }
 
   .wpa-btn-close-sidebar-mobile {
-    display: inline-flex;
+    display: inline-flex !important;
   }
 
   .wpa-header-controls .theme-selector-group {
-    display: none;
+    display: none !important;
+  }
+
+  .wpa-header {
+    padding: 0.45rem 0.85rem;
   }
 
   .wpa-main-title {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
   }
 
   .wpa-subtitle {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
+  }
+
+  .wpa-compass-rose {
+    top: 0.75rem;
+    right: 0.75rem;
+    left: auto;
+  }
+
+  .wpa-compass-svg {
+    width: 36px;
+    height: 36px;
   }
 
   /* Responsive Leaflet Popup on Mobile & Tablets */
+  .leaflet-popup {
+    max-width: calc(100vw - 32px) !important;
+  }
+
   .leaflet-popup-content-wrapper {
     max-width: calc(100vw - 32px) !important;
   }
 
   .wpa-postcard {
-    max-width: calc(100vw - 48px) !important;
-    min-width: 260px;
-    padding: 0.7rem 0.75rem;
+    max-width: min(310px, calc(100vw - 44px)) !important;
+    min-width: 250px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.65rem 0.75rem;
   }
 
   .wpa-field-note-card {
-    max-width: calc(100vw - 48px) !important;
-    min-width: 260px;
+    max-width: min(310px, calc(100vw - 44px)) !important;
+    min-width: 250px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .wpa-postcard-img {
-    height: 135px;
+    height: 140px;
   }
 }
 
