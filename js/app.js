@@ -10,6 +10,7 @@ class GreetingsApp {
   constructor() {
     this.searchQuery = '';
     this.selectedMarkerId = null;
+    this.currentLightboxId = null;
     this.isCuratorMode = false;
     this.hasLocalPlannedData = false;
   }
@@ -316,8 +317,45 @@ class GreetingsApp {
       importDraftsBtn.addEventListener('click', () => this.importDraftsFromTextarea());
     }
 
-    // Keyboard shortcut to toggle Curator Mode: Shift + P (Planner)
+    // Postcard Artwork Lightbox Controls
+    const closeLightboxBtn = document.getElementById('btn-close-lightbox');
+    const prevLightboxBtn = document.getElementById('btn-lightbox-prev');
+    const nextLightboxBtn = document.getElementById('btn-lightbox-next');
+    const lightboxModal = document.getElementById('modal-postcard-lightbox');
+
+    if (closeLightboxBtn) {
+      closeLightboxBtn.addEventListener('click', () => this.closePostcardLightbox());
+    }
+    if (prevLightboxBtn) {
+      prevLightboxBtn.addEventListener('click', () => this.navigateLightbox(-1));
+    }
+    if (nextLightboxBtn) {
+      nextLightboxBtn.addEventListener('click', () => this.navigateLightbox(1));
+    }
+    if (lightboxModal) {
+      lightboxModal.addEventListener('click', (e) => {
+        if (e.target === lightboxModal || e.target.classList.contains('wpa-lightbox-container')) {
+          this.closePostcardLightbox();
+        }
+      });
+    }
+
+    // Global keyboard listener for Curator Mode (Shift+P) and Lightbox Navigation (Esc, Left/Right)
     document.addEventListener('keydown', (e) => {
+      if (this.currentLightboxId) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.closePostcardLightbox();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.navigateLightbox(-1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.navigateLightbox(1);
+        }
+        return;
+      }
+
       if (e.shiftKey && (e.key === 'P' || e.key === 'p') && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
         e.preventDefault();
         this.toggleCuratorMode();
@@ -500,6 +538,17 @@ class GreetingsApp {
         const edition = repickLiveBtn.dataset.edition || 'Marker';
         if (id) {
           this.startRepickingLiveMarker(id, edition);
+        }
+      }
+
+      // Postcard Photo Lightbox Inspection Trigger
+      const lightboxTrigger = e.target.closest('.wpa-lightbox-trigger') || e.target.closest('.wpa-postcard-photo-frame');
+      if (lightboxTrigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = lightboxTrigger.dataset.id || this.selectedMarkerId || kenoshaMap.activeMarkerId;
+        if (id) {
+          this.openPostcardLightbox(id);
         }
       }
     });
@@ -746,6 +795,89 @@ class GreetingsApp {
       this.showToast(`✓ Successfully imported ${res.count} draft pins! Total now: ${res.total}`, 4500);
     } else {
       alert(`Import Failed: ${res.error || 'Please check data format.'}`);
+    }
+  }
+
+  openPostcardLightbox(markerId) {
+    const item = markerStore.getById(markerId);
+    if (!item) return;
+
+    const modal = document.getElementById('modal-postcard-lightbox');
+    const img = document.getElementById('lightbox-img');
+    const editionBadge = document.getElementById('lightbox-edition-badge');
+    const statusBadge = document.getElementById('lightbox-status-badge');
+    const titleEl = document.getElementById('lightbox-card-title');
+    const addressEl = document.getElementById('lightbox-card-address');
+    const notesEl = document.getElementById('lightbox-card-notes');
+    const coordsEl = document.getElementById('lightbox-coords');
+    const substackLink = document.getElementById('lightbox-substack-link');
+
+    if (!modal) return;
+
+    this.currentLightboxId = markerId;
+
+    const edition = item.edition || item.plannedEdition || 'Edition';
+    const title = item.title || 'Untitled Kenosha Postcard';
+    const address = item.address || 'Kenosha, WI';
+    const notes = item.summary || item.notes || 'No notes or story recorded for this landmark yet.';
+    const status = item.status || (item.isDefault ? 'Published Edition' : 'In Progress');
+    const imageUrl = item.imageUrl || './card-00.jpg';
+
+    if (img) {
+      img.src = imageUrl;
+      img.alt = `${edition}: ${title}`;
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = imageUrl.includes('assets/') ? imageUrl.replace('assets/', '') : `./assets/${imageUrl.split('/').pop()}`;
+      };
+    }
+
+    if (editionBadge) editionBadge.textContent = edition;
+    if (statusBadge) statusBadge.textContent = status;
+    if (titleEl) titleEl.textContent = title;
+    if (addressEl) addressEl.textContent = address;
+    if (notesEl) notesEl.textContent = notes;
+    if (coordsEl && typeof item.lat === 'number' && typeof item.lng === 'number') {
+      coordsEl.textContent = `📍 ${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`;
+    }
+
+    if (substackLink) {
+      if (item.link && item.link !== '#' && !item.link.startsWith('javascript')) {
+        substackLink.href = item.link;
+        substackLink.style.display = 'inline-flex';
+      } else {
+        substackLink.style.display = 'none';
+      }
+    }
+
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
+
+  closePostcardLightbox() {
+    const modal = document.getElementById('modal-postcard-lightbox');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.style.display = 'none';
+    }
+    this.currentLightboxId = null;
+  }
+
+  navigateLightbox(direction) {
+    if (!this.currentLightboxId) return;
+
+    const allMarkers = markerStore.getAll(this.isCuratorMode);
+    if (!allMarkers || allMarkers.length === 0) return;
+
+    const currentIndex = allMarkers.findIndex(m => m.id === this.currentLightboxId);
+    let nextIndex = 0;
+    if (currentIndex !== -1) {
+      nextIndex = (currentIndex + direction + allMarkers.length) % allMarkers.length;
+    }
+
+    const nextMarker = allMarkers[nextIndex];
+    if (nextMarker) {
+      this.openPostcardLightbox(nextMarker.id);
     }
   }
 

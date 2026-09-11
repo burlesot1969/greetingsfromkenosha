@@ -228,9 +228,9 @@ class KenoshaMap {
 
         <div class="wpa-postcard-content">
           ${data.imageUrl ? `
-            <div class="wpa-postcard-photo-frame">
+            <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${data.id}" title="Click to view full screen postcard">
               <img src="${data.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" />
-              <div class="wpa-postcard-photo-caption">Historic Kenosha Edition</div>
+              <div class="wpa-postcard-photo-caption">Historic Kenosha Edition • 🔍 Click to Enlarge</div>
             </div>
           ` : ''}
 
@@ -375,9 +375,9 @@ class KenoshaMap {
     return `
       <div class="wpa-field-note-card" role="region" aria-label="Curator Note: ${title}">
         ${imageUrl ? `
-          <div class="wpa-postcard-photo-frame" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
+          <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full screen postcard" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
             <img src="${imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
-            <div class="wpa-postcard-photo-caption" style="font-size: 0.68rem; padding: 0.25rem; background: var(--wpa-charcoal-road); color: var(--wpa-cream-paper); text-align: center; font-family: var(--font-display); letter-spacing: 0.5px;">Curator Preview • ${edition}</div>
+            <div class="wpa-postcard-photo-caption" style="font-size: 0.68rem; padding: 0.25rem; background: var(--wpa-charcoal-road); color: var(--wpa-cream-paper); text-align: center; font-family: var(--font-display); letter-spacing: 0.5px;">Curator Preview • ${edition} • 🔍 Click to Enlarge</div>
           </div>
         ` : ''}
 
