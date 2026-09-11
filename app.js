@@ -346,6 +346,7 @@ class GreetingsApp {
         const lat = parseFloat(document.getElementById('planned-input-lat')?.value);
         const lng = parseFloat(document.getElementById('planned-input-lng')?.value);
         const status = document.getElementById('planned-input-status')?.value || 'Researching';
+        const imageUrl = document.getElementById('planned-input-image')?.value.trim() || '';
         const notes = document.getElementById('planned-input-notes')?.value.trim() || '';
 
         if (!title || isNaN(lat) || isNaN(lng)) {
@@ -362,6 +363,7 @@ class GreetingsApp {
             lng,
             plannedEdition: edition,
             status,
+            imageUrl,
             notes
           });
         } else {
@@ -372,6 +374,7 @@ class GreetingsApp {
             lng,
             plannedEdition: edition,
             status,
+            imageUrl,
             notes
           });
         }
@@ -558,6 +561,7 @@ class GreetingsApp {
     const titleInput = document.getElementById('planned-input-title');
     const addressInput = document.getElementById('planned-input-address');
     const statusSelect = document.getElementById('planned-input-status');
+    const imageInput = document.getElementById('planned-input-image');
     const notesInput = document.getElementById('planned-input-notes');
 
     if (!modal) return;
@@ -579,8 +583,12 @@ class GreetingsApp {
       }
     });
     const nextNum = maxEditionNum + 1;
+    const formattedNum = String(nextNum).padStart(2, '0');
     if (editionInput) {
-      editionInput.value = `No. ${String(nextNum).padStart(2, '0')}`;
+      editionInput.value = `No. ${formattedNum}`;
+    }
+    if (imageInput) {
+      imageInput.value = `./card-${formattedNum}.jpg`;
     }
     if (titleInput) titleInput.value = '';
     if (addressInput) addressInput.value = '';
@@ -612,6 +620,7 @@ class GreetingsApp {
     const titleInput = document.getElementById('planned-input-title');
     const addressInput = document.getElementById('planned-input-address');
     const statusSelect = document.getElementById('planned-input-status');
+    const imageInput = document.getElementById('planned-input-image');
     const notesInput = document.getElementById('planned-input-notes');
 
     if (!modal) return;
@@ -624,6 +633,7 @@ class GreetingsApp {
     if (statusSelect) statusSelect.value = item.status || 'Researching';
     if (titleInput) titleInput.value = item.title || '';
     if (addressInput) addressInput.value = item.address || '';
+    if (imageInput) imageInput.value = item.imageUrl || '';
     if (latInput) latInput.value = parseFloat(item.lat).toFixed(7);
     if (lngInput) lngInput.value = parseFloat(item.lng).toFixed(7);
     if (notesInput) notesInput.value = item.notes || '';

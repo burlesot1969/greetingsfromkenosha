@@ -364,6 +364,7 @@ class KenoshaMap {
     const edition = item.plannedEdition || 'Planned';
     const status = item.status || 'In Research';
     const notes = item.notes || 'No curatorial field notes recorded yet.';
+    const imageUrl = item.imageUrl || '';
     const statusLower = status.toLowerCase();
     const statusClass = statusLower.includes('art')
       ? 'status-art'
@@ -373,6 +374,13 @@ class KenoshaMap {
 
     return `
       <div class="wpa-field-note-card" role="region" aria-label="Curator Note: ${title}">
+        ${imageUrl ? `
+          <div class="wpa-postcard-photo-frame" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
+            <img src="${imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
+            <div class="wpa-postcard-photo-caption" style="font-size: 0.68rem; padding: 0.25rem; background: var(--wpa-charcoal-road); color: var(--wpa-cream-paper); text-align: center; font-family: var(--font-display); letter-spacing: 0.5px;">Curator Preview • ${edition}</div>
+          </div>
+        ` : ''}
+
         <div class="wpa-field-note-header">
           <span class="wpa-field-note-badge">📝 CURATOR NOTE • ${edition}</span>
           <span class="wpa-status-pill ${statusClass}">${status}</span>
