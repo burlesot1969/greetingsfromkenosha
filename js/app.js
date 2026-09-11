@@ -62,23 +62,17 @@ class GreetingsApp {
 
   setupIntroCurtain() {
     const curtain = document.getElementById('wpa-intro-curtain');
-    const introCard = curtain?.querySelector('.wpa-intro-card');
     const exploreBtn = document.getElementById('btn-intro-explore');
     const closeBtn = document.getElementById('btn-intro-close');
     const substackBtn = document.getElementById('btn-intro-substack');
     const replayBtn = document.getElementById('btn-replay-intro');
     if (!curtain) return;
 
-    let autoDismissTimer = null;
     let isDismissed = false;
 
     const dismissCurtain = () => {
       if (isDismissed) return;
       isDismissed = true;
-      if (autoDismissTimer) {
-        clearTimeout(autoDismissTimer);
-        autoDismissTimer = null;
-      }
       curtain.classList.add('fade-out');
 
       // Activate glowing pin beacons on the map to invite interaction
@@ -86,26 +80,18 @@ class GreetingsApp {
         kenoshaMap.activatePinBeacons();
       }, 350);
 
-      // Settle beacons automatically after 12 seconds if untouched
+      // Settle beacons automatically after 14 seconds if untouched
       setTimeout(() => {
         kenoshaMap.deactivatePinBeacons();
-      }, 12000);
+      }, 14000);
     };
 
     const showCurtain = () => {
       isDismissed = false;
       curtain.classList.remove('fade-out');
-      if (autoDismissTimer) clearTimeout(autoDismissTimer);
-      // Doubled relaxed timer (7.5 seconds) for full animation loop & reading
-      autoDismissTimer = setTimeout(() => {
-        dismissCurtain();
-      }, 7500);
     };
 
-    // Auto-dismiss after 7.5 seconds on initial page load
-    autoDismissTimer = setTimeout(() => {
-      dismissCurtain();
-    }, 7500);
+    // The welcome folio stays open until the reader chooses to enter (reader-paced welcome mat)
 
     // Clicking the dark backdrop outside the card dismisses immediately
     curtain.addEventListener('click', (e) => {
@@ -131,7 +117,7 @@ class GreetingsApp {
     if (substackBtn) {
       substackBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        // Allow user to open Substack in new tab without instantly closing guide
+        // Allow user to open Substack in new tab
       });
     }
 
@@ -142,7 +128,7 @@ class GreetingsApp {
       }
     });
 
-    // Replay welcome guide anytime by clicking the WPA Seal logo badge in the header
+    // Replay welcome folio anytime by clicking the WPA Seal logo badge in the header
     if (replayBtn) {
       replayBtn.addEventListener('click', (e) => {
         e.preventDefault();

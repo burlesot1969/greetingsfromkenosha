@@ -2520,24 +2520,24 @@ html, body {
   cursor: pointer;
 }
 
-/* Animated Project Intro Splash Screen / Curator Welcome Card */
+/* Animated Project Intro Splash Screen / Curator Welcome Folio */
 .wpa-intro-curtain {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  background: rgba(17, 24, 35, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(14, 20, 29, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 5000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1.5rem;
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.75s;
   cursor: pointer;
 }
 
@@ -2548,27 +2548,27 @@ html, body {
   visibility: hidden;
 }
 
-.wpa-intro-card {
+.wpa-folio-card {
   position: relative;
   background: var(--wpa-cream-paper);
   border: 3.5px solid var(--wpa-charcoal-road);
   border-radius: var(--radius-md);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 5px 6px 0px rgba(36, 39, 44, 0.9);
-  max-width: 660px;
-  width: min(660px, 94vw);
-  max-height: min(92vh, 880px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 6px 8px 0px rgba(36, 39, 44, 0.95);
+  max-width: 680px;
+  width: min(680px, 94vw);
+  max-height: min(92vh, 890px);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  animation: introBloom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: introBloom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: default;
 }
 
 @keyframes introBloom {
   0% {
     opacity: 0;
-    transform: scale(0.92) translateY(12px);
+    transform: scale(0.92) translateY(16px);
   }
   100% {
     opacity: 1;
@@ -2578,22 +2578,22 @@ html, body {
 
 .wpa-intro-close-btn {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
-  width: 32px;
-  height: 32px;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(251, 248, 241, 0.9);
+  background: rgba(251, 248, 241, 0.95);
   color: var(--wpa-charcoal-road);
-  border: 1.5px solid var(--wpa-charcoal-road);
+  border: 2px solid var(--wpa-charcoal-road);
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 20;
-  box-shadow: 1px 1px 0px var(--wpa-charcoal-road);
+  z-index: 30;
+  box-shadow: 2px 2px 0px var(--wpa-charcoal-road);
   transition: all 0.15s ease;
 }
 
@@ -2601,12 +2601,13 @@ html, body {
   background: var(--wpa-terracotta);
   color: #FFF;
   transform: scale(1.1);
+  box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
 }
 
 .wpa-intro-banner-stage {
   background: var(--wpa-ink-navy);
-  border-bottom: 3px solid var(--wpa-terracotta);
-  padding: 0.75rem 0.85rem;
+  border-bottom: 3.5px solid var(--wpa-terracotta);
+  padding: 0.85rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2617,150 +2618,196 @@ html, body {
 .wpa-intro-banner-stage::after {
   content: '';
   position: absolute;
-  bottom: -6px;
+  bottom: -7px;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 3.5px;
   background: var(--wpa-ochre-gold);
+}
+
+.wpa-intro-banner-mat {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 2px solid var(--wpa-ochre-gold);
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
 .wpa-intro-banner-img {
   width: 100%;
   height: auto;
-  max-height: 34vh;
+  max-height: 30vh;
   object-fit: contain;
-  border-radius: 6px;
-  border: 2px solid var(--wpa-ochre-gold);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
   display: block;
 }
 
 .wpa-intro-body {
-  padding: 1.25rem 1.6rem 1.35rem;
+  padding: 1.5rem 1.85rem 1.6rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.65rem;
   background: var(--wpa-cream-paper);
+}
+
+.wpa-intro-folio-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
 }
 
 .wpa-intro-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.1rem;
+  gap: 0.6rem;
+  margin-bottom: 0.15rem;
 }
 
 .wpa-intro-wpa-badge {
   font-family: var(--font-display);
   font-size: 0.85rem;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   background: var(--wpa-terracotta);
   color: #FFF;
-  padding: 0.15rem 0.55rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 3px;
+  box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.4);
 }
 
 .wpa-intro-editions-count {
   font-family: var(--font-display);
   font-size: 0.85rem;
-  letter-spacing: 0.8px;
+  letter-spacing: 1px;
   background: var(--wpa-ink-navy);
   color: var(--wpa-ochre-gold);
-  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--wpa-ochre-gold);
+  padding: 0.2rem 0.65rem;
   border-radius: 3px;
 }
 
 .wpa-intro-title {
   font-family: var(--font-display);
-  font-size: 2.1rem;
-  letter-spacing: 2px;
+  font-size: 2.35rem;
+  letter-spacing: 2.5px;
   color: var(--wpa-text-dark);
   line-height: 1;
-  margin: 0;
+  margin: 0.1rem 0 0;
 }
 
 .wpa-intro-title span {
   color: var(--wpa-terracotta);
 }
 
-.wpa-intro-subtitle {
-  font-size: 0.9rem;
+.wpa-intro-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
   color: var(--wpa-text-muted);
-  font-weight: 500;
   margin: 0;
 }
 
-.wpa-intro-author {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  letter-spacing: 1.2px;
-  color: var(--wpa-terracotta);
-  margin-top: -0.2rem;
+/* 1930s Art Deco Rule with Diamond */
+.wpa-intro-divider-deco {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 80%;
+  margin: 0.2rem auto;
+  opacity: 0.75;
 }
 
-/* Curator Story Narrative Box */
-.wpa-intro-story-box {
-  background: var(--wpa-cream-bg);
-  border: 1.5px solid var(--wpa-border-color);
-  border-left: 4px solid var(--wpa-terracotta);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-  margin: 0.35rem 0 0.2rem;
+.wpa-deco-line {
+  flex: 1;
+  height: 1.5px;
+  background: var(--wpa-terracotta);
+}
+
+.wpa-deco-diamond {
+  color: var(--wpa-ochre-gold);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+/* Intimate Literary Narrative Prose */
+.wpa-intro-prose-wrap {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0.4rem 0 0.2rem;
+  width: 100%;
 }
 
-.wpa-intro-story-text {
-  font-size: 0.88rem;
-  line-height: 1.5;
+.wpa-intro-lead-paragraph {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.65;
   color: var(--wpa-text-dark);
   margin: 0;
 }
 
-/* Feature Highlights Grid */
-.wpa-intro-features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.65rem;
-  width: 100%;
-  margin: 0.25rem 0;
-  text-align: left;
+.wpa-intro-body-paragraph {
+  font-family: var(--font-serif);
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--wpa-text-dark);
+  opacity: 0.92;
+  margin: 0;
 }
 
-.wpa-intro-feature-item {
-  background: #FFF;
-  border: 1.5px solid var(--wpa-border-color);
+.wpa-intro-invitation-paragraph {
+  font-family: var(--font-serif);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--wpa-ink-navy);
+  text-align: center;
+  margin: 0.2rem 0 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(43, 104, 112, 0.08);
   border-radius: var(--radius-sm);
-  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(43, 104, 112, 0.2);
+}
+
+/* Author Signature Block */
+.wpa-intro-signature-row {
   display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  box-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0.35rem 0 0.2rem;
 }
 
-.wpa-intro-feature-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.wpa-intro-feature-text {
+.wpa-intro-author-block {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.15rem;
 }
 
-.wpa-intro-feature-text strong {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  color: var(--wpa-text-dark);
+.wpa-intro-author-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--wpa-terracotta);
 }
 
-.wpa-intro-feature-text span {
-  font-size: 0.76rem;
-  line-height: 1.35;
+.wpa-intro-author-title {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
   color: var(--wpa-text-muted);
 }
 
@@ -2768,27 +2815,27 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.45rem;
+  gap: 0.85rem;
+  margin-top: 0.6rem;
   width: 100%;
 }
 
 .wpa-intro-btn-explore {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   letter-spacing: 1.2px;
-  padding: 0.6rem 1.6rem;
+  padding: 0.65rem 1.85rem;
   background: var(--wpa-terracotta);
   color: #FFF;
-  border: 2px solid var(--wpa-charcoal-road);
+  border: 2.5px solid var(--wpa-charcoal-road);
   border-radius: var(--radius-sm);
   box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  animation: exploreBtnPulse 2.2s ease-in-out infinite;
+  animation: exploreBtnPulse 2.4s ease-in-out infinite;
 }
 
 @keyframes exploreBtnPulse {
@@ -2797,7 +2844,7 @@ html, body {
     transform: scale(1);
   }
   50% {
-    box-shadow: 4px 4px 0px var(--wpa-charcoal-road), 0 0 16px rgba(196, 89, 52, 0.45);
+    box-shadow: 4px 5px 0px var(--wpa-charcoal-road), 0 0 18px rgba(196, 89, 52, 0.45);
     transform: scale(1.03);
   }
 }
@@ -2810,34 +2857,35 @@ html, body {
 
 .wpa-intro-btn-substack {
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  letter-spacing: 0.8px;
-  padding: 0.55rem 1.15rem;
-  background: var(--wpa-cream-bg);
-  color: var(--wpa-charcoal-road);
-  border: 2px solid var(--wpa-charcoal-road);
+  font-size: 1.12rem;
+  letter-spacing: 1px;
+  padding: 0.65rem 1.45rem;
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-ochre-gold);
+  border: 2px solid var(--wpa-ochre-gold);
   border-radius: var(--radius-sm);
-  box-shadow: 2px 2px 0px var(--wpa-charcoal-road);
+  box-shadow: 2.5px 2.5px 0px rgba(0,0,0,0.5);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .wpa-intro-btn-substack:hover {
-  background: var(--wpa-teal-water);
+  background: #1B3147;
   color: #FFF;
+  border-color: #FFF;
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.7);
 }
 
 .wpa-intro-footer-hint {
   font-size: 0.76rem;
   color: var(--wpa-text-muted);
-  letter-spacing: 0.3px;
-  margin-top: 0.2rem;
+  letter-spacing: 0.4px;
+  margin-top: 0.35rem;
 }
 
 @media (max-width: 900px) {
@@ -3109,64 +3157,78 @@ html, body {
   }
 
   /* Intro Curtain on Mobile */
-  .wpa-intro-card {
-    width: 95vw;
+  /* Curator Welcome Folio on Mobile */
+  .wpa-intro-curtain {
+    padding: 0.65rem;
+  }
+
+  .wpa-folio-card {
+    width: 96vw;
     max-height: 94vh;
   }
 
-  .wpa-intro-title {
-    font-size: 1.55rem;
-    letter-spacing: 1px;
-  }
-
-  .wpa-intro-subtitle {
-    font-size: 0.8rem;
-  }
-
   .wpa-intro-banner-stage {
-    padding: 0.55rem;
+    padding: 0.65rem 0.75rem;
   }
 
   .wpa-intro-banner-img {
-    max-height: 24vh;
+    max-height: 22vh;
   }
 
   .wpa-intro-body {
-    padding: 0.85rem 0.9rem 1.15rem;
-    gap: 0.45rem;
+    padding: 1rem 1.1rem 1.25rem;
+    gap: 0.5rem;
   }
 
-  .wpa-intro-story-box {
-    padding: 0.6rem 0.75rem;
-    margin: 0.2rem 0;
+  .wpa-intro-title {
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
   }
 
-  .wpa-intro-story-text {
-    font-size: 0.82rem;
+  .wpa-intro-tagline {
+    font-size: 0.92rem;
+  }
+
+  .wpa-intro-prose-wrap {
+    gap: 0.55rem;
+    margin: 0.25rem 0 0.15rem;
+  }
+
+  .wpa-intro-lead-paragraph {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .wpa-intro-body-paragraph {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .wpa-intro-invitation-paragraph {
+    font-size: 0.9rem;
     line-height: 1.45;
+    padding: 0.45rem 0.6rem;
   }
 
-  .wpa-intro-features-grid {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-  }
-
-  .wpa-intro-feature-item {
-    padding: 0.45rem 0.65rem;
+  .wpa-intro-author-name {
+    font-size: 1.05rem;
   }
 
   .wpa-intro-actions {
     flex-direction: column;
-    gap: 0.45rem;
+    gap: 0.5rem;
     width: 100%;
+    margin-top: 0.4rem;
   }
 
   .wpa-intro-btn-explore,
   .wpa-intro-btn-substack {
     width: 100%;
     justify-content: center;
-    padding: 0.55rem 1rem;
-    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
   }
 }
 

@@ -15,77 +15,75 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
   <!-- Custom WPA Stylesheet (supports root & nested css/ folder with aggressive cache busting) -->
-  <link rel="stylesheet" href="css/styles.css?v=20260911_v7">
-  <link rel="stylesheet" href="styles.css?v=20260911_v7">
+  <link rel="stylesheet" href="css/styles.css?v=20260911_v8">
+  <link rel="stylesheet" href="styles.css?v=20260911_v8">
 </head>
 <body>
   <!-- Authentic 1930s Paper Texture Overlay -->
   <div class="paper-grain-texture" aria-hidden="true"></div>
 
-  <!-- Animated Project Intro Splash Screen / Curator Welcome Note -->
+  <!-- Animated Project Intro Splash Screen / Curator Welcome Folio -->
   <div id="wpa-intro-curtain" class="wpa-intro-curtain" role="dialog" aria-modal="true" aria-label="Welcome to Greetings From Kenosha">
-    <div class="wpa-intro-card">
+    <div class="wpa-intro-card wpa-folio-card">
       <button id="btn-intro-close" class="wpa-intro-close-btn" type="button" aria-label="Close Welcome Guide and Enter Map" title="Close and Enter Map">✕</button>
 
+      <!-- Vintage Framed Lithograph Stage -->
       <div class="wpa-intro-banner-stage">
-        <img src="./logo-banner.gif" onerror="this.onerror=null;this.src='./assets/logo-banner.gif';" alt="Greetings From Kenosha Animated Banner" class="wpa-intro-banner-img" />
+        <div class="wpa-intro-banner-mat">
+          <img src="./logo-banner.gif" onerror="this.onerror=null;this.src='./assets/logo-banner.gif';" alt="Greetings From Kenosha Animated Banner" class="wpa-intro-banner-img" />
+        </div>
       </div>
 
       <div class="wpa-intro-body">
-        <div class="wpa-intro-badge-row">
-          <span class="wpa-intro-wpa-badge">WPA WISCONSIN</span>
-          <span class="wpa-intro-editions-count">8 Historic Editions</span>
+        <div class="wpa-intro-folio-header">
+          <div class="wpa-intro-badge-row">
+            <span class="wpa-intro-wpa-badge">FEDERAL ART PROJECT • WISCONSIN</span>
+            <span class="wpa-intro-editions-count">8 Historic Editions</span>
+          </div>
+          <h2 class="wpa-intro-title">GREETINGS FROM <span>KENOSHA</span></h2>
+          <p class="wpa-intro-tagline">A Living History &amp; Architectural Atlas</p>
         </div>
 
-        <h2 class="wpa-intro-title">GREETINGS FROM <span>KENOSHA</span></h2>
-        <p class="wpa-intro-subtitle">An Illustrated Journey &amp; Historic Postcard Atlas</p>
-        <p class="wpa-intro-author">By Todd Burleson</p>
+        <div class="wpa-intro-divider-deco" aria-hidden="true">
+          <span class="wpa-deco-line"></span>
+          <span class="wpa-deco-diamond">◆</span>
+          <span class="wpa-deco-line"></span>
+        </div>
 
-        <div class="wpa-intro-story-box">
-          <p class="wpa-intro-story-text">
-            <em>Greetings from Kenosha</em> is an ongoing celebration of the storied streets, historic architecture, and cultural heritage of Downtown Kenosha, Wisconsin. Inspired by 1930s WPA travel posters and vintage linen postcards, each numbered edition pairs original vintage-style artwork with in-depth historical essays.
+        <div class="wpa-intro-prose-wrap">
+          <p class="wpa-intro-lead-paragraph">
+            Every corner of Kenosha holds a memory etched in brick, stone, and lakefront breeze. This project is a love letter to the places that shape our shared heritage—an invitation to slow down, look up, and rediscover the stories resting just beneath the surface of the buildings we pass every day.
+          </p>
+          <p class="wpa-intro-body-paragraph">
+            Inspired by the bold optimism of 1930s WPA travel posters and the tactile warmth of vintage linen postcards, each edition pairs an original hand-crafted illustration with an in-depth essay exploring the human history, architecture, and enduring spirit of our city.
+          </p>
+          <p class="wpa-intro-invitation-paragraph">
+            Whether Kenosha is your lifelong home or a place you are discovering for the very first time, welcome. Step into the map, wander its historic avenues, and join the journey.
           </p>
         </div>
 
-        <div class="wpa-intro-features-grid">
-          <div class="wpa-intro-feature-item">
-            <span class="wpa-intro-feature-icon">🗺️</span>
-            <div class="wpa-intro-feature-text">
-              <strong>Interactive Map</strong>
-              <span>Tap numbered golden pins to view postcard art &amp; landmark history.</span>
-            </div>
-          </div>
-          <div class="wpa-intro-feature-item">
-            <span class="wpa-intro-feature-icon">📖</span>
-            <div class="wpa-intro-feature-text">
-              <strong>Postcard Index</strong>
-              <span>Browse editions in order or search by landmark name.</span>
-            </div>
-          </div>
-          <div class="wpa-intro-feature-item">
-            <span class="wpa-intro-feature-icon">✍️</span>
-            <div class="wpa-intro-feature-text">
-              <strong>Substack Stories</strong>
-              <span>Read complete historical narratives published on Substack.</span>
-            </div>
+        <div class="wpa-intro-signature-row">
+          <div class="wpa-intro-author-block">
+            <span class="wpa-intro-author-name">Todd Burleson</span>
+            <span class="wpa-intro-author-title">Author &amp; Illustrator</span>
           </div>
         </div>
 
         <div class="wpa-intro-actions">
           <button id="btn-intro-explore" class="wpa-intro-btn-explore" type="button">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <polygon points="12 2 19 21 12 17 5 21 12 2"/>
             </svg>
-            <span>Explore the Atlas</span>
+            <span>Enter the Atlas</span>
           </button>
-          <a id="btn-intro-substack" href="https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha" target="_blank" rel="noopener noreferrer" class="wpa-intro-btn-substack" title="Visit Substack Series (Opens in new tab)">
+          <a id="btn-intro-substack" href="https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha" target="_blank" rel="noopener noreferrer" class="wpa-intro-btn-substack" title="Visit Substack Publication (Opens in new tab)">
             <span>Read on Substack</span>
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
           </a>
         </div>
 
         <div class="wpa-intro-footer-hint">
-          <span>Tap anywhere to begin • Tap the WPA Seal in the header anytime to reopen this guide</span>
+          <span>Click anywhere or press Esc to enter • Revisit this prologue anytime via the WPA seal in the header</span>
         </div>
       </div>
     </div>
@@ -492,6 +490,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20260911_v7"></script>
+  <script type="module" src="app.js?v=20260911_v8"></script>
 </body>
 </html>
