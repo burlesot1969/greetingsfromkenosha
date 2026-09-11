@@ -362,8 +362,10 @@
     <!-- Modal: Fullscreen Postcard Artwork & Design Inspector Lightbox -->
     <div id="modal-postcard-lightbox" class="wpa-modal-overlay wpa-lightbox-overlay" role="dialog" aria-modal="true" aria-labelledby="lightbox-card-title" style="display: none;">
       <div class="wpa-lightbox-container">
-        <!-- Close Button -->
-        <button id="btn-close-lightbox" class="wpa-lightbox-close" aria-label="Close full view">&times;</button>
+        <!-- Close / Return Button -->
+        <button id="btn-close-lightbox" class="wpa-lightbox-close" aria-label="Close enlarged view" title="Close (or Press Esc)">
+          <span>&times;</span>
+        </button>
         
         <!-- Navigation Buttons -->
         <button id="btn-lightbox-prev" class="wpa-lightbox-nav prev" aria-label="Previous postcard" title="Previous Postcard (Left Arrow)">
@@ -375,29 +377,37 @@
 
         <!-- Main Lightbox Content Card -->
         <div class="wpa-lightbox-card">
-          <div class="wpa-lightbox-image-wrapper">
-            <img id="lightbox-img" src="" alt="Full Screen Postcard Artwork" class="wpa-lightbox-img" />
-          </div>
-
-          <div class="wpa-lightbox-details">
+          <!-- Top Header Bar -->
+          <div class="wpa-lightbox-header-bar">
             <div class="wpa-lightbox-meta-row">
               <span id="lightbox-edition-badge" class="wpa-lightbox-edition">No. 00</span>
-              <span id="lightbox-status-badge" class="wpa-lightbox-status">Published</span>
+              <span id="lightbox-status-badge" class="wpa-lightbox-status">Published Edition</span>
             </div>
-            
-            <h2 id="lightbox-card-title" class="wpa-lightbox-title">Landmark Title</h2>
-            <p id="lightbox-card-address" class="wpa-lightbox-address">Address, Kenosha, WI</p>
-            
-            <div class="wpa-lightbox-notes-box">
-              <div class="wpa-lightbox-notes-label">Curator Field Notes &amp; Story</div>
+            <div class="wpa-lightbox-title-wrap">
+              <h2 id="lightbox-card-title" class="wpa-lightbox-title">Landmark Title</h2>
+              <p id="lightbox-card-address" class="wpa-lightbox-address">Address, Kenosha, WI</p>
+            </div>
+          </div>
+
+          <!-- Hero Image Stage -->
+          <div class="wpa-lightbox-image-stage" id="lightbox-image-stage" title="Click to toggle high-resolution zoom inspection">
+            <img id="lightbox-img" src="" alt="Full Screen Postcard Artwork" class="wpa-lightbox-img" />
+            <div class="wpa-lightbox-zoom-hint" id="lightbox-zoom-hint">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg>
+              <span>Click to Zoom &amp; Inspect</span>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar -->
+          <div class="wpa-lightbox-footer">
+            <div class="wpa-lightbox-notes-snippet" id="lightbox-card-notes-wrap">
               <p id="lightbox-card-notes" class="wpa-lightbox-notes"></p>
             </div>
-
             <div class="wpa-lightbox-footer-actions">
-              <span id="lightbox-coords" class="wpa-lightbox-coords">42.58..., -87.81...</span>
-              <a id="lightbox-substack-link" href="#" target="_blank" rel="noopener noreferrer" class="wpa-btn wpa-btn-primary" style="display: none; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
-                <span>Read on Substack</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+              <span id="lightbox-coords" class="wpa-lightbox-coords">📍 42.58..., -87.81...</span>
+              <a id="lightbox-substack-link" href="#" target="_blank" rel="noopener noreferrer" class="wpa-btn-card-story" style="display: none; padding: 0.4rem 0.9rem; font-size: 0.9rem; text-decoration: none;">
+                <span>Read Story on Substack</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
               </a>
             </div>
           </div>
@@ -413,6 +423,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20260911m"></script>
+  <script type="module" src="app.js?v=20260911n"></script>
 </body>
 </html>

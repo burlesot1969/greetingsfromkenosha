@@ -487,20 +487,57 @@ class GreetingsApp {
     const prevLightboxBtn = document.getElementById('btn-lightbox-prev');
     const nextLightboxBtn = document.getElementById('btn-lightbox-next');
     const lightboxModal = document.getElementById('modal-postcard-lightbox');
+    const imgStage = document.getElementById('lightbox-image-stage');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const zoomHint = document.getElementById('lightbox-zoom-hint');
 
     if (closeLightboxBtn) {
-      closeLightboxBtn.addEventListener('click', () => this.closePostcardLightbox());
+      closeLightboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.closePostcardLightbox();
+      });
     }
     if (prevLightboxBtn) {
-      prevLightboxBtn.addEventListener('click', () => this.navigateLightbox(-1));
+      prevLightboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.navigateLightbox(-1);
+      });
     }
     if (nextLightboxBtn) {
-      nextLightboxBtn.addEventListener('click', () => this.navigateLightbox(1));
+      nextLightboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.navigateLightbox(1);
+      });
     }
     if (lightboxModal) {
       lightboxModal.addEventListener('click', (e) => {
         if (e.target === lightboxModal || e.target.classList.contains('wpa-lightbox-container')) {
           this.closePostcardLightbox();
+        }
+      });
+    }
+
+    // Interactive Image Stage Zoom & Pan on desktop
+    if (imgStage && lightboxImg) {
+      imgStage.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isInspecting = imgStage.classList.toggle('inspecting');
+        if (zoomHint) {
+          zoomHint.innerHTML = isInspecting
+            ? `<span>Click to Zoom Out</span>`
+            : `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom &amp; Inspect</span>`;
+        }
+        if (!isInspecting) {
+          lightboxImg.style.transformOrigin = 'center center';
+        }
+      });
+
+      imgStage.addEventListener('mousemove', (e) => {
+        if (imgStage.classList.contains('inspecting')) {
+          const rect = imgStage.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          lightboxImg.style.transformOrigin = `${x}% ${y}%`;
         }
       });
     }
@@ -991,10 +1028,20 @@ class GreetingsApp {
     if (img) {
       img.src = imageUrl;
       img.alt = `${edition}: ${title}`;
+      img.style.transformOrigin = 'center center';
       img.onerror = () => {
         img.onerror = null;
         img.src = imageUrl.includes('assets/') ? imageUrl.replace('assets/', '') : `./assets/${imageUrl.split('/').pop()}`;
       };
+    }
+
+    const imgStage = document.getElementById('lightbox-image-stage');
+    const zoomHint = document.getElementById('lightbox-zoom-hint');
+    if (imgStage) {
+      imgStage.classList.remove('inspecting');
+    }
+    if (zoomHint) {
+      zoomHint.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom &amp; Inspect</span>`;
     }
 
     if (editionBadge) editionBadge.textContent = edition;
@@ -1021,6 +1068,14 @@ class GreetingsApp {
 
   closePostcardLightbox() {
     const modal = document.getElementById('modal-postcard-lightbox');
+    const imgStage = document.getElementById('lightbox-image-stage');
+    const img = document.getElementById('lightbox-img');
+    if (imgStage) {
+      imgStage.classList.remove('inspecting');
+    }
+    if (img) {
+      img.style.transformOrigin = 'center center';
+    }
     if (modal) {
       modal.classList.remove('open');
       modal.style.display = 'none';
