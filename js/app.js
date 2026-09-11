@@ -34,12 +34,15 @@ class GreetingsApp {
     // 5. Setup event listeners & Surveyor Tool
     this.setupEventListeners();
 
-    // 6. Set initial mobile view (default to map view on small screens so map is immediately visible)
+    // 6. Setup Animated Project Intro Splash Screen / Welcome Curtain
+    this.setupIntroCurtain();
+
+    // 7. Set initial mobile view (default to map view on small screens so map is immediately visible)
     if (window.innerWidth <= 900) {
       this.setMobileView('map');
     }
 
-    // 7. Subscribe to data changes
+    // 8. Subscribe to data changes
     markerStore.subscribe(() => {
       this.refreshMarkers();
       if (this.isCuratorMode) {
@@ -55,6 +58,75 @@ class GreetingsApp {
         kenoshaMap.highlightMarkerPin(markers[0].id);
       }
     }, 400);
+  }
+
+  setupIntroCurtain() {
+    const curtain = document.getElementById('wpa-intro-curtain');
+    const exploreBtn = document.getElementById('btn-intro-explore');
+    const replayBtn = document.getElementById('btn-replay-intro');
+    if (!curtain) return;
+
+    let autoDismissTimer = null;
+    let isDismissed = false;
+
+    const dismissCurtain = () => {
+      if (isDismissed) return;
+      isDismissed = true;
+      if (autoDismissTimer) clearTimeout(autoDismissTimer);
+      curtain.classList.add('fade-out');
+
+      // Activate glowing pin beacons on the map to invite interaction
+      setTimeout(() => {
+        kenoshaMap.activatePinBeacons();
+      }, 350);
+
+      // Settle beacons automatically after 10 seconds if untouched
+      setTimeout(() => {
+        kenoshaMap.deactivatePinBeacons();
+      }, 10000);
+    };
+
+    const showCurtain = () => {
+      isDismissed = false;
+      curtain.classList.remove('fade-out');
+      if (autoDismissTimer) clearTimeout(autoDismissTimer);
+      autoDismissTimer = setTimeout(() => {
+        dismissCurtain();
+      }, 3200);
+    };
+
+    // Auto-dismiss after 3.2 seconds
+    autoDismissTimer = setTimeout(() => {
+      dismissCurtain();
+    }, 3200);
+
+    // Click anywhere on curtain background or card to dismiss immediately
+    curtain.addEventListener('click', () => {
+      dismissCurtain();
+    });
+
+    if (exploreBtn) {
+      exploreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dismissCurtain();
+      });
+    }
+
+    // Keyboard dismiss on Escape / Enter / Space
+    window.addEventListener('keydown', (e) => {
+      if (!isDismissed && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
+        dismissCurtain();
+      }
+    });
+
+    // Replay intro anytime by clicking the WPA Seal logo badge in the header
+    if (replayBtn) {
+      replayBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showCurtain();
+      });
+    }
   }
 
   setMobileView(view) {
@@ -257,6 +329,11 @@ class GreetingsApp {
 
   selectMarker(id, zoomOnMap = true) {
     this.selectedMarkerId = id;
+    
+    // Deactivate inviting beacon glow once a landmark is selected
+    if (kenoshaMap) {
+      kenoshaMap.deactivatePinBeacons();
+    }
     
     // Update TOC active state
     document.querySelectorAll('.wpa-toc-card').forEach(c => {

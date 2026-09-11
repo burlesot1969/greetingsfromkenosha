@@ -78,6 +78,7 @@ class KenoshaMap {
 
     // Left-Click when in Repick Mode or Surveyor Mode
     this.map.on('click', (e) => {
+      this.deactivatePinBeacons();
       if (this.isRepicking && typeof this.onRepickCoordinate === 'function') {
         this.onRepickCoordinate(e.latlng.lat, e.latlng.lng);
         return;
@@ -85,6 +86,11 @@ class KenoshaMap {
       if (this.isSurveyorMode) {
         this.dropSurveyorPin(e.latlng.lat, e.latlng.lng, true);
       }
+    });
+
+    // Deactivate inviting beacon glow once user begins interacting with map
+    this.map.on('movestart zoomstart', () => {
+      this.deactivatePinBeacons();
     });
 
     return this;
@@ -162,7 +168,8 @@ class KenoshaMap {
     const numOnly = digits !== '' ? digits : '00';
 
     const iconHtml = `
-      <div class="wpa-pin-wrapper" data-id="${markerData.id}">
+      <div class="wpa-pin-wrapper wpa-pin-beacon" data-id="${markerData.id}">
+        <div class="wpa-pin-beacon-halo" aria-hidden="true"></div>
         <div class="wpa-pin-head">
           <div class="wpa-pin-inner">
             <span class="wpa-pin-no">#</span>
@@ -181,6 +188,16 @@ class KenoshaMap {
       iconAnchor: [20, 48],
       popupAnchor: [0, -44]
     });
+  }
+
+  activatePinBeacons() {
+    const pins = document.querySelectorAll('.wpa-pin-wrapper');
+    pins.forEach(pin => pin.classList.add('wpa-pin-beacon'));
+  }
+
+  deactivatePinBeacons() {
+    const pins = document.querySelectorAll('.wpa-pin-wrapper');
+    pins.forEach(pin => pin.classList.remove('wpa-pin-beacon'));
   }
 
   createPostcardPopupHTML(data) {

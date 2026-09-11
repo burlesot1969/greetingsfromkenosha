@@ -147,6 +147,17 @@ html, body {
   display: block;
 }
 
+.wpa-logo-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  outline: none;
+  text-decoration: none;
+}
+
 .wpa-seal-emblem {
   width: 44px;
   height: 44px;
@@ -157,7 +168,15 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.4), 2px 2px 0px rgba(0,0,0,0.5);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.wpa-logo-btn:hover .wpa-seal-emblem,
+.wpa-logo-link:hover .wpa-seal-emblem {
+  transform: scale(1.08);
+  border-color: #FFF;
+  box-shadow: 0 0 12px var(--wpa-ochre-gold), 3px 3px 0px rgba(0,0,0,0.7);
 }
 
 .wpa-seal-text {
@@ -1145,6 +1164,56 @@ html, body {
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Inviting Beacon Halo Animation on Marker Pins */
+.wpa-pin-beacon-halo {
+  position: absolute;
+  top: 19px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(220, 161, 52, 0.45) 0%, rgba(220, 161, 52, 0.1) 55%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.wpa-pin-wrapper.wpa-pin-beacon .wpa-pin-beacon-halo {
+  opacity: 1;
+  animation: wpaBeaconHaloPulse 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.wpa-pin-wrapper.wpa-pin-beacon .wpa-pin-head {
+  box-shadow: 0 0 16px rgba(220, 161, 52, 0.9), 2px 2px 6px rgba(0, 0, 0, 0.4);
+  animation: wpaPinBeaconBreath 2.2s ease-in-out infinite;
+}
+
+@keyframes wpaBeaconHaloPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.95;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.85);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.95);
+    opacity: 0;
+  }
+}
+
+@keyframes wpaPinBeaconBreath {
+  0%, 100% {
+    transform: rotate(-45deg) scale(1);
+  }
+  50% {
+    transform: rotate(-45deg) scale(1.09);
+  }
+}
+
 .wpa-pin-wrapper:hover {
   transform: scale(1.15) translateY(-4px);
   z-index: 999;
@@ -1169,6 +1238,7 @@ html, body {
   position: absolute;
   top: 0;
   left: 1px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .wpa-pin-wrapper.active-pin .wpa-pin-head {
@@ -2450,6 +2520,206 @@ html, body {
   cursor: pointer;
 }
 
+/* Animated Project Intro Splash Screen / Welcome Curtain */
+.wpa-intro-curtain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(17, 24, 35, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+  cursor: pointer;
+}
+
+.wpa-intro-curtain.fade-out {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.wpa-intro-card {
+  position: relative;
+  background: var(--wpa-cream-paper);
+  border: 3.5px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 5px 6px 0px rgba(36, 39, 44, 0.9);
+  max-width: 580px;
+  width: min(580px, 92vw);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: introBloom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+@keyframes introBloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.wpa-intro-banner-stage {
+  background: var(--wpa-ink-navy);
+  border-bottom: 3px solid var(--wpa-terracotta);
+  padding: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.wpa-intro-banner-stage::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--wpa-ochre-gold);
+}
+
+.wpa-intro-banner-img {
+  width: 100%;
+  height: auto;
+  max-height: 48vh;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 2px solid var(--wpa-ochre-gold);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  display: block;
+}
+
+.wpa-intro-body {
+  padding: 1.25rem 1.5rem 1.35rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--wpa-cream-paper);
+}
+
+.wpa-intro-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+
+.wpa-intro-wpa-badge {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  padding: 0.15rem 0.55rem;
+  border-radius: 3px;
+}
+
+.wpa-intro-editions-count {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-ochre-gold);
+  padding: 0.15rem 0.55rem;
+  border-radius: 3px;
+}
+
+.wpa-intro-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--wpa-text-dark);
+  line-height: 1;
+  margin: 0;
+}
+
+.wpa-intro-title span {
+  color: var(--wpa-terracotta);
+}
+
+.wpa-intro-subtitle {
+  font-size: 0.88rem;
+  color: var(--wpa-text-muted);
+  font-weight: 500;
+  margin: 0;
+}
+
+.wpa-intro-author {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: var(--wpa-terracotta);
+  margin-top: -0.15rem;
+}
+
+.wpa-intro-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+  width: 100%;
+}
+
+.wpa-intro-btn-explore {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 1.2px;
+  padding: 0.6rem 1.6rem;
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  border: 2px solid var(--wpa-charcoal-road);
+  border-radius: var(--radius-sm);
+  box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  animation: exploreBtnPulse 2s ease-in-out infinite;
+}
+
+@keyframes exploreBtnPulse {
+  0%, 100% {
+    box-shadow: 3px 3px 0px var(--wpa-charcoal-road);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 4px 4px 0px var(--wpa-charcoal-road), 0 0 16px rgba(196, 89, 52, 0.4);
+    transform: scale(1.03);
+  }
+}
+
+.wpa-intro-btn-explore:hover {
+  background: var(--wpa-terracotta-dark);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--wpa-charcoal-road);
+}
+
+.wpa-intro-hint {
+  font-size: 0.75rem;
+  color: var(--wpa-text-muted);
+  letter-spacing: 0.5px;
+}
+
 @media (max-width: 900px) {
   .wpa-mobile-nav-bar {
     display: flex !important;
@@ -2716,6 +2986,39 @@ html, body {
 
   .wpa-lightbox-nav.next {
     right: 0.25rem;
+  }
+
+  /* Intro Curtain on Mobile */
+  .wpa-intro-card {
+    width: 95vw;
+    max-height: 94vh;
+  }
+
+  .wpa-intro-title {
+    font-size: 1.55rem;
+    letter-spacing: 1px;
+  }
+
+  .wpa-intro-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .wpa-intro-banner-stage {
+    padding: 0.55rem;
+  }
+
+  .wpa-intro-banner-img {
+    max-height: 38vh;
+  }
+
+  .wpa-intro-body {
+    padding: 1rem 1rem 1.15rem;
+    gap: 0.35rem;
+  }
+
+  .wpa-intro-btn-explore {
+    padding: 0.5rem 1.25rem;
+    font-size: 1.05rem;
   }
 }
 
