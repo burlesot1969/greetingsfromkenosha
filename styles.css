@@ -333,13 +333,15 @@ html, body {
   gap: 0.4rem;
 }
 
-.wpa-toc-banner-gif {
+.wpa-toc-banner-gif,
+.wpa-toc-banner-video {
   width: 100%;
   height: auto;
   border-radius: 6px;
   border: 1.5px solid var(--wpa-ochre-gold);
   box-shadow: 0 3px 6px rgba(0,0,0,0.4);
   display: block;
+  pointer-events: none;
 }
 
 .wpa-toc-banner-footer {
@@ -2978,13 +2980,15 @@ html, body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
-.wpa-intro-banner-img {
+.wpa-intro-banner-img,
+.wpa-intro-banner-video {
   width: 100%;
   height: auto;
   max-height: 30vh;
   object-fit: contain;
   border-radius: 4px;
   display: block;
+  pointer-events: none;
 }
 
 .wpa-intro-body {
@@ -3558,7 +3562,8 @@ html, body {
     padding: 0.65rem 0.75rem;
   }
 
-  .wpa-intro-banner-img {
+  .wpa-intro-banner-img,
+  .wpa-intro-banner-video {
     max-height: 22vh;
   }
 
