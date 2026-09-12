@@ -157,9 +157,36 @@ class KenoshaMap {
         }
       });
 
+      marker.on('mouseover', () => {
+        if (window.__greetingsApp) {
+          window.__greetingsApp.highlightTocCard(markerData.id, true);
+        }
+        marker.setZIndexOffset(1000);
+      });
+
+      marker.on('mouseout', () => {
+        if (window.__greetingsApp) {
+          window.__greetingsApp.highlightTocCard(markerData.id, false);
+        }
+        marker.setZIndexOffset(0);
+      });
+
       marker.addTo(this.markersLayer);
       this.markerMap.set(markerData.id, marker);
     });
+  }
+
+  highlightMarker(id, isHighlighted) {
+    const marker = this.markerMap.get(id) || this.plannedMap.get(id);
+    if (!marker) return;
+    const el = marker.getElement();
+    if (el) {
+      const pin = el.querySelector('.wpa-pin-wrapper') || el.querySelector('.wpa-pin-planned');
+      if (pin) {
+        pin.classList.toggle('wpa-pin-pulse-halo', isHighlighted);
+      }
+    }
+    marker.setZIndexOffset(isHighlighted ? 1500 : 0);
   }
 
   createCustomMarkerIcon(markerData) {
@@ -341,6 +368,20 @@ class KenoshaMap {
             }
           });
         }
+      });
+
+      marker.on('mouseover', () => {
+        if (window.__greetingsApp) {
+          window.__greetingsApp.highlightTocCard(item.id, true);
+        }
+        marker.setZIndexOffset(1000);
+      });
+
+      marker.on('mouseout', () => {
+        if (window.__greetingsApp) {
+          window.__greetingsApp.highlightTocCard(item.id, false);
+        }
+        marker.setZIndexOffset(0);
       });
 
       marker.addTo(this.plannedPinsLayer);

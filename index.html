@@ -6,6 +6,14 @@
   <meta name="description" content="Interactive 1930s WPA-style map and Table of Contents (TOC) postcard index for Historic Downtown Kenosha, Wisconsin.">
   <title>Greetings From Kenosha: Interactive Map &amp; Postcard Index</title>
 
+  <meta name="theme-color" content="#1D2D44">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Greetings Kenosha">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="./assets/logo-banner.gif">
+
   <!-- Google Fonts: Bebas Neue, League Spartan, Montserrat, Josefin Sans, Outfit & Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +23,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
   <!-- Custom WPA Stylesheet (supports root & nested css/ folder with aggressive cache busting) -->
-  <link rel="stylesheet" href="css/styles.css?v=20260911_v14">
-  <link rel="stylesheet" href="styles.css?v=20260911_v14">
+  <link rel="stylesheet" href="css/styles.css?v=20260911_v15">
+  <link rel="stylesheet" href="styles.css?v=20260911_v15">
 </head>
 <body>
   <!-- Authentic 1930s Paper Texture Overlay -->
@@ -454,18 +462,98 @@
               <span id="lightbox-edition-badge" class="wpa-lightbox-edition">No. 00</span>
               <span id="lightbox-status-badge" class="wpa-lightbox-status">Published Edition</span>
             </div>
+            
             <div class="wpa-lightbox-title-wrap">
               <h2 id="lightbox-card-title" class="wpa-lightbox-title">Landmark Title</h2>
               <p id="lightbox-card-address" class="wpa-lightbox-address">Address, Kenosha, WI</p>
             </div>
+
+            <div class="wpa-lightbox-header-actions">
+              <button id="btn-lightbox-flip" class="wpa-btn-flip-card" type="button" title="Flip postcard to read simulated 1930s back (or press F)">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span id="lightbox-flip-btn-text">Postcard Back ⟲</span>
+              </button>
+              <button id="btn-lightbox-share" class="wpa-btn-share-card" type="button" title="Copy direct link to this postcard edition">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+                <span>Share Link</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Hero Image Stage -->
-          <div class="wpa-lightbox-image-stage" id="lightbox-image-stage" title="Click to toggle high-resolution zoom inspection">
-            <img id="lightbox-img" src="" alt="Full Screen Postcard Artwork" class="wpa-lightbox-img" />
-            <div class="wpa-lightbox-zoom-hint" id="lightbox-zoom-hint">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg>
-              <span>Click to Zoom &amp; Inspect</span>
+          <!-- 3D Flippable Postcard Stage -->
+          <div class="wpa-lightbox-image-stage" id="lightbox-image-stage">
+            <div class="wpa-postcard-flipper" id="lightbox-postcard-flipper">
+              <!-- Front Face: Artwork -->
+              <div class="wpa-postcard-face wpa-postcard-front">
+                <img id="lightbox-img" src="" alt="Full Screen Postcard Artwork" class="wpa-lightbox-img" />
+                <div class="wpa-lightbox-zoom-hint" id="lightbox-zoom-hint">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                  <span>Click to Zoom Artwork</span>
+                </div>
+              </div>
+
+              <!-- Back Face: 1930s Linen Postcard Reverse -->
+              <div class="wpa-postcard-face wpa-postcard-back" id="lightbox-postcard-back">
+                <div class="wpa-postcard-back-grain-texture" aria-hidden="true"></div>
+                
+                <!-- Top Postmark & Stamp Row -->
+                <div class="wpa-postmark-stamp-box">
+                  <div class="wpa-postmark-group">
+                    <div class="wpa-postmark-circle">
+                      <span class="wpa-postmark-city">KENOSHA, WIS.</span>
+                      <span class="wpa-postmark-date" id="lightbox-back-postmark-date">SEP 11</span>
+                      <span class="wpa-postmark-time">1936</span>
+                    </div>
+                    <div class="wpa-postmark-wavy-lines" aria-hidden="true">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+
+                  <div class="wpa-vintage-stamp" title="3 Cent Federal Art Project Commemorative Stamp">
+                    <div class="wpa-stamp-inner">
+                      <span class="wpa-stamp-country">U.S. POSTAGE</span>
+                      <span class="wpa-stamp-center-icon">◆</span>
+                      <span class="wpa-stamp-cents">3¢</span>
+                      <span class="wpa-stamp-label">WPA WIS.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wpa-postcard-back-header">
+                  <span class="wpa-postcard-back-brand">POST CARD • GREETINGS FROM KENOSHA HISTORIC ATLAS</span>
+                  <span class="wpa-postcard-back-serial" id="lightbox-back-serial">SERIES 1930s • NO. 00</span>
+                </div>
+
+                <div class="wpa-postcard-back-divider-line"></div>
+
+                <!-- 2-Column Split: Field Notes (Left) / Address Lines (Right) -->
+                <div class="wpa-postcard-back-columns">
+                  <div class="wpa-postcard-back-left">
+                    <span class="wpa-postcard-back-heading">CURATOR FIELD NOTES:</span>
+                    <p class="wpa-postcard-back-text" id="lightbox-back-notes">
+                      Every corner of Kenosha holds a memory etched in brick, stone, and lakefront breeze.
+                    </p>
+                    <div class="wpa-postcard-back-meta">
+                      <span id="lightbox-back-artist" class="wpa-back-meta-item">Artist: Todd Burleson</span>
+                      <span id="lightbox-back-era" class="wpa-back-meta-item">Era: Historic Downtown</span>
+                    </div>
+                  </div>
+
+                  <div class="wpa-postcard-back-right">
+                    <span class="wpa-postcard-back-heading">LANDMARK DESTINATION:</span>
+                    <div class="wpa-postcard-address-lines">
+                      <div class="wpa-address-line font-typewriter" id="lightbox-back-title">Landmark Title</div>
+                      <div class="wpa-address-line font-typewriter" id="lightbox-back-address">5608 10th Avenue</div>
+                      <div class="wpa-address-line font-typewriter">Kenosha, Wisconsin</div>
+                      <div class="wpa-address-line font-typewriter font-coords" id="lightbox-back-coords">42°35'04.6"N 87°49'07.7"W</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wpa-postcard-back-footer">
+                  <span>Genuine 1930s WPA Style Linen Reproduction • Photographs &amp; Digital Art by Todd Burleson</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -475,11 +563,16 @@
               <p id="lightbox-card-notes" class="wpa-lightbox-notes"></p>
             </div>
             <div class="wpa-lightbox-footer-actions">
-              <span id="lightbox-coords" class="wpa-lightbox-coords">📍 42.58..., -87.81...</span>
-              <a id="lightbox-substack-link" href="#" target="_blank" rel="noopener noreferrer" class="wpa-btn-card-story" style="display: none; padding: 0.4rem 0.9rem; font-size: 0.9rem; text-decoration: none;">
-                <span>Read Story on Substack</span>
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-              </a>
+              <div class="wpa-lightbox-kbd-hints">
+                <span>[ ← / → ] Flip Cards</span> • <span>[ F ] Turn Over</span> • <span>[ / ] Search</span> • <span>[ Esc ] Close</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <span id="lightbox-coords" class="wpa-lightbox-coords">📍 42.58..., -87.81...</span>
+                <a id="lightbox-substack-link" href="#" target="_blank" rel="noopener noreferrer" class="wpa-btn-card-story" style="display: none; padding: 0.4rem 0.9rem; font-size: 0.9rem; text-decoration: none;">
+                  <span>Read Story on Substack</span>
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -494,6 +587,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20260911_v10"></script>
+  <script type="module" src="app.js?v=20260911_v15"></script>
 </body>
 </html>

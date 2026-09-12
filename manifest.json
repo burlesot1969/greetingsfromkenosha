@@ -1,0 +1,24 @@
+{
+  "name": "Greetings From Kenosha - Historic Postcard Atlas",
+  "short_name": "Greetings Kenosha",
+  "description": "Interactive 1930s WPA-style map and Table of Contents postcard index for Historic Downtown Kenosha, Wisconsin.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5EFEB",
+  "theme_color": "#1D2D44",
+  "categories": ["travel", "education", "lifestyle", "navigation"],
+  "icons": [
+    {
+      "src": "./assets/logo-banner.gif",
+      "sizes": "192x192 512x512",
+      "type": "image/gif"
+    },
+    {
+      "src": "./assets/hero-banner.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}

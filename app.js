@@ -14,6 +14,7 @@ class GreetingsApp {
     this.isCuratorMode = false;
     this.hasLocalPlannedData = false;
     this.currentMobileView = 'map';
+    this._preloadedImages = new Set();
   }
 
   async init() {
@@ -50,14 +51,25 @@ class GreetingsApp {
       }
     });
 
-    // Automatically highlight the first marker after initial load
+    // 9. Check URL Deep-Link (#00, #01, ?edition=01, etc.)
     setTimeout(() => {
-      const markers = markerStore.getAll();
-      if (markers.length > 0) {
-        this.selectedMarkerId = markers[0].id;
-        kenoshaMap.highlightMarkerPin(markers[0].id);
+      this.checkUrlDeepLink();
+    }, 250);
+
+    window.addEventListener('hashchange', () => {
+      this.checkUrlDeepLink();
+    });
+
+    // Automatically highlight the first marker after initial load if no deep link
+    setTimeout(() => {
+      if (!this.currentLightboxId && !window.location.hash) {
+        const markers = markerStore.getAll();
+        if (markers.length > 0) {
+          this.selectedMarkerId = markers[0].id;
+          kenoshaMap.highlightMarkerPin(markers[0].id);
+        }
       }
-    }, 400);
+    }, 450);
   }
 
   setupIntroCurtain() {
@@ -333,6 +345,23 @@ class GreetingsApp {
           this.selectMarker(id, true);
         }
       });
+
+      // Bi-directional hover synchronization & background image preloading
+      card.addEventListener('mouseenter', () => {
+        const item = markerStore.getById(id);
+        if (item && item.imageUrl) {
+          this.preloadImage(item.imageUrl);
+        }
+        if (kenoshaMap) {
+          kenoshaMap.highlightMarker(id, true);
+        }
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (kenoshaMap) {
+          kenoshaMap.highlightMarker(id, false);
+        }
+      });
     });
   }
 
@@ -581,6 +610,8 @@ class GreetingsApp {
     const closeLightboxBtn = document.getElementById('btn-close-lightbox');
     const prevLightboxBtn = document.getElementById('btn-lightbox-prev');
     const nextLightboxBtn = document.getElementById('btn-lightbox-next');
+    const flipLightboxBtn = document.getElementById('btn-lightbox-flip');
+    const shareLightboxBtn = document.getElementById('btn-lightbox-share');
     const lightboxModal = document.getElementById('modal-postcard-lightbox');
     const imgStage = document.getElementById('lightbox-image-stage');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -604,6 +635,18 @@ class GreetingsApp {
         this.navigateLightbox(1);
       });
     }
+    if (flipLightboxBtn) {
+      flipLightboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.togglePostcardFlip();
+      });
+    }
+    if (shareLightboxBtn) {
+      shareLightboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.copyCurrentPostcardLink();
+      });
+    }
     if (lightboxModal) {
       lightboxModal.addEventListener('click', (e) => {
         if (e.target === lightboxModal || e.target.classList.contains('wpa-lightbox-container')) {
@@ -616,11 +659,18 @@ class GreetingsApp {
     if (imgStage && lightboxImg) {
       imgStage.addEventListener('click', (e) => {
         e.stopPropagation();
+        const flipper = document.getElementById('lightbox-postcard-flipper');
+        if (flipper && flipper.classList.contains('is-flipped')) {
+          // If back is showing, clicking stage flips back to front
+          this.togglePostcardFlip();
+          return;
+        }
+
         const isInspecting = imgStage.classList.toggle('inspecting');
         if (zoomHint) {
           zoomHint.innerHTML = isInspecting
             ? `<span>Click to Zoom Out</span>`
-            : `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom &amp; Inspect</span>`;
+            : `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom Artwork</span>`;
         }
         if (!isInspecting) {
           lightboxImg.style.transformOrigin = 'center center';
@@ -637,27 +687,8 @@ class GreetingsApp {
       });
     }
 
-    // Global keyboard listener for Curator Mode (Shift+P) and Lightbox Navigation (Esc, Left/Right)
-    document.addEventListener('keydown', (e) => {
-      if (this.currentLightboxId) {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          this.closePostcardLightbox();
-        } else if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          this.navigateLightbox(-1);
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          this.navigateLightbox(1);
-        }
-        return;
-      }
-
-      if (e.shiftKey && (e.key === 'P' || e.key === 'p') && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
-        e.preventDefault();
-        this.toggleCuratorMode();
-      }
-    });
+    // Global keyboard listener for Power Navigation (/, Esc, Left/Right, F, M, L, Shift+P)
+    document.addEventListener('keydown', (e) => this.handleGlobalKeyDown(e));
 
     // Modal Planned Pin Controls
     const closePlannedBtn = document.getElementById('btn-close-planned-modal');
@@ -1109,9 +1140,29 @@ class GreetingsApp {
     const coordsEl = document.getElementById('lightbox-coords');
     const substackLink = document.getElementById('lightbox-substack-link');
 
+    // Postcard Back Elements
+    const flipper = document.getElementById('lightbox-postcard-flipper');
+    const flipBtnText = document.getElementById('lightbox-flip-btn-text');
+    const backNotesEl = document.getElementById('lightbox-back-notes');
+    const backTitleEl = document.getElementById('lightbox-back-title');
+    const backAddressEl = document.getElementById('lightbox-back-address');
+    const backCoordsEl = document.getElementById('lightbox-back-coords');
+    const backArtistEl = document.getElementById('lightbox-back-artist');
+    const backEraEl = document.getElementById('lightbox-back-era');
+    const backSerialEl = document.getElementById('lightbox-back-serial');
+    const backPostmarkDateEl = document.getElementById('lightbox-back-postmark-date');
+
     if (!modal) return;
 
     this.currentLightboxId = markerId;
+
+    // Reset flipper to front side on new card load
+    if (flipper) {
+      flipper.classList.remove('is-flipped');
+    }
+    if (flipBtnText) {
+      flipBtnText.textContent = 'Postcard Back ⟲';
+    }
 
     const edition = item.edition || item.plannedEdition || 'Edition';
     const title = item.title || 'Untitled Kenosha Postcard';
@@ -1120,6 +1171,7 @@ class GreetingsApp {
     const status = item.status || (item.isDefault ? 'Published Edition' : 'In Progress');
     const imageUrl = item.imageUrl || './card-00.jpg';
 
+    // Populate Front Artwork
     if (img) {
       img.src = imageUrl;
       img.alt = `${edition}: ${title}`;
@@ -1136,7 +1188,7 @@ class GreetingsApp {
       imgStage.classList.remove('inspecting');
     }
     if (zoomHint) {
-      zoomHint.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom &amp; Inspect</span>`;
+      zoomHint.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg><span>Click to Zoom Artwork</span>`;
     }
 
     if (editionBadge) editionBadge.textContent = edition;
@@ -1144,8 +1196,27 @@ class GreetingsApp {
     if (titleEl) titleEl.textContent = title;
     if (addressEl) addressEl.textContent = address;
     if (notesEl) notesEl.textContent = notes;
-    if (coordsEl && typeof item.lat === 'number' && typeof item.lng === 'number') {
-      coordsEl.textContent = `📍 ${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`;
+
+    const formattedCoords = (typeof item.lat === 'number' && typeof item.lng === 'number')
+      ? `${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`
+      : '42.5841, -87.8188';
+
+    if (coordsEl) {
+      coordsEl.textContent = `📍 ${formattedCoords}`;
+    }
+
+    // Populate Back Linen Postcard Elements
+    if (backNotesEl) backNotesEl.textContent = notes;
+    if (backTitleEl) backTitleEl.textContent = title;
+    if (backAddressEl) backAddressEl.textContent = address;
+    if (backCoordsEl) backCoordsEl.textContent = `📍 ${formattedCoords}`;
+    if (backArtistEl) backArtistEl.textContent = `Artist: ${item.artist || 'Todd Burleson'}`;
+    if (backEraEl) backEraEl.textContent = item.year ? `Era: Est. ${item.year}` : 'Era: Historic Downtown';
+    if (backSerialEl) backSerialEl.textContent = `SERIES 1930s • ${edition.toUpperCase()}`;
+    if (backPostmarkDateEl) {
+      const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const now = new Date();
+      backPostmarkDateEl.textContent = `${months[now.getMonth()]} ${now.getDate()}`;
     }
 
     if (substackLink) {
@@ -1157,6 +1228,14 @@ class GreetingsApp {
       }
     }
 
+    // Update Deep Link URL Hash without reload
+    try {
+      history.replaceState(null, null, '#' + item.id);
+    } catch (e) {}
+
+    // Preload adjacent images for zero-lag cycling
+    this.preloadAdjacentPostcards(markerId);
+
     modal.classList.add('open');
     modal.style.display = 'flex';
   }
@@ -1165,17 +1244,64 @@ class GreetingsApp {
     const modal = document.getElementById('modal-postcard-lightbox');
     const imgStage = document.getElementById('lightbox-image-stage');
     const img = document.getElementById('lightbox-img');
+    const flipper = document.getElementById('lightbox-postcard-flipper');
+
     if (imgStage) {
       imgStage.classList.remove('inspecting');
     }
     if (img) {
       img.style.transformOrigin = 'center center';
     }
+    if (flipper) {
+      flipper.classList.remove('is-flipped');
+    }
     if (modal) {
       modal.classList.remove('open');
       modal.style.display = 'none';
     }
     this.currentLightboxId = null;
+
+    // Clean up hash if closed
+    if (window.location.hash) {
+      try {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+      } catch (e) {}
+    }
+  }
+
+  togglePostcardFlip() {
+    const flipper = document.getElementById('lightbox-postcard-flipper');
+    const flipBtnText = document.getElementById('lightbox-flip-btn-text');
+    const imgStage = document.getElementById('lightbox-image-stage');
+    if (!flipper) return;
+
+    if (imgStage) {
+      imgStage.classList.remove('inspecting');
+    }
+
+    const isFlipped = flipper.classList.toggle('is-flipped');
+    if (flipBtnText) {
+      flipBtnText.textContent = isFlipped ? 'View Artwork ⟳' : 'Postcard Back ⟲';
+    }
+  }
+
+  copyCurrentPostcardLink() {
+    if (!this.currentLightboxId) return;
+    const item = markerStore.getById(this.currentLightboxId);
+    if (!item) return;
+
+    const url = `${window.location.origin}${window.location.pathname}#${item.id}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url)
+        .then(() => {
+          this.showToast(`✓ Postcard link copied to clipboard!`, 3500);
+        })
+        .catch(() => {
+          prompt('Copy direct link to this postcard:', url);
+        });
+    } else {
+      prompt('Copy direct link to this postcard:', url);
+    }
   }
 
   navigateLightbox(direction) {
@@ -1193,6 +1319,154 @@ class GreetingsApp {
     const nextMarker = allMarkers[nextIndex];
     if (nextMarker) {
       this.openPostcardLightbox(nextMarker.id);
+    }
+  }
+
+  checkUrlDeepLink() {
+    const hash = window.location.hash.replace('#', '').trim();
+    const params = new URLSearchParams(window.location.search);
+    const cardParam = params.get('card') || params.get('edition') || params.get('id') || hash;
+    if (!cardParam) return;
+
+    const all = markerStore.getAll(true);
+    const found = all.find(m => {
+      if (m.id === cardParam) return true;
+      const cleanParam = cardParam.replace(/\D/g, '');
+      const mNum = String(m.editionNum || '').replace(/\D/g, '') || String(m.edition || '').replace(/\D/g, '');
+      if (cleanParam && mNum && parseInt(cleanParam, 10) === parseInt(mNum, 10)) return true;
+      return m.title && m.title.toLowerCase().includes(cardParam.toLowerCase());
+    });
+
+    if (found) {
+      // Dismiss intro prologue curtain if open
+      const curtain = document.getElementById('wpa-intro-curtain');
+      if (curtain && !curtain.classList.contains('fade-out')) {
+        curtain.classList.add('fade-out');
+        setTimeout(() => { curtain.style.display = 'none'; }, 700);
+      }
+      this.selectMarker(found.id, true);
+      setTimeout(() => {
+        this.openPostcardLightbox(found.id);
+      }, 350);
+    }
+  }
+
+  highlightTocCard(id, isHovered) {
+    const list = document.getElementById('toc-marker-list');
+    if (!list) return;
+    const cards = list.querySelectorAll('.wpa-toc-card');
+    cards.forEach(c => {
+      if (c.dataset.id === id) {
+        c.classList.toggle('wpa-card-marker-highlight', isHovered);
+        if (isHovered) {
+          c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      } else {
+        c.classList.remove('wpa-card-marker-highlight');
+      }
+    });
+  }
+
+  preloadImage(url) {
+    if (!url || this._preloadedImages.has(url)) return;
+    const img = new Image();
+    img.src = url;
+    this._preloadedImages.add(url);
+  }
+
+  preloadAdjacentPostcards(currentId) {
+    const allMarkers = markerStore.getAll(this.isCuratorMode);
+    const idx = allMarkers.findIndex(m => m.id === currentId);
+    if (idx === -1) return;
+    const prevIdx = (idx - 1 + allMarkers.length) % allMarkers.length;
+    const nextIdx = (idx + 1) % allMarkers.length;
+    if (allMarkers[prevIdx]?.imageUrl) this.preloadImage(allMarkers[prevIdx].imageUrl);
+    if (allMarkers[nextIdx]?.imageUrl) this.preloadImage(allMarkers[nextIdx].imageUrl);
+  }
+
+  handleGlobalKeyDown(e) {
+    const activeTag = document.activeElement?.tagName;
+    const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag);
+
+    // When lightbox is open
+    if (this.currentLightboxId) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        this.closePostcardLightbox();
+        return;
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.navigateLightbox(-1);
+        return;
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.navigateLightbox(1);
+        return;
+      }
+      if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        this.togglePostcardFlip();
+        return;
+      }
+      return;
+    }
+
+    if (isInputActive) {
+      if (e.key === 'Escape') {
+        document.activeElement.blur();
+      }
+      return;
+    }
+
+    // Global Shortcuts
+    if (e.key === '/' || e.key === 's' || e.key === 'S') {
+      e.preventDefault();
+      const searchInput = document.getElementById('toc-search-input');
+      const sidebar = document.getElementById('wpa-sidebar');
+      if (sidebar && !sidebar.classList.contains('mobile-open') && window.innerWidth <= 900) {
+        sidebar.classList.add('mobile-open');
+      }
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+      return;
+    }
+
+    if (e.key === 'Escape') {
+      const curtain = document.getElementById('wpa-intro-curtain');
+      if (curtain && !curtain.classList.contains('fade-out')) {
+        curtain.classList.add('fade-out');
+        setTimeout(() => { curtain.style.display = 'none'; }, 700);
+      }
+      const sidebar = document.getElementById('wpa-sidebar');
+      if (sidebar && sidebar.classList.contains('mobile-open')) {
+        sidebar.classList.remove('mobile-open');
+      }
+      return;
+    }
+
+    if (e.key === 'm' || e.key === 'M') {
+      e.preventDefault();
+      const sidebar = document.getElementById('wpa-sidebar');
+      if (sidebar && window.innerWidth <= 900) {
+        sidebar.classList.toggle('mobile-open');
+      }
+      return;
+    }
+
+    if (e.key === 'l' || e.key === 'L') {
+      e.preventDefault();
+      const locateBtn = document.getElementById('btn-locate-me');
+      if (locateBtn) locateBtn.click();
+      return;
+    }
+
+    if (e.shiftKey && (e.key === 'P' || e.key === 'p' || e.key === 'C' || e.key === 'c')) {
+      e.preventDefault();
+      this.toggleCuratorMode();
     }
   }
 
