@@ -2770,20 +2770,21 @@ html, body {
   padding-top: 0.35rem;
 }
 
-.wpa-lightbox-footer {
-  background: var(--wpa-cream-paper);
-  border-top: 2px solid var(--wpa-border-color);
-  padding: 0.65rem 1.25rem;
-  display: flex;
+.wpa-back-substack-link {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 4px;
+  color: var(--wpa-terracotta);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-top: 0.35rem;
+  transition: color 0.15s ease;
 }
 
-.wpa-lightbox-coords {
-  font-family: monospace;
-  font-size: 0.82rem;
-  color: var(--wpa-text-muted);
+.wpa-back-substack-link:hover {
+  color: var(--wpa-terracotta-dark);
 }
 
 /* Bi-directional Hover Highlights */

@@ -1123,8 +1123,6 @@ class GreetingsApp {
     const statusBadge = document.getElementById('lightbox-status-badge');
     const titleEl = document.getElementById('lightbox-card-title');
     const addressEl = document.getElementById('lightbox-card-address');
-    const coordsEl = document.getElementById('lightbox-coords');
-    const substackLink = document.getElementById('lightbox-substack-link');
 
     // Postcard Back Elements
     const flipper = document.getElementById('lightbox-postcard-flipper');
@@ -1204,12 +1202,13 @@ class GreetingsApp {
       backPostmarkDateEl.textContent = `${months[now.getMonth()]} ${now.getDate()}`;
     }
 
-    if (substackLink) {
+    const backSubstackLink = document.getElementById('lightbox-back-substack');
+    if (backSubstackLink) {
       if (item.link && item.link !== '#' && !item.link.startsWith('javascript')) {
-        substackLink.href = item.link;
-        substackLink.style.display = 'inline-flex';
+        backSubstackLink.href = item.link;
+        backSubstackLink.style.display = 'inline-flex';
       } else {
-        substackLink.style.display = 'none';
+        backSubstackLink.style.display = 'none';
       }
     }
 
