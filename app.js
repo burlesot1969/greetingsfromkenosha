@@ -1137,7 +1137,6 @@ class GreetingsApp {
     const statusBadge = document.getElementById('lightbox-status-badge');
     const titleEl = document.getElementById('lightbox-card-title');
     const addressEl = document.getElementById('lightbox-card-address');
-    const notesEl = document.getElementById('lightbox-card-notes');
     const coordsEl = document.getElementById('lightbox-coords');
     const substackLink = document.getElementById('lightbox-substack-link');
 
@@ -1196,7 +1195,6 @@ class GreetingsApp {
     if (statusBadge) statusBadge.textContent = status;
     if (titleEl) titleEl.textContent = title;
     if (addressEl) addressEl.textContent = address;
-    if (notesEl) notesEl.textContent = notes;
 
     const formattedCoords = (typeof item.lat === 'number' && typeof item.lng === 'number')
       ? `${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`
