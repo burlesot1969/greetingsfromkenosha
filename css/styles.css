@@ -2665,35 +2665,6 @@ html, body {
   width: 100%;
 }
 
-.wpa-intro-badge-row {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.15rem;
-}
-
-.wpa-intro-wpa-badge {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  letter-spacing: 1.2px;
-  background: var(--wpa-terracotta);
-  color: #FFF;
-  padding: 0.2rem 0.65rem;
-  border-radius: 3px;
-  box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.4);
-}
-
-.wpa-intro-editions-count {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  background: var(--wpa-ink-navy);
-  color: var(--wpa-ochre-gold);
-  border: 1px solid var(--wpa-ochre-gold);
-  padding: 0.2rem 0.65rem;
-  border-radius: 3px;
-}
-
 .wpa-intro-title {
   font-family: var(--font-display);
   font-size: 2.35rem;
