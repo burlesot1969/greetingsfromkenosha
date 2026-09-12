@@ -2751,24 +2751,15 @@ html, body {
   width: 100%;
 }
 
-.wpa-intro-lead-paragraph {
-  font-family: var(--font-vintage-sans);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.0rem;
-  line-height: 1.65;
-  color: var(--wpa-text-dark);
-  margin: 0;
-}
-
+.wpa-intro-lead-paragraph,
 .wpa-intro-body-paragraph {
   font-family: var(--font-vintage-sans);
   font-style: normal;
   font-weight: 400;
-  font-size: 0.96rem;
+  font-size: 0.98rem;
   line-height: 1.65;
   color: var(--wpa-text-dark);
-  opacity: 0.95;
+  opacity: 1;
   margin: 0;
 }
 
@@ -3212,15 +3203,10 @@ html, body {
     margin: 0.25rem 0 0.15rem;
   }
 
-  .wpa-intro-lead-paragraph {
-    font-size: 0.92rem;
-    line-height: 1.55;
-    text-align: left;
-  }
-
+  .wpa-intro-lead-paragraph,
   .wpa-intro-body-paragraph {
-    font-size: 0.88rem;
-    line-height: 1.5;
+    font-size: 0.90rem;
+    line-height: 1.55;
     text-align: left;
   }
 
