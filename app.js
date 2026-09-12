@@ -1184,10 +1184,6 @@ class GreetingsApp {
       ? `${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`
       : '42.5841, -87.8188';
 
-    if (coordsEl) {
-      coordsEl.textContent = `📍 ${formattedCoords}`;
-    }
-
     // Populate Back Linen Postcard Elements
     if (backNotesEl) backNotesEl.textContent = notes;
     if (backTitleEl) backTitleEl.textContent = title;
