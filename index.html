@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
   <!-- Custom WPA Stylesheet (supports root & nested css/ folder with aggressive cache busting) -->
-  <link rel="stylesheet" href="css/styles.css?v=20260911_v13">
-  <link rel="stylesheet" href="styles.css?v=20260911_v13">
+  <link rel="stylesheet" href="css/styles.css?v=20260911_v14">
+  <link rel="stylesheet" href="styles.css?v=20260911_v14">
 </head>
 <body>
   <!-- Authentic 1930s Paper Texture Overlay -->
@@ -62,7 +62,10 @@
 
         <div class="wpa-intro-signature-row">
           <div class="wpa-intro-author-block">
-            <span class="wpa-intro-author-name">Todd Burleson</span>
+            <a href="https://toddburlesonwonders.com/" target="_blank" rel="noopener noreferrer" class="wpa-intro-author-link" title="Visit Todd Burleson's Portfolio, Books &amp; Works (Opens in new tab)">
+              <span class="wpa-intro-author-name">Todd Burleson</span>
+              <svg class="wpa-author-external-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
             <span class="wpa-intro-author-title">Author, Photographer &amp; Creator</span>
           </div>
         </div>
@@ -106,10 +109,10 @@
       <div class="wpa-header-controls">
         <div class="theme-selector-group">
           <select id="select-wpa-theme" class="wpa-select" aria-label="Select Map Style Theme">
-            <option value="wpa-poster" selected>1930s WPA Poster (Standard)</option>
-            <option value="wpa-litho">Warm Lithograph</option>
-            <option value="wpa-sepia">Vintage Postcard Sepia</option>
-            <option value="wpa-night">Midnight Deco</option>
+            <option value="warm-wpa">1930s WPA Poster (Default)</option>
+            <option value="carto-voyager">Voyager Clean</option>
+            <option value="osm-standard">Classic Standard</option>
+            <option value="satellite">Aerial Satellite</option>
           </select>
         </div>
 
@@ -170,8 +173,11 @@
           <div class="wpa-toc-banner-inner">
             <img src="./logo-banner.gif" onerror="this.onerror=null;this.src='./assets/logo-banner.gif';" alt="Greetings from Kenosha Animated Banner" class="wpa-toc-banner-gif" />
             <div class="wpa-toc-banner-footer">
-              <span class="wpa-toc-author">By Todd Burleson</span>
-              <a href="https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha" target="_blank" rel="noopener noreferrer" class="wpa-toc-substack-link">
+              <a href="https://toddburlesonwonders.com/" target="_blank" rel="noopener noreferrer" class="wpa-toc-author-link" title="Visit Todd Burleson's Portfolio, Books &amp; Works (Opens in new tab)">
+                <span>By Todd Burleson</span>
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+              </a>
+              <a href="https://whereimaginationtakesflight.substack.com/s/greetings-from-kenosha" target="_blank" rel="noopener noreferrer" class="wpa-toc-substack-link" title="Read on Substack (Opens in new tab)">
                 <span>Substack</span>
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
               </a>
