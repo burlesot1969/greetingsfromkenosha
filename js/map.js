@@ -195,8 +195,7 @@ class KenoshaMap {
     const numOnly = digits !== '' ? digits : '00';
 
     const iconHtml = `
-      <div class="wpa-pin-wrapper wpa-pin-beacon" data-id="${markerData.id}">
-        <div class="wpa-pin-beacon-halo" aria-hidden="true"></div>
+      <div class="wpa-pin-wrapper" data-id="${markerData.id}">
         <div class="wpa-pin-head">
           <div class="wpa-pin-inner">
             <span class="wpa-pin-no">#</span>
@@ -218,13 +217,11 @@ class KenoshaMap {
   }
 
   activatePinBeacons() {
-    const pins = document.querySelectorAll('.wpa-pin-wrapper');
-    pins.forEach(pin => pin.classList.add('wpa-pin-beacon'));
+    // Graceful no-op to prevent continuous animation loops
   }
 
   deactivatePinBeacons() {
-    const pins = document.querySelectorAll('.wpa-pin-wrapper');
-    pins.forEach(pin => pin.classList.remove('wpa-pin-beacon'));
+    // Graceful no-op
   }
 
   createPostcardPopupHTML(data) {

@@ -374,10 +374,18 @@ class GreetingsApp {
     }
     
     // Update TOC active state
+    const list = document.getElementById('toc-marker-list');
+    const listRect = list ? list.getBoundingClientRect() : null;
     document.querySelectorAll('.wpa-toc-card').forEach(c => {
       if (c.dataset.id === id) {
         c.classList.add('active');
-        c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (listRect) {
+          const cardRect = c.getBoundingClientRect();
+          const isFullyVisible = (cardRect.top >= listRect.top && cardRect.bottom <= listRect.bottom);
+          if (!isFullyVisible) {
+            c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
       } else {
         c.classList.remove('active');
       }
@@ -1354,12 +1362,17 @@ class GreetingsApp {
   highlightTocCard(id, isHovered) {
     const list = document.getElementById('toc-marker-list');
     if (!list) return;
+    const listRect = list.getBoundingClientRect();
     const cards = list.querySelectorAll('.wpa-toc-card');
     cards.forEach(c => {
       if (c.dataset.id === id) {
         c.classList.toggle('wpa-card-marker-highlight', isHovered);
         if (isHovered) {
-          c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          const cardRect = c.getBoundingClientRect();
+          const isFullyVisible = (cardRect.top >= listRect.top && cardRect.bottom <= listRect.bottom);
+          if (!isFullyVisible) {
+            c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
       } else {
         c.classList.remove('wpa-card-marker-highlight');
