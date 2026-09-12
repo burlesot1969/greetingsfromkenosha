@@ -337,10 +337,13 @@ html, body {
 .wpa-toc-banner-video {
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
+  background: #141619;
   border-radius: 6px;
   border: 1.5px solid var(--wpa-ochre-gold);
   box-shadow: 0 3px 6px rgba(0,0,0,0.4);
   display: block;
+  object-fit: cover;
   pointer-events: none;
 }
 
@@ -2976,7 +2979,7 @@ html, body {
   border-radius: 6px;
   border: 2px solid var(--wpa-ochre-gold);
   padding: 3px;
-  background: rgba(0, 0, 0, 0.35);
+  background: #141619;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
@@ -2984,6 +2987,8 @@ html, body {
 .wpa-intro-banner-video {
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
+  background: #141619;
   max-height: 30vh;
   object-fit: contain;
   border-radius: 4px;
