@@ -2798,16 +2798,8 @@ html, body {
 .wpa-lightbox-footer-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.85rem;
-  width: 100%;
-}
-
-.wpa-lightbox-kbd-hints {
-  font-family: var(--font-vintage-sans);
-  font-size: 0.74rem;
-  color: var(--wpa-text-muted);
-  letter-spacing: 0.4px;
 }
 
 .wpa-lightbox-coords {

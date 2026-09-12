@@ -619,7 +619,6 @@ class GreetingsApp {
     const prevLightboxBtn = document.getElementById('btn-lightbox-prev');
     const nextLightboxBtn = document.getElementById('btn-lightbox-next');
     const flipLightboxBtn = document.getElementById('btn-lightbox-flip');
-    const shareLightboxBtn = document.getElementById('btn-lightbox-share');
     const lightboxModal = document.getElementById('modal-postcard-lightbox');
     const imgStage = document.getElementById('lightbox-image-stage');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -647,12 +646,6 @@ class GreetingsApp {
       flipLightboxBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         this.togglePostcardFlip();
-      });
-    }
-    if (shareLightboxBtn) {
-      shareLightboxBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.copyCurrentPostcardLink();
       });
     }
     if (lightboxModal) {
