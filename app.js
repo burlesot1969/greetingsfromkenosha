@@ -616,8 +616,6 @@ class GreetingsApp {
 
     // Postcard Artwork Lightbox Controls
     const closeLightboxBtn = document.getElementById('btn-close-lightbox');
-    const prevLightboxBtn = document.getElementById('btn-lightbox-prev');
-    const nextLightboxBtn = document.getElementById('btn-lightbox-next');
     const flipLightboxBtn = document.getElementById('btn-lightbox-flip');
     const lightboxModal = document.getElementById('modal-postcard-lightbox');
     const imgStage = document.getElementById('lightbox-image-stage');
@@ -628,18 +626,6 @@ class GreetingsApp {
       closeLightboxBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         this.closePostcardLightbox();
-      });
-    }
-    if (prevLightboxBtn) {
-      prevLightboxBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.navigateLightbox(-1);
-      });
-    }
-    if (nextLightboxBtn) {
-      nextLightboxBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.navigateLightbox(1);
       });
     }
     if (flipLightboxBtn) {
