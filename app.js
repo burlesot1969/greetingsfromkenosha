@@ -1271,64 +1271,23 @@ class GreetingsApp {
 
   playCardFlipSound() {
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      if (!this._audioCtx) {
-        this._audioCtx = new AudioCtx();
+      if (!this._flipAudio) {
+        this._flipAudio = new Audio('assets/card-flip.mp3');
+        this._flipAudio.volume = 0.5;
+        this._flipAudio.preload = 'auto';
       }
-      const ctx = this._audioCtx;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
+      // Clone or reset to allow clean, responsive playback on fast repeated flips
+      const sound = this._flipAudio.cloneNode();
+      sound.volume = 0.5;
+      const playPromise = sound.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          this._flipAudio.currentTime = 0;
+          this._flipAudio.play().catch(() => {});
+        });
       }
-
-      const now = ctx.currentTime;
-      const duration = 0.12;
-
-      // 1. Paper swoosh (filtered noise burst)
-      const bufferSize = Math.floor(ctx.sampleRate * duration);
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.45));
-      }
-
-      const noiseNode = ctx.createBufferSource();
-      noiseNode.buffer = noiseBuffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.Q.setValueAtTime(1.8, now);
-      filter.frequency.setValueAtTime(1200, now);
-      filter.frequency.exponentialRampToValueAtTime(320, now + duration);
-
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.01, now);
-      noiseGain.gain.linearRampToValueAtTime(0.18, now + 0.02);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      noiseNode.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(ctx.destination);
-
-      // 2. Soft tactile card thwack/flick resonance
-      const osc = ctx.createOscillator();
-      const oscGain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(220, now);
-      osc.frequency.exponentialRampToValueAtTime(75, now + 0.08);
-
-      oscGain.gain.setValueAtTime(0.12, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-
-      osc.connect(oscGain);
-      oscGain.connect(ctx.destination);
-
-      noiseNode.start(now);
-      osc.start(now);
-      osc.stop(now + 0.09);
-      noiseNode.stop(now + duration);
     } catch (e) {
-      // Audio playback fails gracefully if muted
+      // Audio playback fails gracefully if muted or unsupported
     }
   }
 
