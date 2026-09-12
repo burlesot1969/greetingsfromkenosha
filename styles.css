@@ -3,7 +3,7 @@
  * Aesthetic: Cream Land, Muted Teal Water, Sage Green Parks, Deep Charcoal Roads, Terracotta & Ochre Accents
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:wght@400;500;600;700&family=League+Spartan:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
 
 :root {
   /* 1930s WPA Color Tokens */
@@ -26,7 +26,8 @@
   --wpa-border-color: #D3C5B4;
   
   /* Typography */
-  --font-display: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+  --font-display: 'Bebas Neue', 'League Gothic', 'Anton', Impact, 'Arial Black', sans-serif;
+  --font-vintage-sans: 'League Spartan', 'Montserrat', 'Josefin Sans', sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
@@ -2707,9 +2708,12 @@ html, body {
 }
 
 .wpa-intro-tagline {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.05rem;
+  font-family: var(--font-vintage-sans);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   color: var(--wpa-text-muted);
   margin: 0;
 }
@@ -2737,45 +2741,56 @@ html, body {
   line-height: 1;
 }
 
-/* Intimate Literary Narrative Prose */
+/* 1930s WPA Geometric Narrative Prose */
 .wpa-intro-prose-wrap {
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.75rem;
   margin: 0.4rem 0 0.2rem;
   width: 100%;
 }
 
 .wpa-intro-lead-paragraph {
-  font-family: var(--font-serif);
-  font-size: 1.02rem;
+  font-family: var(--font-vintage-sans);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.0rem;
   line-height: 1.65;
   color: var(--wpa-text-dark);
   margin: 0;
 }
 
 .wpa-intro-body-paragraph {
-  font-family: var(--font-serif);
-  font-size: 0.94rem;
-  line-height: 1.6;
+  font-family: var(--font-vintage-sans);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.96rem;
+  line-height: 1.65;
   color: var(--wpa-text-dark);
-  opacity: 0.92;
+  opacity: 0.95;
   margin: 0;
 }
 
+.wpa-intro-callout-box {
+  width: 100%;
+  margin: 0.35rem 0 0;
+}
+
 .wpa-intro-invitation-paragraph {
-  font-family: var(--font-serif);
-  font-size: 0.96rem;
-  line-height: 1.6;
-  font-style: italic;
+  font-family: var(--font-vintage-sans);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.55;
   color: var(--wpa-ink-navy);
   text-align: center;
-  margin: 0.2rem 0 0;
-  padding: 0.5rem 0.75rem;
-  background: rgba(43, 104, 112, 0.08);
+  margin: 0;
+  padding: 0.8rem 1.1rem;
+  background: #EBE6DF;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(43, 104, 112, 0.2);
+  border: 1.5px solid var(--wpa-border-color);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 /* Author Signature Block */
@@ -2795,17 +2810,19 @@ html, body {
 }
 
 .wpa-intro-author-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-vintage-sans);
   font-weight: 700;
-  font-style: italic;
-  font-size: 1.15rem;
+  font-style: normal;
+  font-size: 1.1rem;
   color: var(--wpa-terracotta);
+  letter-spacing: 0.6px;
 }
 
 .wpa-intro-author-title {
-  font-family: var(--font-sans);
+  font-family: var(--font-vintage-sans);
   font-size: 0.75rem;
   font-weight: 600;
+  font-style: normal;
   text-transform: uppercase;
   letter-spacing: 1.8px;
   color: var(--wpa-text-muted);
@@ -3186,7 +3203,8 @@ html, body {
   }
 
   .wpa-intro-tagline {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    letter-spacing: 1.5px;
   }
 
   .wpa-intro-prose-wrap {
@@ -3206,10 +3224,15 @@ html, body {
     text-align: left;
   }
 
+  .wpa-intro-callout-box {
+    margin: 0.2rem 0 0;
+  }
+
   .wpa-intro-invitation-paragraph {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.45;
-    padding: 0.45rem 0.6rem;
+    padding: 0.65rem 0.8rem;
+    text-align: center;
   }
 
   .wpa-intro-author-name {
