@@ -85,7 +85,7 @@ export const DEFAULT_MARKERS = [
     editionNum: 4,
     imageUrl: './card-04.jpg',
     summary: 'If you walk the Simmons Island harbor path on a clear, sunny afternoon, the contrast is impossible to miss. To your left lies the serene, open basin of the Southport Marina, where pleasure boats rock gently against their slips, and gulls drift lazily overhead. But to your right, bounded by a security fence and brick perimeter at 5036 Fourth Avenue, is a disciplined hive of active-duty military life.',
-    link: 'https://whereimaginationtakesflight.substack.com/p/7fa5a6a2-8bc8-40b1-9af0-1bea7e1e1c22',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-04?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1879',
     artist: 'Todd Burleson',
     tags: ['Coast Guard', 'Simmons Island', 'Historic Landmark', 'Maritime', 'Southport Marina'],
