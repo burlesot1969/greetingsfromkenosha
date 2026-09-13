@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v6';
@@ -74,6 +74,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Historic Building', 'Downtown', 'Weiskopf Block', 'Vintage Goods'],
     isDefault: true,
     dateAdded: '2026-09-09T16:40:06.768Z'
+  },
+  {
+    id: 'kenosha-04',
+    title: 'US Coast Guard Station Kenosha',
+    address: '5036 4th Ave, Kenosha, WI 53140',
+    lat: 42.5901200,
+    lng: -87.8168100,
+    edition: 'No. 04',
+    editionNum: 4,
+    imageUrl: './card-04.jpg',
+    summary: 'If you walk the Simmons Island harbor path on a clear, sunny afternoon, the contrast is impossible to miss. To your left lies the serene, open basin of the Southport Marina, where pleasure boats rock gently against their slips, and gulls drift lazily overhead. But to your right, bounded by a security fence and brick perimeter at 5036 Fourth Avenue, is a disciplined hive of active-duty military life.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/7fa5a6a2-8bc8-40b1-9af0-1bea7e1e1c22',
+    year: '1879',
+    artist: 'Todd Burleson',
+    tags: ['Coast Guard', 'Simmons Island', 'Historic Landmark', 'Maritime', 'Southport Marina'],
+    isDefault: true,
+    dateAdded: '2026-09-12T20:15:00Z'
   }
 ];
 
