@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v6';
@@ -91,6 +91,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Coast Guard', 'Simmons Island', 'Historic Landmark', 'Maritime', 'Southport Marina'],
     isDefault: true,
     dateAdded: '2026-09-12T20:15:00Z'
+  },
+  {
+    id: 'kenosha-05',
+    title: 'Southport Lighthouse',
+    address: '5117 4th Ave, Kenosha, WI 53140',
+    lat: 42.5894400,
+    lng: -87.8158300,
+    edition: 'No. 05',
+    editionNum: 5,
+    imageUrl: './card-05.jpg',
+    summary: 'The Sentinel on the Sands. Built in 1866 of Milwaukee Cream City brick, this 55-foot conical lighthouse stands as a timeless beacon on Simmons Island, preserving Kenosha\'s rich maritime heritage.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-05?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1866',
+    artist: 'Todd Burleson',
+    tags: ['Lighthouse', 'Simmons Island', 'Cream City Brick', 'Historic Landmark', 'Lake Michigan'],
+    isDefault: true,
+    dateAdded: '2026-09-12T21:26:00Z'
   }
 ];
 
