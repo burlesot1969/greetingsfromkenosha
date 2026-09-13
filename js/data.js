@@ -1,9 +1,9 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07
  */
 
-const STORAGE_KEY = 'greetings_from_kenosha_markers_v6';
+const STORAGE_KEY = 'greetings_from_kenosha_markers_v7';
 
 // Pre-populated default collection of Postcards
 export const DEFAULT_MARKERS = [
@@ -110,6 +110,23 @@ export const DEFAULT_MARKERS = [
     dateAdded: '2026-09-12T21:26:00Z'
   },
   {
+    id: 'kenosha-06',
+    title: 'Kenosha History Center',
+    address: '220 51st Place, Kenosha, WI 53140',
+    lat: 42.5893200,
+    lng: -87.8157000,
+    edition: 'No. 06',
+    editionNum: 6,
+    imageUrl: './card-06.jpg',
+    summary: 'I stood on the 50th Street harbor bridge this morning and felt the city grid give way to the open expanse of Lake Michigan. The air always shifts here. It turns sharp with freshwater wind. Follow 51st Place toward the water and look below the grassy hill holding the 1866 Southport Lighthouse. You will find a stout red-brick building at 220 51st Place. It features arched multipane windows, heavy limestone accents, and solid load-bearing masonry. It carries the mechanical gravity of a classic Great Lakes civic landmark.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-06?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1899',
+    artist: 'Todd Burleson',
+    tags: ['Museum', 'Simmons Island', 'Historic Landmark', 'Great Lakes History', 'Maritime', 'Pump House'],
+    isDefault: true,
+    dateAdded: '2026-09-13T17:07:00Z'
+  },
+  {
     id: 'kenosha-07',
     title: 'Kenosha North Pier Lighthouse',
     address: 'North Pier, Simmons Island Park, Kenosha, WI 53140',
@@ -158,12 +175,19 @@ class MarkerStore {
     const localStored = this.loadLocalPlanned();
     const localMap = new Map(localStored.map(item => [item.id, item]));
     
+    // Published IDs / Editions to prevent duplicate draft pins if a planned marker is now published
+    const publishedEditions = new Set(this.markers.map(m => (m.edition || '').toLowerCase().replace(/\s+/g, '')));
+    const publishedIds = new Set(this.markers.map(m => m.id));
+
     const combined = [];
     const seenIds = new Set();
 
     if (Array.isArray(list)) {
       for (const item of list) {
-        if (!deletedIds.has(item.id)) {
+        const itemEditionClean = (item.plannedEdition || item.edition || '').toLowerCase().replace(/\s+/g, '');
+        const isAlreadyPublished = (itemEditionClean && publishedEditions.has(itemEditionClean)) || publishedIds.has(item.id);
+
+        if (!deletedIds.has(item.id) && !isAlreadyPublished) {
           const localItem = localMap.get(item.id) || {};
           const toUse = {
             ...localItem,
@@ -179,7 +203,10 @@ class MarkerStore {
     }
 
     for (const item of localStored) {
-      if (!seenIds.has(item.id) && !deletedIds.has(item.id)) {
+      const itemEditionClean = (item.plannedEdition || item.edition || '').toLowerCase().replace(/\s+/g, '');
+      const isAlreadyPublished = (itemEditionClean && publishedEditions.has(itemEditionClean)) || publishedIds.has(item.id);
+
+      if (!seenIds.has(item.id) && !deletedIds.has(item.id) && !isAlreadyPublished) {
         combined.push(item);
         seenIds.add(item.id);
       }
