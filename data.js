@@ -108,6 +108,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Lighthouse', 'Simmons Island', 'Cream City Brick', 'Historic Landmark', 'Lake Michigan'],
     isDefault: true,
     dateAdded: '2026-09-12T21:26:00Z'
+  },
+  {
+    id: 'kenosha-07',
+    title: 'Kenosha North Pier Lighthouse',
+    address: 'North Pier, Simmons Island Park, Kenosha, WI 53140',
+    lat: 42.5888000,
+    lng: -87.8086000,
+    edition: 'No. 07',
+    editionNum: 7,
+    imageUrl: './card-07.jpg',
+    summary: 'The Walk Out to the Red Tower. Walk to the very end of 50th Street on Simmons Island. Past the white clapboard Coast Guard Station and the historic pump house of the Kenosha History Center, the paved road gives way to beach sand. The harbor’s edge sits on your right. From there, you step out onto wave-washed concrete and open water.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-07?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1906',
+    artist: 'Todd Burleson',
+    tags: ['Lighthouse', 'Simmons Island', 'North Pier', 'Historic Landmark', 'Lake Michigan', 'Red Tower'],
+    isDefault: true,
+    dateAdded: '2026-09-13T14:38:00Z'
   }
 ];
 
