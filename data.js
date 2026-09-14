@@ -1,9 +1,9 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08
  */
 
-const STORAGE_KEY = 'greetings_from_kenosha_markers_v7';
+const STORAGE_KEY = 'greetings_from_kenosha_markers_v8';
 
 // Pre-populated default collection of Postcards
 export const DEFAULT_MARKERS = [
@@ -142,6 +142,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Lighthouse', 'Simmons Island', 'North Pier', 'Historic Landmark', 'Lake Michigan', 'Red Tower'],
     isDefault: true,
     dateAdded: '2026-09-13T14:38:00Z'
+  },
+  {
+    id: 'kenosha-08',
+    title: 'Simmons Island Beach House',
+    address: '5001 Simmons Island Rd, Kenosha, WI 53140',
+    lat: 42.5909800,
+    lng: -87.8143600,
+    edition: 'No. 08',
+    editionNum: 8,
+    imageUrl: './card-08.jpg',
+    summary: 'An English Manor on a Great Lakes Dune\n\nFollowing 50th Street past the marina and across the parkland of Simmons Island, the city grid falls away. The mechanical hum of downtown traffic yields to dune grass, gull cries, and the steady roll of Lake Michigan. Walking from my apartment in the early morning, I look for the exact moment the sunrise catches the shoreline. Cresting the slight rise near the sand reveals an architectural outlier. It looks like a heavy English manor dropped onto a Great Lakes dune. A steep slate roof caps dark-stained timber gables. Forged wrought-iron strap hinges anchor a rigid limestone entrance pavilion. Carved into the stone above the massive doors is a simple date: Anno Municipal Bathhouse 1934.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-08?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1934',
+    artist: 'Todd Burleson',
+    tags: ['Beach House', 'Simmons Island', 'Municipal Bathhouse', 'Historic Landmark', 'Lake Michigan', 'WPA Era'],
+    isDefault: true,
+    dateAdded: '2026-09-13T20:04:00Z'
   }
 ];
 
