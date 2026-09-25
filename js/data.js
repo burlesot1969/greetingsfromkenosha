@@ -1,9 +1,9 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09
  */
 
-const STORAGE_KEY = 'greetings_from_kenosha_markers_v8';
+const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
 
 // Pre-populated default collection of Postcards
 export const DEFAULT_MARKERS = [
@@ -15,7 +15,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8191389,
     edition: 'No. 00',
     editionNum: 0,
-    imageUrl: './card-00.jpg',
+    imageUrl: './assets/Todd Burleson - 00.jpeg',
     summary: 'Painted in 2018 by local artist Kelly Witte on the historic Jockey Factory Store building, this vibrant public art piece features hidden tributes to local history, including historic PCC streetcars and the Southport Light Station.',
     link: 'https://whereimaginationtakesflight.substack.com/p/kenosha-through-a-new-lens?r=4abqy&utm_campaign=post-expanded-share&utm_medium=web',
     year: '2018',
@@ -32,7 +32,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8234616,
     edition: 'No. 01',
     editionNum: 1,
-    imageUrl: './card-01.jpg',
+    imageUrl: './assets/Todd Burleson - 01.jpeg',
     summary: 'The Stone Fortress That Walked Across the Square. Housed in a historic 1908 neoclassical federal post office building on Library Square, this unique institution explores the evolutionary link between meat-eating theropod dinosaurs and modern birds.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal?r=4abqy&utm_campaign=post-expanded-share&utm_medium=web',
     year: '1908',
@@ -49,8 +49,8 @@ export const DEFAULT_MARKERS = [
     lng: -87.8192056,
     edition: 'No. 02',
     editionNum: 2,
-    imageUrl: './card-02.jpg',
-    summary: 'The Fish Shanty That Learned to Steam Milk. Situated along the north side of the harbor basin, this cozy lakeside café sits in a 1928 Milwaukee Cream City brick building steeped in maritime heritage, offering espresso and views across the water.',
+    imageUrl: './assets/Todd Burleson - 02.jpeg',
+    summary: 'The Fish Shanty That Learned to steam milk. Situated along the north side of the harbor basin, this cozy lakeside café sits in a 1928 Milwaukee Cream City brick building steeped in maritime heritage, offering espresso and views across the water.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-02?r=4abqy&utm_campaign=post-expanded-share&utm_medium=web',
     year: '1928',
     artist: 'Todd Burleson',
@@ -66,7 +66,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8206569,
     edition: 'No. 03',
     editionNum: 3,
-    imageUrl: './card-03.jpg',
+    imageUrl: './assets/Todd Burleson - 03.jpeg',
     summary: 'In the 1890s, the Weiskopf block was a disjointed row of three separate wood-frame storefronts. They housed a barbershop, Charles Skidd’s hardware store, and a plumbing shop. The local editors of the Kenosha News publicly shamed the corner as an architectural eyesore. It sure has changed today!',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-3?r=4abqy&utm_campaign=post-expanded-share&utm_medium=web',
     year: "1890s",
@@ -83,7 +83,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8168100,
     edition: 'No. 04',
     editionNum: 4,
-    imageUrl: './card-04.jpg',
+    imageUrl: './assets/Todd Burleson - 04.jpeg',
     summary: 'If you walk the Simmons Island harbor path on a clear, sunny afternoon, the contrast is impossible to miss. To your left lies the serene, open basin of the Southport Marina, where pleasure boats rock gently against their slips, and gulls drift lazily overhead. But to your right, bounded by a security fence and brick perimeter at 5036 Fourth Avenue, is a disciplined hive of active-duty military life.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-04?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1879',
@@ -100,7 +100,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8158300,
     edition: 'No. 05',
     editionNum: 5,
-    imageUrl: './card-05.jpg',
+    imageUrl: './assets/Todd Burleson - 05.jpeg',
     summary: 'The Sentinel on the Sands. Built in 1866 of Milwaukee Cream City brick, this 55-foot conical lighthouse stands as a timeless beacon on Simmons Island, preserving Kenosha\'s rich maritime heritage.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-05?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1866',
@@ -117,7 +117,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8154048,
     edition: 'No. 06',
     editionNum: 6,
-    imageUrl: './card-06.jpg',
+    imageUrl: './assets/Todd Burleson - 06.jpeg',
     summary: 'I stood on the 50th Street harbor bridge this morning and felt the city grid give way to the open expanse of Lake Michigan. The air always shifts here. It turns sharp with freshwater wind. Follow 51st Place toward the water and look below the grassy hill holding the 1866 Southport Lighthouse. You will find a stout red-brick building at 220 51st Place. It features arched multipane windows, heavy limestone accents, and solid load-bearing masonry. It carries the mechanical gravity of a classic Great Lakes civic landmark.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-06?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1899',
@@ -134,7 +134,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8086000,
     edition: 'No. 07',
     editionNum: 7,
-    imageUrl: './card-07.jpg',
+    imageUrl: './assets/Todd Burleson - 07.jpeg?v=20260925_h1',
     summary: 'The Walk Out to the Red Tower. Walk to the very end of 50th Street on Simmons Island. Past the white clapboard Coast Guard Station and the historic pump house of the Kenosha History Center, the paved road gives way to beach sand. The harbor’s edge sits on your right. From there, you step out onto wave-washed concrete and open water.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-07?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1906',
@@ -151,7 +151,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8143600,
     edition: 'No. 08',
     editionNum: 8,
-    imageUrl: './card-08.jpg',
+    imageUrl: './assets/Todd Burleson - 08.jpeg',
     summary: 'An English Manor on a Great Lakes Dune\n\nFollowing 50th Street past the marina and across the parkland of Simmons Island, the city grid falls away. The mechanical hum of downtown traffic yields to dune grass, gull cries, and the steady roll of Lake Michigan. Walking from my apartment in the early morning, I look for the exact moment the sunrise catches the shoreline. Cresting the slight rise near the sand reveals an architectural outlier. It looks like a heavy English manor dropped onto a Great Lakes dune. A steep slate roof caps dark-stained timber gables. Forged wrought-iron strap hinges anchor a rigid limestone entrance pavilion. Carved into the stone above the massive doors is a simple date: Anno Municipal Bathhouse 1934.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-08?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1934',
@@ -159,6 +159,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Beach House', 'Simmons Island', 'Municipal Bathhouse', 'Historic Landmark', 'Lake Michigan', 'WPA Era'],
     isDefault: true,
     dateAdded: '2026-09-13T20:04:00Z'
+  },
+  {
+    id: 'kenosha-09',
+    title: 'Pennoyer Park Bandshell',
+    address: '3601 7th Ave (Kennedy Dr), Kenosha, WI 53140',
+    lat: 42.6059400,
+    lng: -87.8200300,
+    edition: 'No. 09',
+    editionNum: 9,
+    imageUrl: './card-09.jpg',
+    summary: 'The Shell on the Shore, Summer Brass, and Rainstorms at Pennoyer Park\n\nStanding on the Lake Michigan shoreline along Kennedy Drive, the Sesquicentennial Bandshell in Pennoyer Park has been Kenosha’s premier outdoor acoustic stage since 1988. Designed by Kenosha architect Robert M. Kueny to celebrate the city’s 150th anniversary, its soaring shell and vibrant youth mosaic murals provide a sun-drenched home for the Kenosha Pops Concert Band and summer evening music over the water.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-09?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1988',
+    artist: 'Todd Burleson',
+    tags: ['Bandshell', 'Pennoyer Park', 'Historic Landmark', 'Lake Michigan', 'Summer Concerts', 'Kennedy Drive'],
+    isDefault: true,
+    dateAdded: '2026-09-16T11:38:00Z'
   }
 ];
 

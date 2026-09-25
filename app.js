@@ -3,8 +3,8 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js';
-import { kenoshaMap } from './map.js';
+import { markerStore } from './data.js?v=20260925_v37';
+import { kenoshaMap } from './map.js?v=20260925_v37';
 
 class GreetingsApp {
   constructor() {
@@ -256,10 +256,10 @@ class GreetingsApp {
           <div class="wpa-toc-card-main">
             <div class="wpa-toc-card-visual">
               ${item.imageUrl ? `
-                <div class="wpa-toc-thumb-wrap wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full postcard artwork" role="button" tabindex="0">
+                <div class="wpa-toc-thumb-wrap wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full postcard & flip back" role="button" tabindex="0">
                   <img src="${item.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${item.title}" class="wpa-toc-thumb" loading="lazy" />
-                  <span class="wpa-toc-badge-overlay">#${numOnly}</span>
-                  <div class="wpa-toc-thumb-zoom-badge" aria-hidden="true">🔍 Zoom</div>
+                  <span class="wpa-toc-badge-overlay">${item.edition || `#${numOnly}`}</span>
+                  <div class="wpa-toc-thumb-zoom-badge" aria-hidden="true">⟲ Flip</div>
                 </div>
               ` : `
                 <div class="wpa-toc-card-badge">
@@ -277,22 +277,17 @@ class GreetingsApp {
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 <span>${item.address}</span>
               </p>
-              <p class="wpa-toc-card-snippet">${this.truncate(item.summary, 90)}</p>
             </div>
           </div>
 
           <div class="wpa-toc-card-actions">
-            <button type="button" class="wpa-btn-card-map btn-card-fly" data-id="${item.id}" title="View ${item.title} on interactive map">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                <polygon points="12 2 19 21 12 17 5 21 12 2"/>
-              </svg>
+            <button type="button" class="wpa-btn-card-map btn-card-fly" data-id="${item.id}" title="Locate ${item.title} on interactive map">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
               <span>View on Map</span>
             </button>
             <a class="wpa-btn-card-story" href="${substackUrl}" target="_blank" rel="noopener noreferrer" title="Read story on Substack (Opens in new tab)">
-              <span>Read Story</span>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M7 17L17 7M17 7H7M17 7V17"/>
-              </svg>
+              <span>Substack Story</span>
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
           </div>
         </article>
@@ -1144,6 +1139,7 @@ class GreetingsApp {
     // Reset flipper to front side on new card load
     if (flipper) {
       flipper.classList.remove('is-flipped');
+      flipper.classList.remove('is-portrait');
     }
     if (flipBtnText) {
       flipBtnText.textContent = 'Postcard Back ⟲';
@@ -1154,10 +1150,17 @@ class GreetingsApp {
     const address = item.address || 'Kenosha, WI';
     const notes = item.summary || item.notes || 'No notes or story recorded for this landmark yet.';
     const status = item.status || (item.isDefault ? 'Published Edition' : 'In Progress');
-    const imageUrl = item.imageUrl || './card-00.jpg';
+    const imageUrl = item.imageUrl || './assets/Todd Burleson - 00.jpeg';
 
     // Populate Front Artwork
     if (img) {
+      img.onload = () => {
+        if (img.naturalWidth && img.naturalHeight && img.naturalHeight > img.naturalWidth) {
+          if (flipper) flipper.classList.add('is-portrait');
+        } else {
+          if (flipper) flipper.classList.remove('is-portrait');
+        }
+      };
       img.src = imageUrl;
       img.alt = `${edition}: ${title}`;
       img.style.transformOrigin = 'center center';

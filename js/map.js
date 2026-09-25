@@ -269,9 +269,11 @@ class KenoshaMap {
 
         <div class="wpa-postcard-content">
           ${data.imageUrl ? `
-            <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${data.id}" title="Click to view full screen postcard">
+            <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${data.id}" title="Click to view full screen postcard & flip back">
               <img src="${data.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" />
-              <div class="wpa-postcard-photo-caption">Historic Kenosha Edition • 🔍 Click to Enlarge</div>
+            </div>
+            <div class="wpa-postcard-click-hint wpa-lightbox-trigger" data-id="${data.id}" role="button" tabindex="0" title="Click to enlarge & flip card">
+              <span>🔍 Click image to enlarge &amp; flip card ⟲</span>
             </div>
           ` : ''}
 
@@ -283,16 +285,12 @@ class KenoshaMap {
             </svg>
             <span>${address}</span>
           </div>
-
-          ${(year || artist) ? `<div class="wpa-meta-pill">${year}${artist}</div>` : ''}
-
-          <p class="wpa-postcard-summary">${summary}</p>
         </div>
 
         <div class="wpa-postcard-footer">
-          <a href="${link}" target="_blank" rel="noopener noreferrer" class="wpa-btn-readmore" id="postcard-link-${data.id}">
-            <span>Read More</span>
-            <svg class="wpa-arrow-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <a href="${link}" target="_blank" rel="noopener noreferrer" class="wpa-btn-readmore" id="postcard-link-${data.id}" title="Read story on Substack (Opens in new tab)">
+            <span>Read on Substack</span>
+            <svg class="wpa-arrow-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="7" y1="17" x2="17" y2="7"></line>
               <polyline points="7 7 17 7 17 17"></polyline>
             </svg>
@@ -430,9 +428,8 @@ class KenoshaMap {
     return `
       <div class="wpa-field-note-card" role="region" aria-label="Curator Note: ${title}">
         ${imageUrl ? `
-          <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full screen postcard" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
+          <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full screen postcard & flip back" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
             <img src="${imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
-            <div class="wpa-postcard-photo-caption" style="font-size: 0.68rem; padding: 0.25rem; background: var(--wpa-charcoal-road); color: var(--wpa-cream-paper); text-align: center; font-family: var(--font-display); letter-spacing: 0.5px;">Curator Preview • ${edition} • 🔍 Click to Enlarge</div>
           </div>
         ` : ''}
 
