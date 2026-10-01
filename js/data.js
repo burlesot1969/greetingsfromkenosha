@@ -168,7 +168,7 @@ export const DEFAULT_MARKERS = [
     lng: -87.8200300,
     edition: 'No. 09',
     editionNum: 9,
-    imageUrl: './card-09.jpg',
+    imageUrl: './assets/Todd Burleson - 09.png',
     summary: 'The Shell on the Shore, Summer Brass, and Rainstorms at Pennoyer Park\n\nStanding on the Lake Michigan shoreline along Kennedy Drive, the Sesquicentennial Bandshell in Pennoyer Park has been Kenosha’s premier outdoor acoustic stage since 1988. Designed by Kenosha architect Robert M. Kueny to celebrate the city’s 150th anniversary, its soaring shell and vibrant youth mosaic murals provide a sun-drenched home for the Kenosha Pops Concert Band and summer evening music over the water.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-09?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1988',
@@ -405,6 +405,10 @@ class MarkerStore {
 
   getPublished() {
     return [...this.markers].sort((a, b) => (a.editionNum ?? 999) - (b.editionNum ?? 999));
+  }
+
+  getDefault() {
+    return this.getPublished();
   }
 
   getPlanned() {

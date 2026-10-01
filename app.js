@@ -3,8 +3,8 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js?v=20260925_v37';
-import { kenoshaMap } from './map.js?v=20260925_v37';
+import { markerStore } from './data.js?v=20260930_v44';
+import { kenoshaMap } from './map.js?v=20260930_v44';
 
 class GreetingsApp {
   constructor() {
@@ -16,6 +16,11 @@ class GreetingsApp {
     this.currentMobileView = 'map';
     this._preloadedImages = new Set();
     this._audioCtx = null;
+    try {
+      this.isPlainTextMode = localStorage.getItem('wpa_plain_text_mode') === 'true';
+    } catch (e) {
+      this.isPlainTextMode = false;
+    }
   }
 
   async init() {
@@ -39,8 +44,8 @@ class GreetingsApp {
     // 6. Setup Animated Project Intro Splash Screen / Welcome Curtain
     this.setupIntroCurtain();
 
-    // 7. Set initial mobile view (default to map view on small screens so map is immediately visible)
-    if (window.innerWidth <= 900) {
+    // 7. Set initial mobile view (default to map view on small screens <= 768px so map is immediately visible)
+    if (window.innerWidth <= 768) {
       this.setMobileView('map');
     }
 
@@ -158,6 +163,7 @@ class GreetingsApp {
     const sidebar = document.getElementById('wpa-sidebar');
     const backdrop = document.getElementById('wpa-sidebar-backdrop');
     const sidebarToggleBtn = document.getElementById('btn-toggle-sidebar');
+    const btnBottomPeek = document.getElementById('btn-bottom-sheet-peek');
 
     if (view === 'index') {
       if (navMapBtn) {
@@ -178,6 +184,10 @@ class GreetingsApp {
       if (sidebarToggleBtn) {
         sidebarToggleBtn.setAttribute('aria-expanded', 'true');
       }
+      if (btnBottomPeek) {
+        btnBottomPeek.classList.add('hidden');
+        btnBottomPeek.setAttribute('aria-expanded', 'true');
+      }
     } else {
       // Map view
       if (navMapBtn) {
@@ -197,6 +207,10 @@ class GreetingsApp {
       if (sidebarToggleBtn) {
         sidebarToggleBtn.setAttribute('aria-expanded', 'false');
       }
+      if (btnBottomPeek) {
+        btnBottomPeek.classList.remove('hidden');
+        btnBottomPeek.setAttribute('aria-expanded', 'false');
+      }
     }
 
     // Trigger Leaflet viewport recalculation
@@ -204,12 +218,12 @@ class GreetingsApp {
       if (kenoshaMap && kenoshaMap.map) {
         kenoshaMap.map.invalidateSize();
       }
-    }, 280);
+    }, 300);
   }
 
   refreshMarkers() {
     const markers = markerStore.getAll();
-    kenoshaMap.renderMarkers(markers, (id) => this.selectMarker(id, true));
+    kenoshaMap.renderMarkers(markers, (id) => this.selectMarker(id, false));
     this.renderTOC();
     this.updateStats();
   }
@@ -388,7 +402,7 @@ class GreetingsApp {
     });
 
     // If on mobile/tablet and focusing on map, close drawer and switch view to map
-    if (window.innerWidth <= 900 && zoomOnMap) {
+    if (window.innerWidth <= 768 && zoomOnMap) {
       this.setMobileView('map');
     }
 
@@ -404,8 +418,10 @@ class GreetingsApp {
     const all = markerStore.getAll();
     const countEl = document.getElementById('stat-total-cards');
     const mobileCountEl = document.getElementById('mobile-stat-total-cards');
+    const peekCountEl = document.getElementById('peek-stat-total-cards');
     if (countEl) countEl.textContent = all.length;
     if (mobileCountEl) mobileCountEl.textContent = all.length;
+    if (peekCountEl) peekCountEl.textContent = all.length;
   }
 
   setupEventListeners() {
@@ -434,11 +450,13 @@ class GreetingsApp {
       });
     }
 
-    // Mobile View Switcher Buttons
+    // Mobile View Switcher Buttons & Bottom Sheet Controls
     const btnMobileMap = document.getElementById('btn-mobile-view-map');
     const btnMobileIndex = document.getElementById('btn-mobile-view-index');
     const btnCloseMobileSidebar = document.getElementById('btn-close-sidebar-mobile');
     const sidebarBackdrop = document.getElementById('wpa-sidebar-backdrop');
+    const btnBottomPeek = document.getElementById('btn-bottom-sheet-peek');
+    const bottomSheetHandleBar = document.getElementById('wpa-bottom-sheet-handle-bar');
 
     if (btnMobileMap) {
       btnMobileMap.addEventListener('click', () => {
@@ -450,6 +468,31 @@ class GreetingsApp {
       btnMobileIndex.addEventListener('click', () => {
         this.setMobileView('index');
       });
+    }
+
+    if (btnBottomPeek) {
+      btnBottomPeek.addEventListener('click', () => {
+        this.setMobileView('index');
+      });
+    }
+
+    if (bottomSheetHandleBar) {
+      bottomSheetHandleBar.addEventListener('click', () => {
+        this.setMobileView('map');
+      });
+
+      // Swipe down gesture detection on bottom sheet handle
+      let touchStartY = 0;
+      bottomSheetHandleBar.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      bottomSheetHandleBar.addEventListener('touchend', (e) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        if (touchEndY - touchStartY > 35) {
+          this.setMobileView('map');
+        }
+      }, { passive: true });
     }
 
     if (btnCloseMobileSidebar) {
@@ -469,7 +512,7 @@ class GreetingsApp {
     const sidebar = document.getElementById('wpa-sidebar');
     if (sidebarToggleBtn && sidebar) {
       sidebarToggleBtn.addEventListener('click', () => {
-        if (window.innerWidth <= 900) {
+        if (window.innerWidth <= 768) {
           const isOpen = sidebar.classList.contains('mobile-open');
           this.setMobileView(isOpen ? 'map' : 'index');
         } else {
@@ -485,17 +528,20 @@ class GreetingsApp {
 
     // Window Resize Handler to handle mobile/desktop layout transitions
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 900) {
+      if (window.innerWidth > 768) {
         if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
         if (sidebar) sidebar.classList.remove('mobile-open');
+        if (btnBottomPeek) btnBottomPeek.classList.remove('hidden');
       } else {
         // Synchronize mobile switcher buttons
         if (this.currentMobileView === 'index') {
           if (sidebar) sidebar.classList.add('mobile-open');
           if (sidebarBackdrop) sidebarBackdrop.classList.add('active');
+          if (btnBottomPeek) btnBottomPeek.classList.add('hidden');
         } else {
           if (sidebar) sidebar.classList.remove('mobile-open');
           if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+          if (btnBottomPeek) btnBottomPeek.classList.remove('hidden');
         }
       }
       setTimeout(() => {
@@ -617,6 +663,34 @@ class GreetingsApp {
     const imgStage = document.getElementById('lightbox-image-stage');
     const lightboxImg = document.getElementById('lightbox-img');
     const zoomHint = document.getElementById('lightbox-zoom-hint');
+    const plainTextToggleBtn = document.getElementById('btn-toggle-plain-text');
+    const postcardBack = document.getElementById('lightbox-postcard-back');
+
+    if (plainTextToggleBtn && postcardBack) {
+      plainTextToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.isPlainTextMode = !this.isPlainTextMode;
+        postcardBack.classList.toggle('plain-text-mode', this.isPlainTextMode);
+        plainTextToggleBtn.classList.toggle('active', this.isPlainTextMode);
+        plainTextToggleBtn.setAttribute('aria-pressed', this.isPlainTextMode ? 'true' : 'false');
+        
+        // If enabling plain text and currently viewing front artwork, flip to back so notes are visible
+        if (this.isPlainTextMode) {
+          const flipper = document.getElementById('lightbox-postcard-flipper');
+          if (flipper && !flipper.classList.contains('is-flipped')) {
+            this.togglePostcardFlip();
+          }
+        }
+
+        try {
+          localStorage.setItem('wpa_plain_text_mode', this.isPlainTextMode ? 'true' : 'false');
+        } catch (err) {}
+      });
+
+      postcardBack.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
 
     if (closeLightboxBtn) {
       closeLightboxBtn.addEventListener('click', (e) => {
@@ -1217,6 +1291,15 @@ class GreetingsApp {
       history.replaceState(null, null, '#' + item.id);
     } catch (e) {}
 
+    // Apply Plain Text Accessibility Mode if active
+    const postcardBack = document.getElementById('lightbox-postcard-back');
+    const plainTextToggleBtn = document.getElementById('btn-toggle-plain-text');
+    if (postcardBack && plainTextToggleBtn) {
+      postcardBack.classList.toggle('plain-text-mode', Boolean(this.isPlainTextMode));
+      plainTextToggleBtn.classList.toggle('active', Boolean(this.isPlainTextMode));
+      plainTextToggleBtn.setAttribute('aria-pressed', this.isPlainTextMode ? 'true' : 'false');
+    }
+
     // Preload adjacent images for zero-lag cycling
     this.preloadAdjacentPostcards(markerId);
 
@@ -1439,7 +1522,7 @@ class GreetingsApp {
       e.preventDefault();
       const searchInput = document.getElementById('toc-search-input');
       const sidebar = document.getElementById('wpa-sidebar');
-      if (sidebar && !sidebar.classList.contains('mobile-open') && window.innerWidth <= 900) {
+      if (sidebar && !sidebar.classList.contains('mobile-open') && window.innerWidth <= 768) {
         sidebar.classList.add('mobile-open');
       }
       if (searchInput) {
@@ -1465,7 +1548,7 @@ class GreetingsApp {
     if (e.key === 'm' || e.key === 'M') {
       e.preventDefault();
       const sidebar = document.getElementById('wpa-sidebar');
-      if (sidebar && window.innerWidth <= 900) {
+      if (sidebar && window.innerWidth <= 768) {
         sidebar.classList.toggle('mobile-open');
       }
       return;
@@ -1561,6 +1644,7 @@ class GreetingsApp {
     } else {
       kenoshaMap.setPlannedLayerVisibility(false);
     }
+    kenoshaMap.renderMarkers(markerStore.getPublished(), (id) => this.selectMarker(id));
   }
 
   truncate(str, maxLen = 100) {

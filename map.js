@@ -141,17 +141,28 @@ class KenoshaMap {
       });
 
       const popupContent = this.createPostcardPopupHTML(markerData);
+      const isDesktop = window.innerWidth > 768;
       marker.bindPopup(popupContent, {
         className: 'wpa-postcard-popup',
         maxWidth: 295,
         minWidth: 240,
-        autoPanPaddingTopLeft: [25, 95],
-        autoPanPaddingBottomRight: [25, 30],
+        autoPan: true,
+        autoPanPaddingTopLeft: isDesktop ? [380, 85] : [20, 85],
+        autoPanPaddingBottomRight: isDesktop ? [35, 35] : [20, 80],
         closeButton: true
       });
 
       marker.on('click', () => {
         this.activeMarkerId = markerData.id;
+        this.highlightMarkerPin(markerData.id);
+        if (typeof onSelectMarker === 'function') {
+          onSelectMarker(markerData.id);
+        }
+      });
+
+      marker.on('popupopen', () => {
+        this.activeMarkerId = markerData.id;
+        this.highlightMarkerPin(markerData.id);
         if (typeof onSelectMarker === 'function') {
           onSelectMarker(markerData.id);
         }
@@ -230,9 +241,7 @@ class KenoshaMap {
     const address = data.address || 'Kenosha, WI';
     const summary = data.summary || '';
     const link = data.link || '#';
-    const year = data.year ? `<span class="wpa-meta-pill">Est. ${data.year}</span>` : '';
-    const artist = data.artist ? `<span class="wpa-meta-pill">Artist: ${data.artist}</span>` : '';
-    const isCurator = window.__greetingsApp?.isCuratorMode || Boolean(sessionStorage.getItem('wpa_curator_mode') === 'true') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isCurator = Boolean(window.__greetingsApp?.isCuratorMode);
 
     return `
       <article class="wpa-postcard" role="region" aria-label="Postcard: ${title}">
@@ -269,45 +278,60 @@ class KenoshaMap {
 
         <div class="wpa-postcard-content">
           ${data.imageUrl ? `
-            <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${data.id}" title="Click to view full screen postcard & flip back">
+            <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${data.id}" title="Click to view full screen postcard & flip back" role="button" tabindex="0">
               <img src="${data.imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" />
-            </div>
-            <div class="wpa-postcard-click-hint wpa-lightbox-trigger" data-id="${data.id}" role="button" tabindex="0" title="Click to enlarge & flip card">
-              <span>🔍 Click image to enlarge &amp; flip card ⟲</span>
+              <div class="wpa-postcard-photo-badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span>Enlarge &amp; Flip ⟲</span>
+              </div>
             </div>
           ` : ''}
 
-          <h3 class="wpa-postcard-title">${title}</h3>
-          
-          <div class="wpa-postcard-location">
-            <svg class="wpa-icon-pin" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-            <span>${address}</span>
+          <div class="wpa-postcard-details">
+            <h3 class="wpa-postcard-title">${title}</h3>
+            
+            <div class="wpa-postcard-geo-box">
+              <div class="wpa-postcard-location" title="Landmark Address">
+                <svg class="wpa-icon-pin" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>${address}</span>
+              </div>
+              <div class="wpa-postcard-coords-badge" title="Survey Grid Coordinates">
+                <svg class="wpa-coords-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/>
+                  <line x1="12" y1="3" x2="12" y2="7"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                  <line x1="3" y1="12" x2="7" y2="12"/>
+                  <line x1="17" y1="12" x2="21" y2="12"/>
+                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                </svg>
+                <span class="wpa-coords-label">GRID:</span>
+                <span class="wpa-coords-val">${data.lat.toFixed(5)}° N, ${Math.abs(data.lng).toFixed(5)}° W</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="wpa-postcard-footer">
           <a href="${link}" target="_blank" rel="noopener noreferrer" class="wpa-btn-readmore" id="postcard-link-${data.id}" title="Read story on Substack (Opens in new tab)">
             <span>Read on Substack</span>
-            <svg class="wpa-arrow-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="wpa-arrow-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="7" y1="17" x2="17" y2="7"></line>
               <polyline points="7 7 17 7 17 17"></polyline>
             </svg>
           </a>
-          <div class="wpa-postcard-coords" title="Geographic Coordinates">
-            <span>${data.lat.toFixed(5)}° N, ${Math.abs(data.lng).toFixed(5)}° W</span>
-          </div>
+          ${isCurator ? `
+            <div class="wpa-postcard-curator-row">
+              <button type="button" class="wpa-btn-repick-live-marker" data-id="${data.id}" data-edition="${edition}" data-title="${title}" title="Repick pin location on the map">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Correct pin location</span>
+              </button>
+            </div>
+          ` : ''}
         </div>
-
-        ${isCurator ? `
-          <div class="wpa-postcard-curator-actions">
-            <button type="button" class="wpa-btn-repick-live-marker" data-id="${data.id}" data-edition="${edition}" data-title="${title}" title="Repick pin location on the map">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              <span>📍 Correct Pin Location</span>
-            </button>
-          </div>
-        ` : ''}
       </article>
     `;
   }
@@ -329,12 +353,14 @@ class KenoshaMap {
       });
 
       const popupContent = this.createFieldNotePopupHTML(item);
+      const isDesktop = window.innerWidth > 768;
       marker.bindPopup(popupContent, {
         className: 'wpa-field-note-popup',
         maxWidth: 320,
         minWidth: 260,
-        autoPanPaddingTopLeft: [25, 95],
-        autoPanPaddingBottomRight: [25, 30],
+        autoPan: true,
+        autoPanPaddingTopLeft: isDesktop ? [380, 85] : [20, 85],
+        autoPanPaddingBottomRight: isDesktop ? [35, 35] : [20, 80],
         closeButton: true
       });
 
@@ -429,7 +455,7 @@ class KenoshaMap {
       <div class="wpa-field-note-card" role="region" aria-label="Curator Note: ${title}">
         ${imageUrl ? `
           <div class="wpa-postcard-photo-frame wpa-lightbox-trigger" data-id="${item.id}" title="Click to view full screen postcard & flip back" style="margin-bottom: 0.65rem; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid var(--wpa-charcoal-road);">
-            <img src="${imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" style="width: 100%; height: 130px; object-fit: cover; display: block;" />
+            <img src="${imageUrl}" onerror="this.onerror=null;this.src=this.src.includes('assets/')?this.src.replace('assets/',''):'./assets/'+this.src.split('/').pop();" alt="${title}" class="wpa-postcard-img" loading="lazy" style="width: 100%; height: auto; max-height: 160px; object-fit: contain; display: block;" />
           </div>
         ` : ''}
 
@@ -453,8 +479,17 @@ class KenoshaMap {
         </div>
 
         <div class="wpa-field-note-footer">
-          <span>Target: ${edition}</span>
-          <span>${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}</span>
+          <span class="wpa-field-note-target">TARGET: ${edition}</span>
+          <span class="wpa-field-note-coords-box" title="Survey Grid Coordinates">
+            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <line x1="12" y1="3" x2="12" y2="7"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+              <line x1="3" y1="12" x2="7" y2="12"/>
+              <line x1="17" y1="12" x2="21" y2="12"/>
+            </svg>
+            ${item.lat.toFixed(5)}° N, ${Math.abs(item.lng).toFixed(5)}° W
+          </span>
         </div>
 
         <div class="wpa-field-note-actions">
@@ -489,13 +524,17 @@ class KenoshaMap {
     const marker = this.markerMap.get(id);
     if (marker) {
       const latlng = marker.getLatLng();
-      const isMobile = window.innerWidth <= 900;
-      // Offset target center north so popup is comfortably positioned below mobile nav/header
-      const offsetLat = isMobile ? 0.0038 : 0.0045;
-      const targetLat = latlng.lat + offsetLat;
+      const isMobile = window.innerWidth <= 768;
       const targetZoom = isMobile ? Math.min(zoomLevel, 15) : zoomLevel;
 
-      this.map.flyTo([targetLat, latlng.lng], targetZoom, {
+      // Calculate pixel offset for viewport framing (sidebar on desktop + top header bar)
+      const targetPoint = this.map.project(latlng, targetZoom);
+      const pixelOffsetX = isMobile ? 0 : -160;
+      const pixelOffsetY = isMobile ? -65 : -75;
+      const adjustedPoint = targetPoint.subtract([pixelOffsetX, pixelOffsetY]);
+      const adjustedLatLng = this.map.unproject(adjustedPoint, targetZoom);
+
+      this.map.flyTo(adjustedLatLng, targetZoom, {
         duration: 0.8,
         easeLinearity: 0.25
       });
@@ -549,7 +588,7 @@ class KenoshaMap {
       zIndexOffset: 1000
     }).addTo(this.map);
 
-    const isCurator = this.isSurveyorMode || window.__greetingsApp?.isCuratorMode || Boolean(sessionStorage.getItem('wpa_curator_mode') === 'true') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isCurator = Boolean(window.__greetingsApp?.isCuratorMode);
 
     const popupHtml = `
       <div class="wpa-surveyor-card">
