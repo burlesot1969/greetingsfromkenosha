@@ -3,8 +3,8 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js?v=20260930_v44';
-import { kenoshaMap } from './map.js?v=20260930_v44';
+import { markerStore } from './data.js?v=20260930_v45';
+import { kenoshaMap } from './map.js?v=20260930_v45';
 
 class GreetingsApp {
   constructor() {
@@ -1588,18 +1588,20 @@ class GreetingsApp {
       // Ignored if file not present or empty
     }
 
-    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
     const params = new URLSearchParams(window.location.search);
     const curatorParam = params.get('curator') || params.get('plan') || params.get('planner') || params.get('drafts');
     const isParamActive = curatorParam && (curatorParam.toLowerCase() === 'true' || curatorParam === '1');
     const storedSession = sessionStorage.getItem('wpa_curator_mode');
 
-    // If local draft pins exist, or on localhost, or parameter active:
-    if (this.hasLocalPlannedData || isLocalHost || isParamActive) {
-      // Default to ON unless explicitly toggled off in this session
-      this.isCuratorMode = (storedSession !== 'false');
+    // Curator mode is strictly OFF by default for public safety.
+    // It is ONLY active if explicitly requested via ?curator=true or already toggled ON in this session.
+    if (isParamActive) {
+      this.isCuratorMode = true;
+      sessionStorage.setItem('wpa_curator_mode', 'true');
+    } else if (storedSession === 'true') {
+      this.isCuratorMode = true;
     } else {
-      this.isCuratorMode = (storedSession === 'true');
+      this.isCuratorMode = false;
     }
   }
 
@@ -1622,11 +1624,9 @@ class GreetingsApp {
     const backupBtn = document.getElementById('btn-open-drafts-modal');
     const plannedList = markerStore.getPlanned();
 
-    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-    const shouldShowCuratorControls = this.isCuratorMode || this.hasLocalPlannedData || isLocalHost || (sessionStorage.getItem('wpa_curator_mode') !== null);
-
+    // Badge and backup button are ONLY visible when Curator Mode is actively ON
     if (badge) {
-      badge.style.display = shouldShowCuratorControls ? 'inline-flex' : 'none';
+      badge.style.display = this.isCuratorMode ? 'inline-flex' : 'none';
       badge.classList.toggle('active', this.isCuratorMode);
       badge.classList.toggle('inactive', !this.isCuratorMode);
       if (countEl) {
@@ -1635,7 +1635,7 @@ class GreetingsApp {
     }
 
     if (backupBtn) {
-      backupBtn.style.display = (shouldShowCuratorControls && plannedList.length > 0) ? 'inline-flex' : 'none';
+      backupBtn.style.display = (this.isCuratorMode && plannedList.length > 0) ? 'inline-flex' : 'none';
     }
 
     if (this.isCuratorMode) {
