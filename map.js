@@ -5,6 +5,45 @@
 
 import { KENOSHA_BOUNDS, KENOSHA_PARKS_GEOJSON, KENOSHA_BOUNDING_LINES } from './kenosha-geo.js';
 
+export const THEME_PROVIDERS = {
+  'warm-wpa': {
+    name: '1930s WPA Poster',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    options: {
+      maxZoom: 19,
+      className: 'wpa-basemap-tiles',
+      attribution: 'Tiles &copy; Esri &mdash; Sources: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, METI'
+    }
+  },
+  'carto-voyager': {
+    name: 'Voyager Clean',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    options: {
+      maxZoom: 19,
+      className: 'wpa-basemap-tiles',
+      attribution: 'Tiles &copy; Esri &mdash; Sources: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC'
+    }
+  },
+  'osm-standard': {
+    name: 'Classic Standard',
+    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    options: {
+      maxZoom: 19,
+      className: 'wpa-basemap-tiles',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+    }
+  },
+  'satellite': {
+    name: 'Aerial Satellite',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    options: {
+      maxZoom: 19,
+      className: 'wpa-basemap-tiles wpa-satellite-tiles',
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, GIS Community'
+    }
+  }
+};
+
 class KenoshaMap {
   constructor() {
     this.map = null;
@@ -21,7 +60,7 @@ class KenoshaMap {
     this.onRepickCoordinate = null;
     this.surveyorMarker = null;
     this.onSurveyorCopied = null;
-    this.currentTheme = 'wpa-poster';
+    this.currentTheme = 'warm-wpa';
   }
 
   init(containerId = 'kenosha-map') {
@@ -62,7 +101,7 @@ class KenoshaMap {
       position: 'bottomright'
     }).addTo(this.map);
 
-    // Add Tile Layers (OSM natural vector rendering with WPA color styling)
+    // Add Tile Layers based on initial theme
     this.setBaseTheme(this.currentTheme);
 
     // Marker Layer Group (Public Live Postcards)
@@ -97,24 +136,22 @@ class KenoshaMap {
   }
 
   setBaseTheme(theme) {
-    this.currentTheme = theme;
+    const provider = THEME_PROVIDERS[theme] || THEME_PROVIDERS['warm-wpa'];
+    this.currentTheme = THEME_PROVIDERS[theme] ? theme : 'warm-wpa';
+
     const mapElement = document.getElementById('kenosha-map');
     if (mapElement) {
-      mapElement.classList.remove('theme-wpa-poster', 'theme-wpa-litho', 'theme-wpa-sepia', 'theme-wpa-night');
-      mapElement.classList.add(`theme-${theme}`);
+      const allThemeClasses = Object.keys(THEME_PROVIDERS).map(t => `theme-${t}`);
+      allThemeClasses.push('theme-wpa-poster', 'theme-wpa-litho', 'theme-wpa-sepia', 'theme-wpa-night');
+      mapElement.classList.remove(...allThemeClasses);
+      mapElement.classList.add(`theme-${this.currentTheme}`);
     }
 
     if (this.baseTileLayer) {
       this.map.removeLayer(this.baseTileLayer);
     }
 
-    // 100% Open & Free Tile Layer (No API Key Required)
-    const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-    this.baseTileLayer = L.tileLayer(tileUrl, {
-      maxZoom: 19,
-      className: 'wpa-basemap-tiles'
-    }).addTo(this.map);
+    this.baseTileLayer = L.tileLayer(provider.url, provider.options).addTo(this.map);
   }
 
   resetBounds() {

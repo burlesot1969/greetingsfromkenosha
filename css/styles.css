@@ -1037,21 +1037,35 @@ html, body {
 
 /* WPA Basemap Filter Themes */
 /* 1. 1930s WPA Poster Style (Default) */
+.theme-warm-wpa .wpa-basemap-tiles,
 .theme-wpa-poster .wpa-basemap-tiles {
-  filter: sepia(35%) hue-rotate(-12deg) saturate(130%) contrast(108%) brightness(98%);
+  filter: sepia(18%) saturate(150%) contrast(120%) brightness(92%);
 }
 
-/* 2. Warm Lithograph */
+/* 2. Voyager Clean */
+.theme-carto-voyager .wpa-basemap-tiles {
+  filter: none;
+}
+
+/* 3. Classic Standard */
+.theme-osm-standard .wpa-basemap-tiles {
+  filter: none;
+}
+
+/* 4. Aerial Satellite */
+.theme-satellite .wpa-basemap-tiles {
+  filter: contrast(106%) brightness(100%);
+}
+
+/* Legacy / Alternative Vintage Themes */
 .theme-wpa-litho .wpa-basemap-tiles {
   filter: sepia(60%) saturate(140%) contrast(115%) brightness(95%);
 }
 
-/* 3. Vintage Postcard Sepia */
 .theme-wpa-sepia .wpa-basemap-tiles {
   filter: sepia(85%) contrast(120%) brightness(92%);
 }
 
-/* 4. Midnight Deco */
 .theme-wpa-night .wpa-basemap-tiles {
   filter: invert(90%) hue-rotate(180deg) saturate(120%) contrast(125%);
 }
