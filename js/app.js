@@ -3,8 +3,8 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js?v=20261002_v48';
-import { kenoshaMap } from './map.js?v=20261002_v48';
+import { markerStore } from './data.js?v=20261005_v49';
+import { kenoshaMap } from './map.js?v=20261005_v49';
 
 class GreetingsApp {
   constructor() {

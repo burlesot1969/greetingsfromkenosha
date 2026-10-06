@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -176,6 +176,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Bandshell', 'Pennoyer Park', 'Historic Landmark', 'Lake Michigan', 'Summer Concerts', 'Kennedy Drive'],
     isDefault: true,
     dateAdded: '2026-09-16T11:38:00Z'
+  },
+  {
+    id: 'kenosha-10',
+    title: 'St. Elizabeth Catholic Church',
+    address: '719 49th Street, Kenosha, WI 53140',
+    lat: 42.5918500,
+    lng: -87.8214000,
+    edition: 'No. 10',
+    editionNum: 10,
+    imageUrl: './assets/Todd Burleson - 10.jpeg',
+    summary: 'Echoes in Pale Yellow Brick: Survival, Sacrifice, and Secrets in Kenosha\n\nErected in 1875 of distinctive Cream City brick following a fire that claimed the original 1852 church, this Romanesque Revival landmark stands proudly in downtown Kenosha. Formed from the historic German congregation of St. George and later merged with St. Casimir to become St. Elizabeth, its soaring bell tower and warm pale brickwork preserve generations of neighborhood faith, sacrifice, and community heritage.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-10?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1875',
+    artist: 'Todd Burleson',
+    tags: ['Historic Church', 'Cream City Brick', 'Downtown', 'Romanesque Revival', 'St. George', 'St. Elizabeth', '49th Street'],
+    isDefault: true,
+    dateAdded: '2026-10-05T23:25:00Z'
   }
 ];
 
