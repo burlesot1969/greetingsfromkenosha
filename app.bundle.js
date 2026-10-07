@@ -1,14 +1,17 @@
 /**
  * Greetings From Kenosha - Standalone Application Bundle
  * Compatible with BOTH file:// direct desktop opening and http:// web servers.
- * Auto-generated: 2026-10-06T15:03:10.727Z
+ * Auto-generated: 2026-10-07T11:13:12.262128+00:00
  */
+
 (function() {
   'use strict';
+
 
   // =========================================================================
   // MODULE: kenosha-geo.js
   // =========================================================================
+
 /**
  * Kenosha Waterfront, Parks & WPA Landmark Boundaries (GeoJSON / Feature Layers)
  * Enhances the 1930s WPA Poster aesthetic with sage green parks and muted teal Lake Michigan waters.
@@ -176,9 +179,24 @@ const KENOSHA_BOUNDING_LINES = {
 };
 
 
+
+  // =========================================================================
+  // MODULE: planned-markers.js
+  // =========================================================================
+
+/**
+ * PRIVATE LOCAL-ONLY CURATOR PLANNING LAYER
+ * This file is git-ignored and NEVER pushed to GitHub.
+ */
+
+const PLANNED_MARKERS = [];
+
+
+
   // =========================================================================
   // MODULE: data.js
   // =========================================================================
+
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
  * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10
@@ -454,14 +472,14 @@ class MarkerStore {
   }
 
   exportPlannedMarkersFileContent() {
-    return `/**\n * PRIVATE LOCAL-ONLY CURATOR PLANNING LAYER\n * This file is git-ignored and NEVER pushed to GitHub.\n * Total Draft Pins: ${this.plannedMarkers.length}\n * Generated: ${new Date().toLocaleString()}\n */\n\nexport const PLANNED_MARKERS = ${JSON.stringify(this.plannedMarkers, null, 2)};\n`;
+    return `/**\n * PRIVATE LOCAL-ONLY CURATOR PLANNING LAYER\n * This file is git-ignored and NEVER pushed to GitHub.\n * Total Draft Pins: ${this.plannedMarkers.length}\n * Generated: ${new Date().toLocaleString()}\n */\n\nconst PLANNED_MARKERS = ${JSON.stringify(this.plannedMarkers, null, 2)};\n`;
   }
 
   importPlannedMarkers(data) {
     let list = data;
     if (typeof data === 'string') {
       try {
-        // Handle JS export syntax if pasted with 'export const PLANNED_MARKERS = ...'
+        // Handle JS export syntax if pasted with 'const PLANNED_MARKERS = ...'
         let clean = data.trim();
         if (clean.includes('=')) {
           clean = clean.split('=').slice(1).join('=').trim().replace(/;$/, '');
@@ -637,6 +655,7 @@ const markerStore = new MarkerStore();
   // =========================================================================
   // MODULE: map.js
   // =========================================================================
+
 /**
  * Leaflet Map Controller for Greetings From Kenosha
  * 1930s WPA Poster Aesthetic, Custom Vintage Pins & Postcard Popups
@@ -739,7 +758,7 @@ class KenoshaMap {
       position: 'bottomright'
     }).addTo(this.map);
 
-    // Add Tile Layers based on initial theme
+    // Add Tile Layers (OSM natural vector rendering with WPA color styling)
     this.setBaseTheme(this.currentTheme);
 
     // Marker Layer Group (Public Live Postcards)
@@ -1343,9 +1362,11 @@ class KenoshaMap {
 const kenoshaMap = new KenoshaMap();
 
 
+
   // =========================================================================
   // MODULE: jukebox-data.js
   // =========================================================================
+
 /**
  * Greetings From Kenosha - Era Jukebox Track Catalog
  * Curated vintage & public domain recordings in STRICT CHRONOLOGICAL ORDER.
@@ -1388,7 +1409,7 @@ const JUKEBOX_ERAS = [
     step: '3',
     label: '1930s Depression Radio Hits',
     shortLabel: '1930s',
-    subLabel: 'Early Radio & Hits',
+    subLabel: 'Depression Radio & Hits',
     decade: '1930–1935',
     icon: '📻',
     tagline: 'Cardboard "Hit of the Week" phonograph records & Fireside Radio days',
@@ -1666,9 +1687,11 @@ const JUKEBOX_TRACKS = [
 ];
 
 
+
   // =========================================================================
   // MODULE: jukebox.js
   // =========================================================================
+
 /**
  * Greetings From Kenosha - Era Jukebox Audio Engine & UI Controller
  * 
@@ -2923,15 +2946,15 @@ class EraJukebox {
 const eraJukebox = new EraJukebox();
 
 
+
   // =========================================================================
   // MODULE: app.js
   // =========================================================================
+
 /**
  * Main Application Controller for Greetings From Kenosha
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
-
-
 
 
 class GreetingsApp {
@@ -3649,7 +3672,11 @@ class GreetingsApp {
       });
 
       postcardBack.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) {
+          return;
+        }
         e.stopPropagation();
+        this.togglePostcardFlip();
       });
     }
 
@@ -4649,23 +4676,4 @@ if (document.readyState === 'loading') {
 }
 
 
-  // =========================================================================
-  // BOOTSTRAP INITIALIZATION
-  // =========================================================================
-  function bootstrapApp() {
-    try {
-      if (!window.app) {
-        window.app = new GreetingsApp();
-        window.app.init();
-      }
-    } catch (e) {
-      console.error('GreetingsApp bootstrap error:', e);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootstrapApp);
-  } else {
-    bootstrapApp();
-  }
 })();

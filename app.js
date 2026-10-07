@@ -722,7 +722,11 @@ class GreetingsApp {
       });
 
       postcardBack.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) {
+          return;
+        }
         e.stopPropagation();
+        this.togglePostcardFlip();
       });
     }
 
