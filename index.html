@@ -23,8 +23,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
   <!-- Custom WPA Stylesheet (supports root & nested css/ folder with aggressive cache busting) -->
-  <link rel="stylesheet" href="css/styles.css?v=20261005_v49">
-  <link rel="stylesheet" href="styles.css?v=20261005_v49">
+  <link rel="stylesheet" href="css/styles.css?v=20261006_v54">
+  <link rel="stylesheet" href="styles.css?v=20261006_v54">
 </head>
 <body>
   <!-- Authentic 1930s Paper Texture Overlay -->
@@ -100,6 +100,54 @@
       </div>
     </div>
   </div>
+
+  <!-- Immediate Zero-Latency Intro Curtain Dismiss Handler -->
+  <script>
+    (function() {
+      function dismissIntroCurtain() {
+        var curtain = document.getElementById('wpa-intro-curtain');
+        if (curtain) {
+          curtain.classList.add('fade-out');
+          curtain.style.pointerEvents = 'none';
+          setTimeout(function() {
+            curtain.style.display = 'none';
+          }, 750);
+        }
+      }
+      window.__dismissIntroCurtain = dismissIntroCurtain;
+
+      var exploreBtn = document.getElementById('btn-intro-explore');
+      if (exploreBtn) {
+        exploreBtn.addEventListener('click', function(e) {
+          if (e) e.stopPropagation();
+          dismissIntroCurtain();
+        });
+      }
+
+      var closeBtn = document.getElementById('btn-intro-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+          if (e) e.stopPropagation();
+          dismissIntroCurtain();
+        });
+      }
+
+      var curtain = document.getElementById('wpa-intro-curtain');
+      if (curtain) {
+        curtain.addEventListener('click', function(e) {
+          if (e.target === curtain) {
+            dismissIntroCurtain();
+          }
+        });
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' || e.key === 'Enter') {
+          dismissIntroCurtain();
+        }
+      });
+    })();
+  </script>
 
   <div class="app-container">
     <!-- Top WPA Travel Poster Header -->
@@ -585,7 +633,7 @@
   <!-- Leaflet JS Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <!-- Application Entry Point -->
-  <script type="module" src="app.js?v=20261005_v49"></script>
+  <!-- Application Entry Point (Supports both file:// desktop launch and http:// web servers) -->
+  <script defer src="app.bundle.js?v=20261006_v55"></script>
 </body>
 </html>

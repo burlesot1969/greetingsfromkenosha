@@ -3202,6 +3202,7 @@ html, body {
   transform: scale(1.04);
   pointer-events: none;
   visibility: hidden;
+  display: none !important;
 }
 
 .wpa-folio-card {
@@ -4033,3 +4034,1171 @@ html, body {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   1930s WPA ERA RADIO JUKEBOX STYLES & RETRO AUDIO ENGINE
+   ========================================================================== */
+
+/* Top Navigation Jukebox Header Button */
+.wpa-btn-jukebox {
+  background: var(--wpa-ink-navy);
+  color: var(--wpa-ochre-gold);
+  border-color: var(--wpa-ochre-gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.wpa-btn-jukebox:hover {
+  background: #243B5A;
+  color: #FFF;
+  border-color: #FFF;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.wpa-btn-jukebox.playing {
+  background: #24415C;
+  border-color: var(--wpa-ochre-gold);
+  color: #FFF;
+  box-shadow: 0 0 10px rgba(220, 161, 52, 0.35);
+}
+
+.wpa-juke-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.wpa-juke-eq-bars {
+  display: none;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.wpa-btn-jukebox.playing .wpa-juke-eq-bars {
+  display: flex;
+}
+
+.wpa-juke-eq-bars span {
+  display: block;
+  width: 2.5px;
+  background: var(--wpa-ochre-gold);
+  border-radius: 1px;
+  animation: jukeEqBounce 0.8s ease-in-out infinite alternate;
+}
+
+.wpa-juke-eq-bars span:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+.wpa-juke-eq-bars span:nth-child(2) { height: 11px; animation-delay: 0.3s; }
+.wpa-juke-eq-bars span:nth-child(3) { height: 7px; animation-delay: 0.15s; }
+.wpa-juke-eq-bars span:nth-child(4) { height: 10px; animation-delay: 0.4s; }
+
+@keyframes jukeEqBounce {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
+
+/* Floating Mini-Player Pill (Visible when minimized while playing) */
+.wpa-jukebox-pill {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  background: #1D2D44;
+  border: 2px solid var(--wpa-ochre-gold);
+  border-radius: 50px;
+  padding: 0.35rem 0.6rem 0.35rem 0.45rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 12px rgba(220, 161, 52, 0.3);
+  animation: pillSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: calc(100vw - 2.5rem);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes pillSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wpa-pill-body {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.1rem 0.5rem 0.1rem 0.2rem;
+  text-align: left;
+  outline: none;
+}
+
+.wpa-pill-vinyl-disc {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #333 0%, #111 65%, #222 100%);
+  border: 1px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinVinyl 3s linear infinite;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.wpa-vinyl-center {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--wpa-terracotta);
+  border: 1.5px solid var(--wpa-ochre-gold);
+}
+
+@keyframes spinVinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wpa-pill-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 170px;
+  overflow: hidden;
+}
+
+.wpa-pill-title {
+  font-family: var(--font-vintage-sans);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #FFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.wpa-pill-artist {
+  font-size: 0.72rem;
+  color: var(--wpa-ochre-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.wpa-pill-play-btn,
+.wpa-pill-next-btn {
+  background: #24415C;
+  border: 1.5px solid rgba(220, 161, 52, 0.6);
+  color: #FFF;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 0.35rem;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.wpa-pill-play-btn:hover,
+.wpa-pill-next-btn:hover {
+  background: var(--wpa-terracotta);
+  border-color: #FFF;
+  transform: scale(1.08);
+}
+
+/* Jukebox Modal Overlay */
+.wpa-jukebox-overlay {
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(18, 26, 36, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.wpa-jukebox-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 1930s Art Deco Radio Cabinet Housing */
+.wpa-jukebox-cabinet {
+  background: #182538;
+  border: 3.5px solid var(--wpa-ochre-gold);
+  border-radius: 16px 16px 12px 12px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(220, 161, 52, 0.28), inset 0 1px 3px rgba(255, 255, 255, 0.15);
+  animation: jukeCabinetPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+@keyframes jukeCabinetPop {
+  from { opacity: 0; transform: scale(0.93) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Mobile Pull Handle (Hidden on Desktop) */
+.wpa-juke-drag-handle-bar {
+  display: none;
+  width: 100%;
+  height: 18px;
+  background: #142032;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(220, 161, 52, 0.2);
+}
+
+.wpa-juke-drag-pill {
+  width: 44px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(220, 161, 52, 0.5);
+  transition: background 0.2s;
+}
+
+.wpa-juke-drag-handle-bar:hover .wpa-juke-drag-pill {
+  background: var(--wpa-ochre-gold);
+}
+
+/* Cabinet Top Brand Arch */
+.wpa-juke-cabinet-top {
+  background: #121B28;
+  border-bottom: 2.5px solid var(--wpa-ochre-gold);
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wpa-juke-brand-plate {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.wpa-juke-deco-wing {
+  color: var(--wpa-ochre-gold);
+  font-size: 0.85rem;
+}
+
+.wpa-juke-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.wpa-juke-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  color: var(--wpa-ochre-gold);
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.wpa-juke-subtitle {
+  font-family: var(--font-vintage-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.8px;
+  color: var(--wpa-cream-darker);
+  opacity: 0.85;
+}
+
+.wpa-juke-close-btn {
+  background: transparent;
+  border: 1.5px solid rgba(220, 161, 52, 0.4);
+  color: var(--wpa-cream-paper);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wpa-juke-close-btn:hover {
+  background: var(--wpa-terracotta);
+  border-color: #FFF;
+  color: #FFF;
+}
+
+/* ==========================================================================
+   SECTION 1: STEPPED CHRONOLOGICAL TIMELINE RIBBON
+   ========================================================================== */
+.wpa-juke-timeline-container {
+  background: #141F2E;
+  border-bottom: 2px solid rgba(220, 161, 52, 0.35);
+  padding: 0.6rem 0.85rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.wpa-juke-timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wpa-juke-timeline-title {
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+  color: var(--wpa-ochre-gold);
+  font-weight: 700;
+}
+
+.wpa-juke-timeline-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.wpa-juke-era-nav-btn {
+  background: #1D2D44;
+  border: 1px solid rgba(220, 161, 52, 0.4);
+  border-radius: 4px;
+  color: var(--wpa-cream-paper);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wpa-juke-era-nav-btn:hover {
+  background: var(--wpa-terracotta);
+  border-color: #FFF;
+  color: #FFF;
+}
+
+.wpa-juke-stepped-timeline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+  position: relative;
+}
+
+.wpa-timeline-station-btn {
+  background: #101926;
+  border: 1.5px solid rgba(220, 161, 52, 0.3);
+  border-radius: 6px;
+  padding: 0.45rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: #CBD5E0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  outline: none;
+}
+
+.wpa-timeline-station-btn:hover {
+  background: #1A283C;
+  border-color: var(--wpa-ochre-gold);
+  color: #FFF;
+  transform: translateY(-2px);
+}
+
+.wpa-timeline-station-btn.active {
+  background: #24415C;
+  border: 2px solid var(--wpa-ochre-gold);
+  color: #FFF;
+  box-shadow: 0 0 12px rgba(220, 161, 52, 0.45), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  transform: translateY(0);
+}
+
+.wpa-timeline-station-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--wpa-ochre-gold);
+}
+
+.wpa-station-step-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.wpa-step-num {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #1D2D44;
+  border: 1px solid var(--wpa-ochre-gold);
+  color: var(--wpa-ochre-gold);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.wpa-timeline-station-btn.active .wpa-step-num {
+  background: var(--wpa-terracotta);
+  border-color: #FFF;
+  color: #FFF;
+}
+
+.wpa-step-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.wpa-station-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.wpa-station-decade {
+  font-family: var(--font-vintage-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.wpa-station-sub {
+  font-size: 0.62rem;
+  color: var(--wpa-ochre-gold);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  opacity: 0.85;
+}
+
+/* Cabinet Main Scrollable Body */
+.wpa-juke-body {
+  padding: 0.85rem 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: radial-gradient(circle at 50% 10%, #203147 0%, #121C2B 100%);
+}
+
+/* ==========================================================================
+   SECTION 2: ILLUMINATED RECEIVER SCREEN (Visual Display Anchor)
+   ========================================================================== */
+.wpa-juke-tuner-glass {
+  background: #0B131E;
+  border: 2px solid var(--wpa-ochre-gold);
+  border-radius: 8px;
+  padding: 0.85rem 1rem 0.75rem;
+  box-shadow: inset 0 3px 14px rgba(0, 0, 0, 0.85), 0 0 16px rgba(220, 161, 52, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.wpa-juke-tuner-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(220, 161, 52, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(220, 161, 52, 0.04) 1px, transparent 1px);
+  background-size: 12px 12px;
+  pointer-events: none;
+}
+
+.wpa-juke-display-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.wpa-juke-status-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.wpa-juke-step-tag {
+  background: #1D2D44;
+  color: var(--wpa-ochre-gold);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  border: 1px solid rgba(220, 161, 52, 0.5);
+}
+
+.wpa-juke-badge {
+  background: var(--wpa-terracotta);
+  color: #FFF;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.8px;
+  padding: 0.12rem 0.45rem;
+  border-radius: 3px;
+  border: 1px solid var(--wpa-ochre-gold);
+}
+
+.wpa-juke-freq {
+  font-size: 0.72rem;
+  color: var(--wpa-ochre-gold);
+  letter-spacing: 0.5px;
+}
+
+.wpa-juke-vacuum-tube {
+  width: 14px;
+  height: 20px;
+  border-radius: 7px 7px 2px 2px;
+  border: 1px solid rgba(220, 161, 52, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(220, 161, 52, 0.4);
+}
+
+.wpa-tube-filament {
+  width: 4px;
+  height: 10px;
+  background: #FFA726;
+  border-radius: 2px;
+  box-shadow: 0 0 6px #FF9800, 0 0 10px #FF5722;
+  animation: tubeGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes tubeGlow {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 2px #FF9800); }
+  100% { opacity: 1; filter: drop-shadow(0 0 8px #FF5722); }
+}
+
+.wpa-juke-track-meta {
+  margin: 0.35rem 0 0.55rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.wpa-juke-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.wpa-juke-track-title {
+  font-family: var(--font-vintage-sans);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFF;
+  margin: 0;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.3px;
+}
+
+.wpa-juke-year-pill {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  background: rgba(220, 161, 52, 0.2);
+  color: var(--wpa-ochre-gold);
+  border: 1px solid var(--wpa-ochre-gold);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.wpa-juke-track-artist {
+  font-size: 0.9rem;
+  color: var(--wpa-ochre-gold);
+  font-weight: 600;
+  margin: 0 0 0.45rem;
+}
+
+.wpa-juke-notes-card {
+  background: rgba(29, 45, 68, 0.6);
+  border-left: 3px solid var(--wpa-ochre-gold);
+  border-radius: 0 6px 6px 0;
+  padding: 0.35rem 0.65rem 0.35rem 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.wpa-notes-quote-mark {
+  color: var(--wpa-ochre-gold);
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.wpa-juke-track-notes {
+  font-size: 0.74rem;
+  color: #B4C4D8;
+  line-height: 1.35;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Animated Equalizer VU Bars */
+.wpa-juke-vu-meter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 20px;
+  margin: 0.4rem 0 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.vu-bar {
+  width: 5px;
+  height: 4px;
+  background: var(--wpa-ochre-gold);
+  border-radius: 2px 2px 0 0;
+  transition: height 0.15s ease;
+  opacity: 0.35;
+}
+
+.is-playing .vu-bar {
+  opacity: 0.95;
+  animation: vuBounce 0.75s ease-in-out infinite alternate;
+}
+
+.is-playing .vu-bar.b1 { animation-delay: 0.05s; }
+.is-playing .vu-bar.b2 { animation-delay: 0.25s; }
+.is-playing .vu-bar.b3 { animation-delay: 0.1s; }
+.is-playing .vu-bar.b4 { animation-delay: 0.35s; }
+.is-playing .vu-bar.b5 { animation-delay: 0.15s; }
+.is-playing .vu-bar.b6 { animation-delay: 0.45s; }
+.is-playing .vu-bar.b7 { animation-delay: 0.2s; }
+.is-playing .vu-bar.b8 { animation-delay: 0.3s; }
+.is-playing .vu-bar.b9 { animation-delay: 0.12s; }
+.is-playing .vu-bar.b10 { animation-delay: 0.4s; }
+
+@keyframes vuBounce {
+  0% { height: 4px; }
+  50% { height: 16px; background: var(--wpa-ochre-gold); }
+  100% { height: 20px; background: var(--wpa-terracotta); }
+}
+
+/* Progress Scrubber */
+.wpa-juke-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.wpa-juke-time {
+  font-size: 0.72rem;
+  color: #A0B0C4;
+  min-width: 32px;
+}
+
+.wpa-juke-progress-track {
+  flex: 1;
+  height: 6px;
+  background: #192636;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(220, 161, 52, 0.3);
+}
+
+.wpa-juke-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--wpa-ochre-gold), var(--wpa-terracotta));
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+/* ==========================================================================
+   SECTION 3: MASTER CONTROLS & VINTAGE TEXTURE DECK
+   ========================================================================== */
+.wpa-juke-controls-panel {
+  background: #121B28;
+  border: 2px solid rgba(220, 161, 52, 0.35);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wpa-juke-transport-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.wpa-juke-ctrl-btn {
+  background: #1D2D44;
+  border: 2px solid var(--wpa-ochre-gold);
+  color: var(--wpa-cream-paper);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.wpa-juke-ctrl-btn:hover {
+  background: var(--wpa-terracotta);
+  border-color: #FFF;
+  color: #FFF;
+  transform: scale(1.08);
+}
+
+/* Big Bakelite Main Play Knob */
+.wpa-juke-main-dial {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #384F6E 0%, #1D2D44 70%, #142032 100%);
+  border: 3.5px solid var(--wpa-ochre-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #FFF;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 16px rgba(220, 161, 52, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wpa-juke-main-dial:hover {
+  transform: scale(1.08);
+  border-color: #FFF;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 22px rgba(220, 161, 52, 0.55);
+}
+
+.wpa-juke-main-dial.playing {
+  background: radial-gradient(circle, var(--wpa-terracotta) 0%, #9C3D1E 100%);
+  border-color: #FFF;
+}
+
+.wpa-dial-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Secondary Toggles & Volume */
+.wpa-juke-toggles-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(220, 161, 52, 0.2);
+}
+
+.wpa-juke-volume-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.wpa-juke-mini-btn {
+  background: transparent;
+  border: none;
+  color: var(--wpa-ochre-gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+}
+
+.wpa-juke-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: #1C2A3C;
+  border-radius: 3px;
+  outline: none;
+}
+
+.wpa-juke-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--wpa-ochre-gold);
+  cursor: pointer;
+  border: 2px solid #142032;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.wpa-juke-toggle-switch {
+  background: #1D2D44;
+  border: 1.5px solid rgba(220, 161, 52, 0.35);
+  border-radius: 20px;
+  padding: 0.25rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #A0B0C4;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wpa-juke-toggle-switch:hover {
+  border-color: var(--wpa-ochre-gold);
+  color: #FFF;
+}
+
+.wpa-juke-toggle-switch.active {
+  background: #24415C;
+  border-color: var(--wpa-ochre-gold);
+  color: #FFF;
+}
+
+.wpa-toggle-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #556677;
+  transition: all 0.15s ease;
+}
+
+.wpa-juke-toggle-switch.active .wpa-toggle-dot {
+  background: #00E676;
+  box-shadow: 0 0 6px #00E676;
+}
+
+/* ==========================================================================
+   SECTION 4: CHRONOLOGICAL RECORDINGS LEDGER TABLE
+   ========================================================================== */
+.wpa-juke-catalog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.wpa-juke-catalog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.wpa-juke-catalog-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.wpa-juke-section-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: var(--wpa-ochre-gold);
+  font-weight: 700;
+}
+
+.wpa-juke-era-tagline {
+  font-size: 0.68rem;
+  color: #8C9CAE;
+  line-height: 1.2;
+}
+
+.wpa-juke-count-badge {
+  font-size: 0.72rem;
+  background: #121B28;
+  color: var(--wpa-ochre-gold);
+  border: 1px solid rgba(220, 161, 52, 0.4);
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Table Header */
+.wpa-juke-ledger-thead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.65rem;
+  background: #121B28;
+  border: 1px solid rgba(220, 161, 52, 0.3);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  color: var(--wpa-ochre-gold);
+  letter-spacing: 0.8px;
+}
+
+.wpa-juke-ledger-thead .col-idx { width: 22px; text-align: center; }
+.wpa-juke-ledger-thead .col-year { width: 44px; }
+.wpa-juke-ledger-thead .col-title { flex: 1; }
+.wpa-juke-ledger-thead .col-dur { width: 42px; text-align: right; }
+
+.wpa-juke-tracklist {
+  background: #101824;
+  border: 1px solid rgba(220, 161, 52, 0.3);
+  border-radius: 0 0 6px 6px;
+  max-height: 170px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.wpa-juke-track-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(220, 161, 52, 0.1);
+  color: #FFF;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  width: 100%;
+}
+
+.wpa-juke-track-row:last-child {
+  border-bottom: none;
+}
+
+.wpa-juke-track-row:hover {
+  background: rgba(220, 161, 52, 0.12);
+}
+
+.wpa-juke-track-row.active {
+  background: #24415C;
+  border-left: 3.5px solid var(--wpa-ochre-gold);
+}
+
+.wpa-juke-row-idx {
+  width: 22px;
+  font-size: 0.75rem;
+  color: var(--wpa-ochre-gold);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wpa-juke-row-year {
+  width: 44px;
+  font-size: 0.72rem;
+  color: var(--wpa-ochre-gold);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.wpa-mini-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 10px;
+}
+
+.wpa-mini-eq span {
+  width: 2px;
+  background: var(--wpa-ochre-gold);
+  animation: jukeEqBounce 0.6s infinite alternate;
+}
+
+.wpa-mini-eq span:nth-child(2) { animation-delay: 0.2s; }
+.wpa-mini-eq span:nth-child(3) { animation-delay: 0.4s; }
+
+.wpa-juke-row-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.wpa-juke-row-title {
+  font-family: var(--font-vintage-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #FFF;
+}
+
+.wpa-juke-row-artist {
+  font-size: 0.68rem;
+  color: #9BB0C6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wpa-juke-row-dur {
+  font-size: 0.72rem;
+  color: #9BB0C6;
+  width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Cabinet Footer */
+.wpa-juke-cabinet-footer {
+  background: #121B28;
+  border-top: 2px solid rgba(220, 161, 52, 0.3);
+  padding: 0.45rem 0.85rem;
+  text-align: center;
+  font-size: 0.68rem;
+  color: #8C9CAE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.wpa-footer-lamp {
+  color: var(--wpa-ochre-gold);
+  font-size: 0.5rem;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE & BOTTOM SHEET DRAWER LAYOUT
+   ========================================================================== */
+@media (max-width: 680px) {
+  /* Overlay aligns cabinet as a slide-up bottom sheet */
+  .wpa-jukebox-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .wpa-jukebox-cabinet {
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    border-width: 3px 3px 0 3px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    animation: jukeDrawerSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes jukeDrawerSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /* Show mobile drag bar */
+  .wpa-juke-drag-handle-bar {
+    display: flex;
+  }
+
+  .wpa-juke-stepped-timeline {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.4rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .wpa-timeline-station-btn {
+    flex: 0 0 105px;
+    scroll-snap-align: start;
+    min-height: 52px;
+  }
+
+  .wpa-juke-body {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .wpa-juke-toggles-row {
+    gap: 0.4rem;
+  }
+
+  .wpa-juke-toggle-switch {
+    font-size: 0.68rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .wpa-juke-tracklist {
+    max-height: 140px;
+  }
+
+  .wpa-juke-track-row {
+    padding: 0.55rem 0.6rem;
+    min-height: 48px;
+  }
+
+  /* Mobile floating pill */
+  .wpa-jukebox-pill {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+    justify-content: space-between;
+  }
+
+  .wpa-pill-info {
+    max-width: 140px;
+  }
+}
+
+

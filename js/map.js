@@ -164,6 +164,13 @@ class KenoshaMap {
   }
 
   renderMarkers(markers, onSelectMarker = null) {
+    if (!this.markersLayer) {
+      if (this.map && typeof L !== 'undefined') {
+        this.markersLayer = L.layerGroup().addTo(this.map);
+      } else {
+        return;
+      }
+    }
     this.markersLayer.clearLayers();
     this.markerMap.clear();
 
@@ -374,6 +381,13 @@ class KenoshaMap {
   }
 
   renderPlannedMarkers(plannedList) {
+    if (!this.plannedPinsLayer) {
+      if (this.map && typeof L !== 'undefined') {
+        this.plannedPinsLayer = L.layerGroup().addTo(this.map);
+      } else {
+        return;
+      }
+    }
     this.plannedPinsLayer.clearLayers();
     this.plannedMap.clear();
 

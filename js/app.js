@@ -3,8 +3,9 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js?v=20261005_v49';
-import { kenoshaMap } from './map.js?v=20261005_v49';
+import { markerStore } from './data.js?v=20261006_v55';
+import { kenoshaMap } from './map.js?v=20261006_v55';
+import { eraJukebox } from './jukebox.js?v=20261006_v55';
 
 class GreetingsApp {
   constructor() {
@@ -24,32 +25,47 @@ class GreetingsApp {
   }
 
   async init() {
-    // 1. Check Curator Planning Mode & load local-only draft file if present
-    await this.checkCuratorMode();
+    // 1. Setup Animated Project Intro Splash Screen / Welcome Curtain IMMEDIATELY
+    this.setupIntroCurtain();
 
     // 2. Initialize Leaflet Map
-    kenoshaMap.init('kenosha-map');
+    try {
+      kenoshaMap.init('kenosha-map');
+    } catch (e) {
+      console.warn('Leaflet map init error:', e);
+    }
 
-    // 3. Render initial markers
+    // 3. Initialize 1930s Era Radio Jukebox Engine & UI
+    try {
+      eraJukebox.init();
+    } catch (e) {
+      console.warn('Era Jukebox init deferred:', e);
+    }
+
+    // 4. Check Curator Planning Mode & load local-only draft file if present
+    try {
+      await this.checkCuratorMode();
+    } catch (e) {
+      console.warn('Check curator mode error:', e);
+    }
+
+    // 5. Render initial markers
     this.refreshMarkers();
 
-    // 4. If in Curator Mode, render planned draft pins
+    // 6. If in Curator Mode, render planned draft pins
     if (this.isCuratorMode) {
       this.updateCuratorModeState();
     }
 
-    // 5. Setup event listeners & Surveyor Tool
+    // 7. Setup event listeners & Surveyor Tool
     this.setupEventListeners();
 
-    // 6. Setup Animated Project Intro Splash Screen / Welcome Curtain
-    this.setupIntroCurtain();
-
-    // 7. Set initial mobile view (default to map view on small screens <= 768px so map is immediately visible)
+    // 8. Set initial mobile view (default to map view on small screens <= 768px so map is immediately visible)
     if (window.innerWidth <= 768) {
       this.setMobileView('map');
     }
 
-    // 8. Subscribe to data changes
+    // 9. Subscribe to data changes
     markerStore.subscribe(() => {
       this.refreshMarkers();
       if (this.isCuratorMode) {
@@ -57,7 +73,7 @@ class GreetingsApp {
       }
     });
 
-    // 9. Check URL Deep-Link (#00, #01, ?edition=01, etc.)
+    // 10. Check URL Deep-Link (#00, #01, ?edition=01, etc.)
     setTimeout(() => {
       this.checkUrlDeepLink();
     }, 250);
@@ -72,7 +88,9 @@ class GreetingsApp {
         const markers = markerStore.getAll();
         if (markers.length > 0) {
           this.selectedMarkerId = markers[0].id;
-          kenoshaMap.highlightMarkerPin(markers[0].id);
+          if (kenoshaMap && typeof kenoshaMap.highlightMarkerPin === 'function') {
+            kenoshaMap.highlightMarkerPin(markers[0].id);
+          }
         }
       }
     }, 450);
@@ -92,24 +110,35 @@ class GreetingsApp {
       if (isDismissed) return;
       isDismissed = true;
       curtain.classList.add('fade-out');
+      curtain.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        curtain.style.display = 'none';
+      }, 750);
 
       // Activate glowing pin beacons on the map to invite interaction
-      setTimeout(() => {
-        kenoshaMap.activatePinBeacons();
-      }, 350);
+      try {
+        if (kenoshaMap && typeof kenoshaMap.activatePinBeacons === 'function') {
+          setTimeout(() => {
+            kenoshaMap.activatePinBeacons();
+          }, 350);
 
-      // Settle beacons automatically after 14 seconds if untouched
-      setTimeout(() => {
-        kenoshaMap.deactivatePinBeacons();
-      }, 14000);
+          setTimeout(() => {
+            kenoshaMap.deactivatePinBeacons();
+          }, 14000);
+        }
+      } catch (err) {}
     };
+
+    window.__dismissIntroCurtain = dismissCurtain;
 
     const showCurtain = () => {
       isDismissed = false;
+      curtain.style.display = 'flex';
+      curtain.style.pointerEvents = 'auto';
+      void curtain.offsetWidth; // Force reflow
       curtain.classList.remove('fade-out');
     };
-
-    // The welcome folio stays open until the reader chooses to enter (reader-paced welcome mat)
 
     // Clicking the dark backdrop outside the card dismisses immediately
     curtain.addEventListener('click', (e) => {
@@ -135,7 +164,6 @@ class GreetingsApp {
     if (substackBtn) {
       substackBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        // Allow user to open Substack in new tab
       });
     }
 
@@ -223,9 +251,15 @@ class GreetingsApp {
 
   refreshMarkers() {
     const markers = markerStore.getAll();
-    kenoshaMap.renderMarkers(markers, (id) => this.selectMarker(id, false));
     this.renderTOC();
     this.updateStats();
+    try {
+      if (kenoshaMap && typeof kenoshaMap.renderMarkers === 'function') {
+        kenoshaMap.renderMarkers(markers, (id) => this.selectMarker(id, false));
+      }
+    } catch (e) {
+      console.warn('Map marker rendering deferred:', e);
+    }
   }
 
   renderTOC() {
