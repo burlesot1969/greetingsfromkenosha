@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -392,6 +392,23 @@ const DEFAULT_MARKERS = [
     tags: ['Historic Church', 'Cream City Brick', 'Downtown', 'Romanesque Revival', 'St. George', 'St. Elizabeth', '49th Street'],
     isDefault: true,
     dateAdded: '2026-10-05T23:25:00Z'
+  },
+  {
+    id: 'kenosha-11',
+    title: 'Joseph McCarthy Transportation Center (54th Street Carhouse)',
+    address: '724 54th Street, Kenosha, WI 53140',
+    lat: 42.5868800,
+    lng: -87.8206900,
+    edition: 'No. 11',
+    editionNum: 11,
+    imageUrl: './assets/Todd Burleson - 11.jpeg',
+    summary: 'Above the Bays: History and City Colors from the Mezzanine View\n\nStanding on the metal grating of the mezzanine above the inspection pits of the 54th Street Carhouse, damp concrete and aged shop grease tell the story of Kenosha’s resilient streetcars. Built on a foundation of crushed concrete salvaged from the demolished AMC Auto Plant and Simmons Bedding factories, Kenosha’s historic PCC streetcar line returned heavy iron to the downtown lakefront in 2000 after a 68-year absence.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/above-the-bays-history-and-city-colors?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '2000',
+    artist: 'Todd Burleson',
+    tags: ['Streetcar', 'PCC Streetcars', 'Carhouse', 'Transit Center', '54th Street', 'Historic Transit', 'Lakefront'],
+    isDefault: true,
+    dateAdded: '2026-10-12T23:40:00Z'
   }
 ];
 
