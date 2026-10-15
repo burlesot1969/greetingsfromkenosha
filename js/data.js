@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -210,6 +210,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Streetcar', 'PCC Streetcars', 'Carhouse', 'Transit Center', '54th Street', 'Historic Transit', 'Lakefront'],
     isDefault: true,
     dateAdded: '2026-10-12T23:40:00Z'
+  },
+  {
+    id: 'kenosha-12',
+    title: 'Kenosha Metra Station',
+    address: '5414 13th Avenue, Kenosha, WI 53140',
+    lat: 42.5859000,
+    lng: -87.8258000,
+    edition: 'No. 12',
+    editionNum: 12,
+    imageUrl: './assets/Todd Burleson - 12.jpeg',
+    summary: 'The 51.6-Mile Marker: History and Freedom on the Elevated Rails\n\nStanding on the elevated platform at 5414 13th Avenue, Kenosha marks the northernmost terminus and only Metra station located outside of Illinois—51.6 miles from Chicago’s Ogilvie Transportation Center. Built along the historic corridor where railway crews drove the final spike in 1855, these elevated tracks hauled industrial freight and welcomed generations of immigrants. Today, connected directly with the downtown electric streetcar loop, this platform serves as a vital commuter sanctuary, bridge between cities, and symbol of personal freedom.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-guide-no-12-the-516-mile-marker?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1855',
+    artist: 'Todd Burleson',
+    tags: ['Metra', 'Train Station', '13th Avenue', 'C&NW', 'Union Pacific', 'Railroad', 'Historic Transit', 'Downtown', 'Commuter Rail', '51.6-Mile Marker'],
+    isDefault: true,
+    dateAdded: '2026-10-15T18:50:00Z'
   }
 ];
 
