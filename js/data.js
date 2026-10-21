@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -227,6 +227,23 @@ export const DEFAULT_MARKERS = [
     tags: ['Metra', 'Train Station', '13th Avenue', 'C&NW', 'Union Pacific', 'Railroad', 'Historic Transit', 'Downtown', 'Commuter Rail', '51.6-Mile Marker'],
     isDefault: true,
     dateAdded: '2026-10-15T18:50:00Z'
+  },
+  {
+    id: 'kenosha-13',
+    title: 'The Maple House',
+    address: '1213 55th Street, Kenosha, WI 53140',
+    lat: 42.5850100,
+    lng: -87.8257300,
+    edition: 'No. 13',
+    editionNum: 13,
+    imageUrl: './assets/Todd Burleson - 13.jpeg',
+    summary: 'The Forgotten Island Behind the Tracks: The Skywalk, the Schlitz Tavern, and the 30-Year Slumber of the Maple House\n\nBuilt in 1880 of Cream City brick at 1213 55th Street, this landmark became the Maple House in 1896 after the Joseph Schlitz Brewing Company acquired it as a tied-house saloon, adding its iconic corner turret topped with the Schlitz globe. Tucked behind the elevated railroad embankment in the Pearl Street Historic District, it was once connected by a covered overhead skywalk to the 1850 Seymour House next door. After surviving Prohibition, a 30-year abandonment, and near-demolition, a community restoration in 1990 returned this storied sanctuary to the heart of Kenosha.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-13-the-forgotten?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1880',
+    artist: 'Todd Burleson',
+    tags: ['The Maple House', 'Cream City Brick', 'Pearl Street Historic District', 'Schlitz Tied-House', 'Corner Turret', 'William Seymour House', '55th Street', 'Historic Saloon', 'Railroad Wall'],
+    isDefault: true,
+    dateAdded: '2026-10-20T12:40:00Z'
   }
 ];
 
