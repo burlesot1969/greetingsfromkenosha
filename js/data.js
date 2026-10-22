@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -244,6 +244,23 @@ export const DEFAULT_MARKERS = [
     tags: ['The Maple House', 'Cream City Brick', 'Pearl Street Historic District', 'Schlitz Tied-House', 'Corner Turret', 'William Seymour House', '55th Street', 'Historic Saloon', 'Railroad Wall'],
     isDefault: true,
     dateAdded: '2026-10-20T12:40:00Z'
+  },
+  {
+    id: 'kenosha-14',
+    title: 'The Winberg Building',
+    address: '1109-1111 55th Street, Kenosha, WI 53140',
+    lat: 42.5850200,
+    lng: -87.8252000,
+    edition: 'No. 14',
+    editionNum: 14,
+    imageUrl: './assets/Todd Burleson - 14.jpeg',
+    summary: 'The Builders, the Sammy Man, and the Ghost of Pearl Street\n\nBuilt in 1907 at 1109-1111 55th Street, this Classical Revival commercial block is anchored by a deep, stone-trimmed arched vestibule designed to trap still air against brutal midwestern winters. Scandinavian immigrants Johan and Jennie Winberg founded the building as a neighborhood grocery and credit lifeline for local factory hands and railway switchmen. Upstairs, Ottoman-born Albanian immigrant A. Emin found a quiet 40-year sanctuary overlooking the elevated tracks. In the 1960s, George and Rose Polanin ran their famous Sammy Ice Cream Company and roving street carts from the ground floor, before the building was rescued from neglect in the 1990s as a cornerstone of the Pearl Street Historic District.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-14-the-builders?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1907',
+    artist: 'Todd Burleson',
+    tags: ['The Winberg Building', 'Classical Revival', 'Pearl Street Historic District', 'Sammy Ice Cream Company', 'Sammy Man', '55th Street', 'A. Emin', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-10-22T17:45:00Z'
   }
 ];
 
