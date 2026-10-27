@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -460,6 +460,23 @@ const DEFAULT_MARKERS = [
     tags: ['The Winberg Building', 'Classical Revival', 'Pearl Street Historic District', 'Sammy Ice Cream Company', 'Sammy Man', '55th Street', 'A. Emin', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-10-22T17:45:00Z'
+  },
+  {
+    id: 'kenosha-15',
+    title: 'The Cast Iron Front Building',
+    address: '1100-1106 55th Street, Kenosha, WI 53140',
+    lat: 42.5852700,
+    lng: -87.8249400,
+    edition: 'No. 15',
+    editionNum: 15,
+    imageUrl: './assets/Todd Burleson - 15.jpeg',
+    summary: 'Mass-Produced Iron, Schoolyard Dreams, and the Roar of the Rails\n\nBuilt in 1868 at 1100 to 1106 55th Street, this industrial pioneer is the oldest commercial survivor on Pearl Street. To avoid the expense of hand-carved stone, post-Civil War merchants relied on heavy foundries to cast slender iron columns and window arches shipped by rail and assembled on-site. The iron’s immense strength allowed for expansive plate-glass windows flooded with natural light. Decades later, that rugged Cream City brick aesthetic inspired Reuther High School student Trevor Brooks to open Kenosha Coffee Roasters in No. 1106, roasting signature blends like “Off The Rails” as Metra trains rattled past. Rescued in the 1990s and designated part of the Pearl Street Historic District in 1998, this cast-iron sentinel completes the Pearl Street Island Trilogy.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-15-the-cast-iron?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1868',
+    artist: 'Todd Burleson',
+    tags: ['The Cast Iron Front Building', 'Cast Iron Architecture', 'Pearl Street Historic District', 'Cream City Brick', '55th Street', 'Kenosha Coffee Roasters', 'Trevor Brooks', 'Industrial Heritage', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-10-27T17:05:00Z'
   }
 ];
 
