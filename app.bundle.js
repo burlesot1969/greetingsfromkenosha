@@ -470,7 +470,7 @@ const DEFAULT_MARKERS = [
     edition: 'No. 15',
     editionNum: 15,
     imageUrl: './assets/Todd Burleson - 15.jpeg',
-    summary: 'Mass-Produced Iron, Schoolyard Dreams, and the Roar of the Rails\n\nBuilt in 1868 at 1100 to 1106 55th Street, this industrial pioneer is the oldest commercial survivor on Pearl Street. To avoid the expense of hand-carved stone, post-Civil War merchants relied on heavy foundries to cast slender iron columns and window arches shipped by rail and assembled on-site. The iron’s immense strength allowed for expansive plate-glass windows flooded with natural light. Decades later, that rugged Cream City brick aesthetic inspired Reuther High School student Trevor Brooks to open Kenosha Coffee Roasters in No. 1106, roasting signature blends like “Off The Rails” as Metra trains rattled past. Rescued in the 1990s and designated part of the Pearl Street Historic District in 1998, this cast-iron sentinel completes the Pearl Street Island Trilogy.',
+    summary: 'Built in 1868, this industrial pioneer is Pearl Street’s oldest commercial survivor. Heavy cast-iron columns allowed expansive glass storefronts, framing over a century of rail history and completing the Pearl Street Island Trilogy.',
     link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-15-the-cast-iron?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
     year: '1868',
     artist: 'Todd Burleson',
