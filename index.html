@@ -25,6 +25,12 @@
   <!-- Custom WPA Stylesheet (supports root & nested css/ folder with aggressive cache busting) -->
   <link rel="stylesheet" href="css/styles.css?v=20261027_v63">
   <link rel="stylesheet" href="styles.css?v=20261027_v63">
+  <script>
+    // Bypass intro curtain when embedded in iframe or when ?skipIntro=true / ?embed=true is set
+    if (window.self !== window.top || window.location.search.indexOf('skipIntro') !== -1 || window.location.search.indexOf('embed') !== -1) {
+      document.write('<style>#wpa-intro-curtain { display: none !important; }</style>');
+    }
+  </script>
 </head>
 <body>
   <!-- Authentic 1930s Paper Texture Overlay -->
