@@ -3,9 +3,9 @@
  * Coordinates TOC sidebar, Map interactions, Search & Surveyor Coordinate Tool
  */
 
-import { markerStore } from './data.js?v=20261027_v63';
-import { kenoshaMap } from './map.js?v=20261027_v63';
-import { eraJukebox } from './jukebox.js?v=20261027_v63';
+import { markerStore } from './data.js?v=20261029_v64';
+import { kenoshaMap } from './map.js?v=20261029_v64';
+import { eraJukebox } from './jukebox.js?v=20261029_v64';
 
 class GreetingsApp {
   constructor() {

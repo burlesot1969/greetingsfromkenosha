@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -477,6 +477,23 @@ const DEFAULT_MARKERS = [
     tags: ['The Cast Iron Front Building', 'Cast Iron Architecture', 'Pearl Street Historic District', 'Cream City Brick', '55th Street', 'Kenosha Coffee Roasters', 'Trevor Brooks', 'Industrial Heritage', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-10-27T17:05:00Z'
+  },
+  {
+    id: 'kenosha-16',
+    title: 'The Old Moose Lodge',
+    address: '1010 56th Street, Kenosha, WI 53140',
+    lat: 42.5845396,
+    lng: -87.8236784,
+    edition: 'No. 16',
+    editionNum: 16,
+    imageUrl: './assets/Todd Burleson - 16.jpeg',
+    summary: 'Built in 1926–1927 by architect Joseph Lindl for Loyal Order of Moose Lodge No. 286, this working-class limestone fortress became The Union Club in 1943 before serving as the Kenosha County Administration Building.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-16-the-old-moose?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1926',
+    artist: 'Todd Burleson',
+    tags: ['The Old Moose Lodge', 'Loyal Order of Moose', 'Lodge No. 286', 'Joseph Lindl', 'The Union Club', 'Civic Center Historic District', '56th Street', '10th Avenue', 'Labor History', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-10-29T12:38:00Z'
   }
 ];
 
