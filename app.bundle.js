@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -494,6 +494,23 @@ const DEFAULT_MARKERS = [
     tags: ['The Old Moose Lodge', 'Loyal Order of Moose', 'Lodge No. 286', 'Joseph Lindl', 'The Union Club', 'Civic Center Historic District', '56th Street', '10th Avenue', 'Labor History', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-10-29T12:38:00Z'
+  },
+  {
+    id: 'kenosha-17',
+    title: 'Kenosha County Courthouse',
+    address: '912 56th Street, Kenosha, WI 53140',
+    lat: 42.5849079,
+    lng: -87.8229201,
+    edition: 'No. 17',
+    editionNum: 17,
+    imageUrl: './assets/Todd Burleson - 17.jpeg',
+    summary: 'Dedicated in 1925 and designed by Joseph Lindl, Charles Lesser, and Albert J. Scholtz, this Neoclassical Indiana limestone landmark is anchored by 22 colossal stone columns and a newly restored 1925 leaded glass skylight.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-17-the-kenosha-county?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1925',
+    artist: 'Todd Burleson',
+    tags: ['Kenosha County Courthouse', 'Joseph Lindl', 'Charles Lesser', 'Albert J. Scholtz', 'Neoclassical Architecture', 'Civic Center Historic District', '56th Street', 'Judge Bode', 'John R. Collins', 'Ceremonial Courtroom', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-03T16:50:00Z'
   }
 ];
 
