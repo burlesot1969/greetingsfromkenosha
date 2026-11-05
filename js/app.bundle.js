@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -511,6 +511,23 @@ const DEFAULT_MARKERS = [
     tags: ['Kenosha County Courthouse', 'Joseph Lindl', 'Charles Lesser', 'Albert J. Scholtz', 'Neoclassical Architecture', 'Civic Center Historic District', '56th Street', 'Judge Bode', 'John R. Collins', 'Ceremonial Courtroom', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-03T16:50:00Z'
+  },
+  {
+    id: 'kenosha-18',
+    title: 'Reuther Central High School',
+    address: '913 57th Street, Kenosha, WI 53140',
+    lat: 42.5832719,
+    lng: -87.8222273,
+    edition: 'No. 18',
+    editionNum: 18,
+    imageUrl: './assets/Todd Burleson - 18.jpeg',
+    summary: 'Opened in 1926 at 913 57th Street and championed by visionary Superintendent Mary D. Bradford with Chicago school architect Charles D. Chubb, this full-block Indiana limestone palace of learning anchors the south edge of Civic Center Park.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-18-reuther-central?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1926',
+    artist: 'Todd Burleson',
+    tags: ['Reuther Central High School', 'Kenosha High School', 'Central High School', 'Mary D. Bradford', 'Charles D. Chubb', 'C. Wilkins Beemer', 'Civic Center Historic District', '57th Street', 'Indiana Limestone', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-04T22:48:00Z'
   }
 ];
 
