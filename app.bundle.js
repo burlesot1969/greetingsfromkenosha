@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -528,6 +528,23 @@ const DEFAULT_MARKERS = [
     tags: ['Reuther Central High School', 'Kenosha High School', 'Central High School', 'Mary D. Bradford', 'Charles D. Chubb', 'C. Wilkins Beemer', 'Civic Center Historic District', '57th Street', 'Indiana Limestone', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-04T22:48:00Z'
+  },
+  {
+    id: 'kenosha-19',
+    title: 'The 1933 Post Office',
+    address: '5605 Sheridan Road, Kenosha, WI 53140',
+    lat: 42.5841181,
+    lng: -87.8216621,
+    edition: 'No. 19',
+    editionNum: 19,
+    imageUrl: './assets/Todd Burleson - 19.jpeg',
+    summary: 'Dedicated in 1933 at 5605 Sheridan Road and designed by federal architect George Daidy, this Neo-Classical Revival post office features six paired groups of colossal Doric columns anchoring the east edge of Civic Center Plaza.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-19-the-1933-post?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1933',
+    artist: 'Todd Burleson',
+    tags: ['The 1933 Post Office', '1933 United States Post Office', 'United States Post Office', 'Kenosha Post Office', 'George Daidy', 'Harland Bartholomew', 'Neo-Classical Revival', 'Doric Columns', 'Civic Center Historic District', 'Civic Center Plaza', 'Sheridan Road', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-10T14:25:00Z'
   }
 ];
 
