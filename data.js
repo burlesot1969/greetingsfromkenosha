@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -346,6 +346,23 @@ export const DEFAULT_MARKERS = [
     tags: ['The 1933 Post Office', '1933 United States Post Office', 'United States Post Office', 'Kenosha Post Office', 'George Daidy', 'Harland Bartholomew', 'Neo-Classical Revival', 'Doric Columns', 'Civic Center Historic District', 'Civic Center Plaza', 'Sheridan Road', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-10T14:25:00Z'
+  },
+  {
+    id: 'kenosha-20',
+    title: 'The Stella Hotel & Ballroom (Kenosha Elks Club)',
+    address: '5706 8th Avenue, Kenosha, WI 53140',
+    lat: 42.5834723,
+    lng: -87.8211412,
+    edition: 'No. 20',
+    editionNum: 20,
+    imageUrl: './assets/Todd Burleson - 20.jpeg',
+    summary: 'Dedicated in 1919 at 5706 8th Avenue as BPOE Lodge #750 and designed by Milwaukee architect Robert Messmer on the ashes of the 1914 Pettit Malting fire, this Georgian Revival landmark reopened in 2019 as The Stella Hotel.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-20-the-stella?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1919',
+    artist: 'Todd Burleson',
+    tags: ['The Stella Hotel', 'Stella Hotel and Ballroom', 'Kenosha Elks Club', 'BPOE Lodge #750', 'Heritage House Inn', 'Pettit Malting Company', 'Robert Messmer', 'Zalmon G. Simmons', 'Georgian Revival', 'Mel Torme', 'Preserve the Elks', '8th Avenue', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-12T14:45:00Z'
   }
 ];
 
