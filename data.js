@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20, No. 21
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -363,6 +363,23 @@ export const DEFAULT_MARKERS = [
     tags: ['The Stella Hotel', 'Stella Hotel and Ballroom', 'Kenosha Elks Club', 'BPOE Lodge #750', 'Heritage House Inn', 'Pettit Malting Company', 'Robert Messmer', 'Zalmon G. Simmons', 'Georgian Revival', 'Mel Torme', 'Preserve the Elks', '8th Avenue', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-12T14:45:00Z'
+  },
+  {
+    id: 'kenosha-21',
+    title: 'Henry M. Simmons Memorial Church (Bradford Community Church UU)',
+    address: '5810 8th Avenue, Kenosha, WI 53140',
+    lat: 42.5824711,
+    lng: -87.8209576,
+    edition: 'No. 21',
+    editionNum: 21,
+    imageUrl: './assets/Todd Burleson - 21.jpeg',
+    summary: 'Built in 1907 at 5810 8th Avenue by architect N. Max Dunning, this Late Gothic Revival limestone fortress served for 50 years as Wisconsin’s first children’s library before becoming Bradford Community Church.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-21-henry-m-simmons?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1907',
+    artist: 'Todd Burleson',
+    tags: ['Henry M. Simmons Memorial Church', 'Bradford Community Church', 'Simmons Boys and Girls Library', 'Boys and Girls Library', 'The Landmark', 'Zalmon G. Simmons', 'N. Max Dunning', 'Cora M. Frantz', 'Mary D. Bradford', 'Florence Buck', 'Late Gothic Revival', '8th Avenue', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-17T19:48:00Z'
   }
 ];
 
