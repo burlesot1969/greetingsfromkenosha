@@ -1,6 +1,6 @@
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20, No. 21, No. 22
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20, No. 21, No. 22, No. 23
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -397,6 +397,23 @@ export const DEFAULT_MARKERS = [
     tags: ['St. James the Apostle Catholic Church', 'St. James Catholic Church', 'St. Marks Catholic Church', 'Father James M. Cleary', 'John Mills Van Osdel', 'Cream City Brick', 'Civic Center Historic District', '10th Avenue', '58th Street', 'Downtown Kenosha Catholic Food Pantry', 'Irish Heritage', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-19T15:50:00Z'
+  },
+  {
+    id: 'kenosha-23',
+    title: 'The Apis Hotel & Restaurant (Isermann Building)',
+    address: '614 56th Street, Kenosha, WI 53140',
+    lat: 42.5851282,
+    lng: -87.8189259,
+    edition: 'No. 23',
+    editionNum: 23,
+    imageUrl: './assets/Todd Burleson - 23.jpeg',
+    summary: 'Opened in 1914 at 614 56th Street as Isermann Brothers Clothiers with a Chicago School mezzanine and basement bowling alley, and later home to Furr by Us, it was restored by Paul Campagna as The Apis Hotel & Restaurant.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-23-apis-hotel-and?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1914',
+    artist: 'Todd Burleson',
+    tags: ['The Apis Hotel & Restaurant', 'Apis Hotel & Restaurant', 'Isermann Building', 'Isermann Brothers Clothiers', 'National Bowling Alley', 'Furr by Us', 'Mary Kipp', 'Paul Campagna', 'Chicago School Architecture', '56th Street', 'Market Street', 'Downtown', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-24T04:00:00Z'
   }
 ];
 
