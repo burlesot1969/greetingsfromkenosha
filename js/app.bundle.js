@@ -199,7 +199,7 @@ const PLANNED_MARKERS = [];
 
 /**
  * Greetings From Kenosha - Postcard Editions Data Store
- * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20, No. 21, No. 22, No. 23
+ * Default Postcards: No. 00, No. 01, No. 02, No. 03, No. 04, No. 05, No. 06, No. 07, No. 08, No. 09, No. 10, No. 11, No. 12, No. 13, No. 14, No. 15, No. 16, No. 17, No. 18, No. 19, No. 20, No. 21, No. 22, No. 23, No. 24
  */
 
 const STORAGE_KEY = 'greetings_from_kenosha_markers_v9';
@@ -613,6 +613,23 @@ const DEFAULT_MARKERS = [
     tags: ['The Apis Hotel & Restaurant', 'Apis Hotel & Restaurant', 'Isermann Building', 'Isermann Brothers Clothiers', 'National Bowling Alley', 'Furr by Us', 'Mary Kipp', 'Paul Campagna', 'Chicago School Architecture', '56th Street', 'Market Street', 'Downtown', 'Historic Architecture', 'Kenosha History'],
     isDefault: true,
     dateAdded: '2026-11-24T04:00:00Z'
+  },
+  {
+    id: 'kenosha-24',
+    title: 'Rhode Center for the Arts (Gateway Theatre)',
+    address: '514 56th Street, Kenosha, WI 53140',
+    lat: 42.5852781,
+    lng: -87.8176926,
+    edition: 'No. 24',
+    editionNum: 24,
+    imageUrl: './assets/Todd Burleson - 24.jpeg',
+    summary: 'Opened in 1927 at 514 56th Street as Rapp & Rapp’s 1,800-seat Gateway Theatre on the site of Peter Rhode’s 1891 Opera House, this Spanish-tiled stage hosted a 1939 Wizard of Oz preview and lives on with the Lakeside Players.',
+    link: 'https://whereimaginationtakesflight.substack.com/p/field-journal-no-24-the-rhode-center?r=4abqy&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true',
+    year: '1927',
+    artist: 'Todd Burleson',
+    tags: ['Rhode Center for the Arts', 'The Rhode Center for the Arts', 'Rhode Opera House', 'Gateway Theatre', 'Lake Theatre', 'Lakeside Players', 'Peter Rhode Sr.', 'Rapp & Rapp', 'Judy Rossow', 'Pollard Gallery', 'The Wizard of Oz', '56th Street', 'Historic Theater', 'Historic Architecture', 'Kenosha History'],
+    isDefault: true,
+    dateAdded: '2026-11-26T01:35:00Z'
   }
 ];
 
